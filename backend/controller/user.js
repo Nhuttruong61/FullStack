@@ -1,0 +1,65 @@
+const UserSerevice = require("../service/user");
+
+const rerister = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const reg = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+    const check = reg.test(email);
+    if (!check)
+      return res.status(403).json({
+        success: false,
+        mes: "Định dạng email không hợp lệ",
+      });
+    const response = await UserSerevice.rerister(req.body);
+    if (response)
+      return res.status(200).json({
+        success: true,
+        response,
+      });
+  } catch (e) {
+    return res.status(500).json({
+      mes: e.mes,
+    });
+  }
+};
+const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const reg = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+    const check = reg.test(email);
+    if (!check)
+      return res.status(403).json({
+        success: false,
+        mes: "Định dạng email không hợp lệ",
+      });
+    const response = await UserSerevice.login(req.body);
+    if (response)
+      return res.status(200).json({
+        success: true,
+        response,
+      });
+  } catch (e) {
+    return res.status(500).json({
+      mes: e.mes,
+    });
+  }
+};
+const getUsers = async (req, res) => {
+  try {
+    const response = await UserSerevice.getUser();
+    if (response)
+      return res.status(200).json({
+        success: true,
+        response,
+      });
+  } catch (e) {
+    return res.status(500).json({
+      mes: e.mes,
+    });
+  }
+};
+module.exports = {
+  rerister,
+  login,
+  getUsers,
+};

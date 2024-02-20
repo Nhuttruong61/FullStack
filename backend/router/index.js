@@ -1,5 +1,7 @@
+const user = require("./user");
 const initialRouter = (app) => {
-  return app.use("/", (req, res) => {
+  app.use("/api/v1/user", user);
+  app.use("/", (req, res) => {
     return res.send("Server on");
   });
 };

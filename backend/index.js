@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const initialRouter = require("./router");
 const DataBaseConnect = require("./config/mongoConnect");
+var cookieParser = require("cookie-parser");
 const app = express();
 require("dotenv").config();
 app.use(
@@ -11,6 +12,7 @@ app.use(
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 initialRouter(app);
 const PORT = process.env.PORT;

@@ -27,4 +27,18 @@ const isAdmin = (req, res, next) => {
   }
   next();
 };
-module.exports = { verifyToken, isAdmin };
+const checkToken = (req, res, next) => {
+  const { refesToken } = req.cookies;
+  jwt.verify(refesToken, process.env.TOKEN_SECRET, (err, decode) => {
+    if (err) {
+      res.clearCookie("refesToken");
+      return res.status(401).json({
+        mes: "Token đã hết hạn",
+      });
+    }
+    req.user = decode;
+    next();
+  });
+};
+
+module.exports = { verifyToken, isAdmin, checkToken };

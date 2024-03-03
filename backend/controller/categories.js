@@ -21,7 +21,7 @@ const getCategory = async (req, res) => {
     if (response)
       return res.status(200).json({
         success: true,
-        response,
+        response: response.category,
       });
   } catch (e) {
     return res.status(500).json({
@@ -33,6 +33,7 @@ const updateCategory = async (req, res) => {
   try {
     const { id } = req.params;
     const response = await CategogySerevice.updateCategory(id, req.body);
+
     if (response)
       return res.status(200).json({
         success: true,

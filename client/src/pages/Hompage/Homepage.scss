@@ -1,8 +1,26 @@
-.container {
+.container{
     width: 100%;
-    background-color: #101010;
-    color: white;
-    justify-content: center;
-    display: flex;
-   
+    background-color: #757575;
+    &--header {
+        width: 100%;
+        background-color: #101010;
+        color: white;
+        justify-content: center;
+        display: flex;
+       &--banner{
+        width: 100%;
+       }
+    }
+    &--event{
+     width: 100%;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+    }
+    &--category{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+       }
 }

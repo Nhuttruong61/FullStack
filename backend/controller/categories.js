@@ -1,8 +1,8 @@
 const CategogySerevice = require("../service/category");
 const createCategory = async (req, res) => {
   try {
-    const { name } = req.body;
-    const response = await CategogySerevice.createCategory(name);
+    const { name, image } = req.body;
+    const response = await CategogySerevice.createCategory(name, image);
     if (response)
       return res.status(200).json({
         success: true,
@@ -21,7 +21,7 @@ const getCategory = async (req, res) => {
     if (response)
       return res.status(200).json({
         success: true,
-        response: response.category,
+        category: response.category,
       });
   } catch (e) {
     return res.status(500).json({
@@ -33,13 +33,13 @@ const updateCategory = async (req, res) => {
   try {
     const { id } = req.params;
     const response = await CategogySerevice.updateCategory(id, req.body);
-
     if (response)
       return res.status(200).json({
         success: true,
-        response,
+        category: response.category,
       });
   } catch (e) {
+    console.log(e);
     return res.status(500).json({
       mes: e.mes,
     });

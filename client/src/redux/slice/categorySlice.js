@@ -8,7 +8,7 @@ const initialState = {
 
 export const fetchCategory = createAsyncThunk("category/fetch", async () => {
   const res = await getCategory();
-  return res.response;
+  return res.category;
 });
 
 export const categorySlice = createSlice({

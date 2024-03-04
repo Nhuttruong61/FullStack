@@ -76,7 +76,7 @@ const getUsers = async (req, res) => {
     if (response)
       return res.status(200).json({
         success: true,
-        response,
+        users: response.user,
       });
   } catch (e) {
     return res.status(500).json({

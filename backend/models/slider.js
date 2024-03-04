@@ -1,8 +1,7 @@
 const mongoose = require("mongoose");
 
-const categorySchema = new mongoose.Schema(
+const sliderSchema = new mongoose.Schema(
   {
-    name: { type: String, required: true },
     image: {
       public_id: {
         type: String,
@@ -16,4 +15,4 @@ const categorySchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-module.exports = mongoose.model("Category", categorySchema);
+module.exports = mongoose.model("Slider", sliderSchema);

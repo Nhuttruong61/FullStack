@@ -1,5 +1,6 @@
+const cloudinary = require("cloudinary").v2;
 const Category = require("../models/category");
-const createCategory = (name) => {
+const createCategory = (name, image) => {
   return new Promise(async (resolve, reject) => {
     try {
       const res = await Category.findOne({ name: name });
@@ -10,7 +11,16 @@ const createCategory = (name) => {
         });
         return;
       }
-      const category = Category.create({ name: name });
+      const myCloud = await cloudinary.uploader.upload(image, {
+        folder: "CloneTopZone/Category",
+      });
+      const category = Category.create({
+        name: name,
+        image: {
+          public_id: myCloud.public_id,
+          url: myCloud.secure_url,
+        },
+      });
       resolve(category.then((res) => res));
     } catch (e) {
       reject(e);
@@ -37,32 +47,40 @@ const getCategory = () => {
     }
   });
 };
-const updateCategory = (id, data) => {
+const updateCategory = (id, props) => {
   return new Promise(async (resolve, reject) => {
+    const { image, name } = props;
     try {
-      const category = await Category.findByIdAndUpdate(id, data);
-      if (!category) {
-        reject({
-          success: false,
-          mes: "Không tìm thấy",
+      const category = await Category.findById(id);
+      if (!image.includes("cloudinary")) {
+        await cloudinary.uploader.destroy(category.image.public_id);
+        const myCloud = await cloudinary.uploader.upload(image, {
+          folder: "CloneTopZone/Category",
         });
-        return;
+        category.image = {
+          public_id: myCloud.public_id,
+          url: myCloud.secure_url,
+        };
       }
-
+      category.name = name;
+      await category.save();
       resolve({
         success: true,
-        res: category,
+        category,
       });
     } catch (e) {
-      reject(e);
+      reject({
+        success: false,
+      });
     }
   });
 };
 const deleteCategory = (id) => {
-  c;
   return new Promise(async (resolve, reject) => {
     try {
-      const category = await Category.findByIdAndDelete(id);
+      const category = await Category.findById(id);
+      await cloudinary.uploader.destroy(category.image.public_id);
+      await Category.deleteById(id);
       if (!category) {
         reject({
           success: false,

@@ -8,6 +8,7 @@ import { IoBagOutline } from "react-icons/io5";
 import { FaRegUser } from "react-icons/fa";
 import Input from "../inputComponet/Input";
 import { MdClose } from "react-icons/md";
+import Screen from "../screenOverlay/Screen";
 function Header() {
   const { data, isLoading } = useSelector((state) => state.category);
   const [active, setActive] = useState(0);
@@ -15,6 +16,7 @@ function Header() {
   const handleNavigate = (active) => {
     setActive(active);
   };
+  console.log(active);
   const handleStatusSearch = () => {
     setShowSearch(!showSearch);
   };
@@ -31,7 +33,7 @@ function Header() {
             <p style={{ color: "purple" }}>e</p>
           </div>
           <div className="right">
-            <img src={Logo} className="right--image" alt="" srcset="" />
+            <img src={Logo} className="right--image" alt="" />
           </div>
         </div>
         <div className="header--content--center">
@@ -68,12 +70,13 @@ function Header() {
           <label>
             <RiSearchLine />
           </label>
-          <Input />
+          <Input placeholder="Tìm kiếm sản phẩm" />
           <label onClick={handleStatusSearch}>
             <MdClose />
           </label>
         </div>
       )}
+      {showSearch && <Screen />}
     </div>
   );
 }

@@ -1,39 +1,37 @@
 const router = require("express").Router();
 const Joi = require("joi");
-const categogyController = require("../controller/categories");
+const sliderController = require("../controller/slider");
 const validateDto = require("../middleware/validate");
 const { stringReq } = require("../middleware/JoiSheme");
 const { verifyToken, isAdmin } = require("../middleware/auth");
 
 router.post(
-  "/creare-category",
+  "/creare-slider",
   validateDto(
     Joi.object({
-      name: stringReq,
       image: stringReq,
     })
   ),
   verifyToken,
   isAdmin,
-  categogyController.createCategory
+  sliderController.createSlider
 );
-router.get("/get-category", categogyController.getCategory);
+router.get("/get-slider", sliderController.getSlider);
 router.put(
-  "/update-category/:id",
+  "/update-slider/:id",
   validateDto(
     Joi.object({
-      name: stringReq,
       image: stringReq,
     })
   ),
   verifyToken,
   isAdmin,
-  categogyController.updateCategory
+  sliderController.updateSlider
 );
 router.delete(
-  "/delete-category/:id",
+  "/delete-slider/:id",
   verifyToken,
   isAdmin,
-  categogyController.deleteCategory
+  sliderController.deleteSlider
 );
 module.exports = router;

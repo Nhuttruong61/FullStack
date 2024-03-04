@@ -3,13 +3,18 @@ import Hompage from "./pages/Hompage/Hompage.jsx";
 import { fetchCategory } from "./redux/slice/categorySlice.js";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { fetchProduct } from "./redux/slice/productSlice.js";
 function App() {
   const dispatch = useDispatch();
   const fetchdataCategory = async () => {
-    await dispatch(fetchCategory());
+    dispatch(fetchCategory());
+  };
+  const fetchProducts = async () => {
+    dispatch(fetchProduct());
   };
   useEffect(() => {
     fetchdataCategory();
+    fetchProducts();
   }, []);
   return (
     <div className="App">

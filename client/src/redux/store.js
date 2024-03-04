@@ -14,10 +14,11 @@ import {
 
 import userReducer from "./slice/userSlice";
 import categoryReducer from "./slice/categorySlice";
-
+import productReducer from "./slice/productSlice";
 const rootReducers = combineReducers({
   user: userReducer,
   category: categoryReducer,
+  products: productReducer,
 });
 
 const persistConfig = {

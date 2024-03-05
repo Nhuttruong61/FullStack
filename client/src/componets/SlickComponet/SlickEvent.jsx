@@ -14,6 +14,20 @@ export default function SlickEvent(props) {
     speed: 500,
     slidesToShow: slidesToShow ? slidesToShow : 1,
     slidesToScroll: slidesToScroll ? slidesToScroll : 1,
+    responsive: [
+      {
+        breakpoint: 900,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+      {
+        breakpoint: 1150,
+        settings: {
+          slidesToShow: 3,
+        },
+      },
+    ],
   };
   return (
     <Slider {...settings}>

@@ -7,7 +7,6 @@ function Category() {
     <div className="content">
       <div className="box-category">
         {data?.map((el) => {
-          console.log("el", el);
           return (
             <div key={el?.id} className="box-category--card">
               <img src={el?.image?.url} alt="" />

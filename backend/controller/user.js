@@ -88,7 +88,6 @@ const refesToken = async (req, res) => {
   try {
     const { id, role } = req.user;
     const response = await UserSerevice.refesToken(id, role);
-    console.log(response);
     if (response)
       return res.status(200).json({
         success: true,

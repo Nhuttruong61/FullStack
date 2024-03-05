@@ -1,0 +1,44 @@
+.box-card-product{
+    background-color: #323232;
+    border-radius: 10px;
+    width: 100%;
+    cursor: pointer;
+    &:hover {box-shadow: white 1px 1px 1px }
+    &--image{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        padding: 12px 0;
+    &--img{
+        width: 200px !important
+    }
+    }
+   
+    &--content{
+        display: flex;
+        flex-direction: column;
+        margin: 12px 0;
+        padding: 32px 0;
+        &--name{
+            text-shadow: 1px ;
+            margin: 0;
+        }
+        &--monney{
+            display: flex;
+            justify-content: center;
+            &--price{
+                color: #ccc;
+                text-decoration: line-through;
+                font-weight: 400;
+                margin: 4px 0;
+                padding-right:6px ;
+            }
+            &--sale{
+                color: #ff9921;
+                font-weight: 600;
+                margin: 4px 0;
+            }
+        }
+       
+    }
+}

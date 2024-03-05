@@ -9,21 +9,26 @@ import { FaRegUser } from "react-icons/fa";
 import Input from "../inputComponet/Input";
 import { MdClose } from "react-icons/md";
 import Screen from "../screenOverlay/Screen";
-function Header() {
+import withBase from "../../hocs/withBase";
+function Header({ navigate }) {
   const { data, isLoading } = useSelector((state) => state.category);
   const [active, setActive] = useState(0);
   const [showSearch, setShowSearch] = useState(false);
   const handleNavigate = (active) => {
     setActive(active);
   };
-  console.log(active);
   const handleStatusSearch = () => {
     setShowSearch(!showSearch);
   };
   return (
     <div className="header">
       <div className={`header--content ${showSearch && "none"}`}>
-        <div className="header--content--left">
+        <div
+          className="header--content--left"
+          onClick={() => {
+            navigate("/h");
+          }}
+        >
           <div className="left">
             <p>Top</p>
             <p style={{ color: "red" }}>P</p>
@@ -40,7 +45,7 @@ function Header() {
           {data?.map((el, index) => {
             return (
               <div
-                className={`box  ${index == active && "active"}`}
+                className={`box  ${index === active && "active"}`}
                 key={el?.id}
                 onClick={() => handleNavigate(index)}
               >
@@ -81,4 +86,4 @@ function Header() {
   );
 }
 
-export default memo(Header);
+export default withBase(memo(Header));

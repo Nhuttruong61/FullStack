@@ -1,8 +1,9 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import "./Event.scss";
 import saleImage from "../../styles/image/icon-fs.png";
 import { useSelector } from "react-redux";
-import SlickEvent from "../SlickComponet/SlickEvent";
+import Loading from "../LoadingComponet/Loading";
+const SlickEvent = lazy(() => import("../SlickComponet/SlickEvent"));
 function Event() {
   const { data } = useSelector((state) => state.products);
   return (
@@ -12,7 +13,9 @@ function Event() {
           <img src={saleImage} alt="" />
         </div>
         <div className="event-container--bottom">
-          <SlickEvent data={data} slidesToShow={5} />
+          <Suspense fallback={<Loading />}>
+            <SlickEvent data={data} slidesToShow={5} />
+          </Suspense>
         </div>
       </div>
     </div>

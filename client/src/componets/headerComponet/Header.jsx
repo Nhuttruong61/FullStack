@@ -14,74 +14,77 @@ function Header({ navigate }) {
   const { data, isLoading } = useSelector((state) => state.category);
   const [active, setActive] = useState(0);
   const [showSearch, setShowSearch] = useState(false);
-  const handleNavigate = (active) => {
+  const handleNavigate = (active, el) => {
     setActive(active);
+    navigate(`/${el.name}`);
   };
   const handleStatusSearch = () => {
     setShowSearch(!showSearch);
   };
   return (
     <div className="header">
-      <div className={`header--content ${showSearch && "none"}`}>
-        <div
-          className="header--content--left"
-          onClick={() => {
-            navigate("/h");
-          }}
-        >
-          <div className="left">
-            <p>Top</p>
-            <p style={{ color: "red" }}>P</p>
-            <p style={{ color: "green" }}>h</p>
-            <p style={{ color: "blue" }}>o</p>
-            <p style={{ color: "pink" }}>n</p>
-            <p style={{ color: "purple" }}>e</p>
+      <div className="content">
+        <div className={`header--content ${showSearch && "none"}`}>
+          <div
+            className="header--content--left"
+            onClick={() => {
+              navigate("/");
+            }}
+          >
+            <div className="left">
+              <p>Top</p>
+              <p style={{ color: "red" }}>P</p>
+              <p style={{ color: "green" }}>h</p>
+              <p style={{ color: "blue" }}>o</p>
+              <p style={{ color: "pink" }}>n</p>
+              <p style={{ color: "purple" }}>e</p>
+            </div>
+            <div className="right">
+              <img src={Logo} className="right--image" alt="" />
+            </div>
           </div>
-          <div className="right">
-            <img src={Logo} className="right--image" alt="" />
+          <div className="header--content--center">
+            {data?.map((el, index) => {
+              return (
+                <div
+                  className={`box  ${index === active && "active"}`}
+                  key={el?.id}
+                  onClick={() => handleNavigate(index, el)}
+                >
+                  <p className="item">{el?.name}</p>
+                </div>
+              );
+            })}
+          </div>
+          <div className="header--content--right">
+            <div style={{ display: "flex" }}>
+              <label onClick={handleStatusSearch}>
+                <RiSearchLine />
+              </label>
+              <label>
+                <IoBagOutline />
+              </label>
+            </div>
+            <div className="">
+              <label>
+                <FaRegUser />
+              </label>
+            </div>
           </div>
         </div>
-        <div className="header--content--center">
-          {data?.map((el, index) => {
-            return (
-              <div
-                className={`box  ${index === active && "active"}`}
-                key={el?.id}
-                onClick={() => handleNavigate(index)}
-              >
-                <p className="item">{el?.name}</p>
-              </div>
-            );
-          })}
-        </div>
-        <div className="header--content--right">
-          <div style={{ display: "flex" }}>
-            <label onClick={handleStatusSearch}>
+        {showSearch && (
+          <div className="header--search">
+            <label>
               <RiSearchLine />
             </label>
-            <label>
-              <IoBagOutline />
+            <Input placeholder="Tìm kiếm sản phẩm" />
+            <label onClick={handleStatusSearch}>
+              <MdClose />
             </label>
           </div>
-          <div className="">
-            <label>
-              <FaRegUser />
-            </label>
-          </div>
-        </div>
+        )}
+        {showSearch && <Screen />}
       </div>
-      {showSearch && (
-        <div className="header--search">
-          <label>
-            <RiSearchLine />
-          </label>
-          <Input placeholder="Tìm kiếm sản phẩm" />
-          <label onClick={handleStatusSearch}>
-            <MdClose />
-          </label>
-        </div>
-      )}
-      {showSearch && <Screen />}
     </div>
   );
 }

@@ -4,6 +4,8 @@ import { fetchCategory } from "./redux/slice/categorySlice.js";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { fetchProduct } from "./redux/slice/productSlice.js";
+import ProductPage from "./pages/ProductPage/ProductPage.jsx";
+import Layout from "./componets/Layout/Layout.jsx";
 function App() {
   const dispatch = useDispatch();
   const fetchdataCategory = async () => {
@@ -20,7 +22,22 @@ function App() {
     <div className="App">
       <Router>
         <Routes>
-          <Route path="/" element={<Hompage />} />
+          <Route
+            path="/"
+            element={
+              <Layout>
+                <Hompage />
+              </Layout>
+            }
+          />
+          <Route
+            path="/:category"
+            element={
+              <Layout>
+                <ProductPage />
+              </Layout>
+            }
+          />
         </Routes>
       </Router>
     </div>

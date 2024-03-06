@@ -44,14 +44,13 @@ const createProduct = (props) => {
 const getProducts = (options) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const { name, limit, page } = options;
+      const { name, limit, page, category } = options;
       const skip = (page - 1) * limit;
       if (options?.name) {
         const regex = new RegExp(name, "i");
         const product = await Product.find({ name: regex })
           .skip(skip)
-          .limit(limit)
-          .select("-password");
+          .limit(limit);
         if (user) {
           resolve({
             success: true,
@@ -60,14 +59,27 @@ const getProducts = (options) => {
         } else {
           resolve({
             success: false,
-            message: "Không tìm thấy người dùng",
+            message: "Không tìm thấy sản phẩm",
+          });
+        }
+      } else if (options?.category) {
+        const regex = new RegExp(category, "i");
+        const product = await Product.find({ category: regex })
+          .skip(skip)
+          .limit(limit);
+        if (product) {
+          resolve({
+            success: true,
+            product,
+          });
+        } else {
+          resolve({
+            success: false,
+            message: "Không tìm thấy sản phẩm",
           });
         }
       } else {
-        const product = await Product.find()
-          .skip(skip)
-          .limit(limit)
-          .select("-password");
+        const product = await Product.find().skip(skip).limit(limit);
         if (product) {
           resolve({
             success: true,

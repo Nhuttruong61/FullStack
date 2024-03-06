@@ -1,7 +1,6 @@
-import React, { memo, useEffect, useState } from "react";
+import React, { memo, useEffect, useState, lazy, Suspense } from "react";
 import Header from "../../componets/headerComponet/Header";
 import "./Homepage.scss";
-import Slick from "../../componets/SlickComponet/SlickBaner";
 import { getBanner } from "../../api/banner";
 import Event from "../../componets/eventComponet/Event";
 import Category from "../../componets/categoryComponet/Category";
@@ -13,6 +12,8 @@ import { LuTruck } from "react-icons/lu";
 import { IoShieldOutline } from "react-icons/io5";
 import { FiRefreshCw } from "react-icons/fi";
 import Footter from "../../componets/footer/Footter";
+import Loading from "../../componets/LoadingComponet/Loading";
+const Slick = lazy(() => import("../../componets/SlickComponet/SlickBaner"));
 function Hompage() {
   const [dataBanner, setDataBanner] = useState([]);
   const { data } = useSelector((state) => state.products);
@@ -26,13 +27,10 @@ function Hompage() {
   }, []);
   return (
     <div className="container">
-      <div className="container--header">
-        <div className="content">
-          <Header />
-        </div>
-      </div>
       <div className="container--banner">
-        <Slick data={dataBanner} />
+        <Suspense fallback={<Loading />}>
+          <Slick data={dataBanner} />
+        </Suspense>
       </div>
       <div className="container--event">
         <Event />
@@ -99,9 +97,6 @@ function Hompage() {
             </span>
           </div>
         </div>
-      </div>
-      <div className="container--footer">
-        <Footter />
       </div>
     </div>
   );

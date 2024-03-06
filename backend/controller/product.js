@@ -26,6 +26,12 @@ const getProducts = async (req, res) => {
     if (name) {
       options.name = name;
     }
+    if (page) {
+      options.page = page;
+    }
+    if (category) {
+      options.category = category;
+    }
     const response = await ProductSerevice.getProducts({ ...options });
     if (response)
       return res.status(200).json({

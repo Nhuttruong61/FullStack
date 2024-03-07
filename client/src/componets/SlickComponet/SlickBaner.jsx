@@ -8,6 +8,7 @@ export default function Slick(props) {
   var settings = {
     dots: true,
     infinite: true,
+    autoplay: true,
     speed: 500,
     slidesToShow: slidesToShow ? slidesToShow : 1,
     slidesToScroll: slidesToScroll ? slidesToScroll : 1,

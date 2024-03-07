@@ -82,7 +82,6 @@ const getUserToken = (id) => {
     try {
       const res = await User.findById(id).select("-password");
       resolve({
-        success: true,
         res,
       });
     } catch (err) {

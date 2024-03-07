@@ -1,5 +1,4 @@
 import React, { memo, useEffect, useState, lazy, Suspense } from "react";
-import Header from "../../componets/headerComponet/Header";
 import "./Homepage.scss";
 import { getBanner } from "../../api/banner";
 import Event from "../../componets/eventComponet/Event";
@@ -11,7 +10,6 @@ import { FiCheckCircle } from "react-icons/fi";
 import { LuTruck } from "react-icons/lu";
 import { IoShieldOutline } from "react-icons/io5";
 import { FiRefreshCw } from "react-icons/fi";
-import Footter from "../../componets/footer/Footter";
 import Loading from "../../componets/LoadingComponet/Loading";
 const Slick = lazy(() => import("../../componets/SlickComponet/SlickBaner"));
 function Hompage() {

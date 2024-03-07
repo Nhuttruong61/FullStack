@@ -53,7 +53,7 @@ const getUserToken = async (req, res) => {
     if (response)
       return res.status(200).json({
         success: true,
-        response,
+        user: response.res,
       });
   } catch (e) {
     return res.status(500).json({

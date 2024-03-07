@@ -7,10 +7,14 @@ body {
     font-size: 14px;
    
   }
+  button{
+    cursor: pointer;
+  }
 
   .content {
     width: 1200px;
     text-align: center;
+   
   }
   .none {
     display: none;

@@ -1,14 +1,22 @@
-import React from "react";
+import React, { memo, useCallback } from "react";
 import { useSelector } from "react-redux";
 import "./Category.scss";
-function Category() {
+import withBase from "../../hocs/withBase";
+function Category({ navigate }) {
   const { data } = useSelector((state) => state.category);
+  const handleNavigate = useCallback((el) => {
+    navigate(`/${el.name}`);
+  }, []);
   return (
     <div className="content">
       <div className="box-category">
         {data?.map((el) => {
           return (
-            <div key={el?.id} className="box-category--card">
+            <div
+              key={el?.id}
+              className="box-category--card"
+              onClick={() => handleNavigate(el)}
+            >
               <img src={el?.image?.url} alt="" />
               <p>{el?.name}</p>
             </div>
@@ -19,4 +27,4 @@ function Category() {
   );
 }
 
-export default Category;
+export default withBase(memo(Category));

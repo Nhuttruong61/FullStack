@@ -3,6 +3,7 @@
     height: 60px;
     display: flex ;
     justify-content: center;
+    align-items: center;
     background-color: #101010;
     color: white;
 
@@ -81,7 +82,37 @@
             &:hover {
                 background-color: #5E5E60;
             }
-          }
+        }
+        &--user{
+            position: relative;
+            &--show{
+                position: absolute;
+                top: 120%;
+                right: 0;
+                height:auto;
+                background-color: #2d2d2d;
+                z-index: 20;
+                width: 180px;
+                border-radius: 4px;
+                div{
+                    display: block;
+                    padding: 4px 8px;
+                    cursor: pointer;
+                   
+                    &:hover{
+                        background-color: #5E5E60;
+                    }
+                }
+            }
+        }
+        .authen{
+            padding-left: 12px;
+            cursor: pointer;
+            &:hover{
+                opacity: 0.9;
+            }
+           
+        }
         }
     } &--search{
         display: flex;
@@ -103,4 +134,10 @@
             }
           }
     }
+}
+.search{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

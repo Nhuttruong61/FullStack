@@ -3,7 +3,7 @@ import "./Card.scss";
 import { formatNumber } from "../../../helper/format";
 function CardProductCbn({ data }) {
   return (
-    <div className="box-card-product">
+    <div key={data?.id} className="box-card-product">
       <div className="box-card-product--image">
         <img
           className="box-card-product--image--img"

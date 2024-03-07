@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { memo } from "react";
 import Logo from "../../styles/image/Logo.png";
@@ -6,21 +6,39 @@ import "./Header.scss";
 import { RiSearchLine } from "react-icons/ri";
 import { IoBagOutline } from "react-icons/io5";
 import { FaRegUser } from "react-icons/fa";
-import Input from "../inputComponet/Input";
+import Input from "../common/inputComponet/Input";
 import { MdClose } from "react-icons/md";
 import Screen from "../screenOverlay/Screen";
 import withBase from "../../hocs/withBase";
-function Header({ navigate }) {
+import { userTK } from "../../api/user";
+import { getUser } from "../../redux/slice/userSlice";
+import Cookies from "js-cookie";
+function Header({ navigate, dispatch }) {
   const { data, isLoading } = useSelector((state) => state.category);
+  const { user } = useSelector((state) => state.user);
   const [active, setActive] = useState(0);
   const [showSearch, setShowSearch] = useState(false);
+  const [showInFor, setShowInFor] = useState(false);
   const handleNavigate = (active, el) => {
     setActive(active);
     navigate(`/${el.name}`);
   };
+  const fetchUser = async () => {
+    try {
+      const res = await userTK();
+      if (res.success) {
+        dispatch(getUser(res?.user));
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
   const handleStatusSearch = () => {
     setShowSearch(!showSearch);
   };
+  useEffect(() => {
+    fetchUser();
+  }, []);
   return (
     <div className="header">
       <div className="content">
@@ -65,24 +83,57 @@ function Header({ navigate }) {
                 <IoBagOutline />
               </label>
             </div>
-            <div className="">
-              <label>
-                <FaRegUser />
-              </label>
-            </div>
+            {user ? (
+              <div
+                className="header--content--right--user"
+                onClick={() => setShowInFor(!showInFor)}
+              >
+                <label>
+                  <FaRegUser />
+                </label>
+                {showInFor && (
+                  <div className="header--content--right--user--show">
+                    {user?.role == "Admin" && (
+                      <div>
+                        <p>Quản lý</p>
+                      </div>
+                    )}
+                    <div>
+                      <p>Tài khoản</p>
+                    </div>
+                    <div
+                      onClick={() => {
+                        Cookies.remove("accesstoken");
+                        dispatch(getUser(null));
+                        navigate("/auth");
+                      }}
+                    >
+                      <p>Đăng xuất</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="authen" onClick={() => navigate("/auth")}>
+                Login
+              </div>
+            )}
+            <p style={{ color: "white", paddingLeft: "8px" }}>{user?.name}</p>
           </div>
         </div>
-        {showSearch && (
-          <div className="header--search">
-            <label>
-              <RiSearchLine />
-            </label>
-            <Input placeholder="Tìm kiếm sản phẩm" />
-            <label onClick={handleStatusSearch}>
-              <MdClose />
-            </label>
-          </div>
-        )}
+        <div className="search">
+          {showSearch && (
+            <div className="header--search">
+              <label>
+                <RiSearchLine />
+              </label>
+              <Input placeholder="Tìm kiếm sản phẩm" />
+              <label onClick={handleStatusSearch}>
+                <MdClose />
+              </label>
+            </div>
+          )}
+        </div>
         {showSearch && <Screen />}
       </div>
     </div>

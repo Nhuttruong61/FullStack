@@ -11,7 +11,6 @@ router.post(
       name: stringReq,
       email: stringReq,
       password: stringReq,
-      role: stringReq,
     })
   ),
   userController.rerister

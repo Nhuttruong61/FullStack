@@ -99,10 +99,14 @@ const refesToken = async (req, res) => {
     });
   }
 };
+const addProductCard = async (req, res) => {
+  clg;
+};
 module.exports = {
   rerister,
   login,
   getUsers,
   getUserToken,
   refesToken,
+  addProductCard,
 };

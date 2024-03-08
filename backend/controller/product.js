@@ -44,5 +44,20 @@ const getProducts = async (req, res) => {
     });
   }
 };
+const getProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const response = await ProductSerevice.getProduct(id);
+    if (response)
+      return res.status(200).json({
+        success: true,
+        product: response.product,
+      });
+  } catch (e) {
+    return res.status(500).json({
+      mes: e.mes,
+    });
+  }
+};
 
-module.exports = { createProduct, getProducts };
+module.exports = { createProduct, getProducts, getProduct };

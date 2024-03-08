@@ -6,6 +6,7 @@ import Loading from "../LoadingComponet/Loading";
 const SlickEvent = lazy(() => import("../SlickComponet/SlickEvent"));
 function Event() {
   const { data } = useSelector((state) => state.products);
+  const dataEvent = data ? data.filter((el) => el?.discount > 0) : [];
   return (
     <div className="content">
       <div className="event-container">
@@ -14,7 +15,7 @@ function Event() {
         </div>
         <div className="event-container--bottom">
           <Suspense fallback={<Loading />}>
-            <SlickEvent data={data} slidesToShow={5} />
+            <SlickEvent data={dataEvent} slidesToShow={5} />
           </Suspense>
         </div>
       </div>

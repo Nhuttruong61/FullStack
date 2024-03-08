@@ -1,9 +1,13 @@
-import React from "react";
+import React, { memo } from "react";
 import "./Card.scss";
 import { formatNumber } from "../../../helper/format";
-function CardEventCbn({ data }) {
+import withBase from "../../../hocs/withBase.js";
+function CardEventCbn({ data, navigate }) {
   return (
-    <div className="box-card-event">
+    <div
+      className="box-card-event"
+      onClick={() => navigate(`/product/${data._id}`)}
+    >
       <div className="box-card-event--image">
         <img src={data.image[0].url} alt="" />
       </div>
@@ -25,4 +29,4 @@ function CardEventCbn({ data }) {
   );
 }
 
-export default CardEventCbn;
+export default withBase(memo(CardEventCbn));

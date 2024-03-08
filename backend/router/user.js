@@ -28,5 +28,6 @@ router.post(
 router.get("/get-user-token", verifyToken, userController.getUserToken);
 router.get("/get-users", verifyToken, isAdmin, userController.getUsers);
 router.get("/refesToken", checkToken, userController.refesToken);
+router.put("/add-card", verifyToken, userController.addProductCard);
 
 module.exports = router;

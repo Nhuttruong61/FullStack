@@ -5,7 +5,7 @@ import withBase from "../../hocs/withBase";
 function Category({ navigate }) {
   const { data } = useSelector((state) => state.category);
   const handleNavigate = useCallback((el) => {
-    navigate(`/${el.name}`);
+    navigate(`/category/${el.name}`);
   }, []);
   return (
     <div className="content">

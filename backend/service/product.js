@@ -3,7 +3,7 @@ const Product = require("../models/product");
 const cloudinary = require("cloudinary").v2;
 const createProduct = (props) => {
   return new Promise(async (resolve, reject) => {
-    const { name, image, category, des, price, discount, quality } = props;
+    const { name, image, category, des, price, discount, color } = props;
     try {
       const res = await Product.findOne({ name: name });
       if (res) {
@@ -28,7 +28,7 @@ const createProduct = (props) => {
         des: des,
         price: price,
         discount: discount,
-        quality: quality,
+        color: color,
         image: listImage.map((item) => ({
           public_id: item.public_id,
           url: item.secure_url,
@@ -88,7 +88,7 @@ const getProducts = (options) => {
         } else {
           resolve({
             success: false,
-            message: "Không tìm thấy người dùng",
+            message: "Không tìm thấy sản phẩm",
           });
         }
       }
@@ -97,5 +97,25 @@ const getProducts = (options) => {
     }
   });
 };
+const getProduct = (id) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const product = await Product.findById(id);
+      if (product) {
+        resolve({
+          success: true,
+          product,
+        });
+      } else {
+        resolve({
+          success: false,
+          message: "Không tìm thấy sản phẩm",
+        });
+      }
+    } catch (err) {
+      reject(err);
+    }
+  });
+};
 
-module.exports = { createProduct, getProducts };
+module.exports = { createProduct, getProducts, getProduct };

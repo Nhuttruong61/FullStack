@@ -16,12 +16,12 @@ import Cookies from "js-cookie";
 function Header({ navigate, dispatch }) {
   const { data, isLoading } = useSelector((state) => state.category);
   const { user } = useSelector((state) => state.user);
-  const [active, setActive] = useState(0);
+  const [active, setActive] = useState(-1);
   const [showSearch, setShowSearch] = useState(false);
   const [showInFor, setShowInFor] = useState(false);
   const handleNavigate = (active, el) => {
     setActive(active);
-    navigate(`/${el.name}`);
+    navigate(`/category/${el.name}`);
   };
   const fetchUser = async () => {
     try {
@@ -95,7 +95,7 @@ function Header({ navigate, dispatch }) {
                   <div className="header--content--right--user--show">
                     {user?.role == "Admin" && (
                       <div>
-                        <p>Quản lý</p>
+                        <p onClick={() => navigate("/admin")}>Quản lý</p>
                       </div>
                     )}
                     <div>

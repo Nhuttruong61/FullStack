@@ -1,9 +1,13 @@
-import React from "react";
+import React, { memo } from "react";
 import "./Card.scss";
 import { formatNumber } from "../../../helper/format";
-function CardProductCbn({ data }) {
+import withBase from "../../../hocs/withBase";
+function CardProductCbn({ data, navigate }) {
+  const handleNavigate = () => {
+    navigate(`/product/${data._id}`);
+  };
   return (
-    <div key={data?.id} className="box-card-product">
+    <div key={data?.id} className="box-card-product" onClick={handleNavigate}>
       <div className="box-card-product--image">
         <img
           className="box-card-product--image--img"
@@ -40,4 +44,4 @@ function CardProductCbn({ data }) {
   );
 }
 
-export default CardProductCbn;
+export default withBase(memo(CardProductCbn));

@@ -1,0 +1,33 @@
+.header-ad{
+    max-width:  100%;
+    display: flex;
+    background-color: #101010;
+    height: 60px;
+    align-items: center;
+    justify-content: space-between; 
+    color: #fff;
+    padding: 0 4%;
+    &--left{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        img{
+            width: 32px;
+            height: 32px;
+        }
+    }
+    &--right{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        &--image{
+            border: #fff 1px solid;
+            border-radius: 100%;
+            padding: 8px 10px;
+        }
+        p{
+            padding-left: 6px;
+        }
+    }
+}

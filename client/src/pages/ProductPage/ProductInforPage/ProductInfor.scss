@@ -1,0 +1,97 @@
+.productInfor{
+    width: 100%;
+    background-color: #3e3e3f;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    &--box{
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(600px, 1fr));
+        &--left{
+            padding: 4% 0;
+            img{
+                width: 320px;
+                height: 320px;
+                object-fit: contain;
+                object-position: center;
+
+            }
+            &--listImg{
+                display:flex ;
+                justify-content: start;
+                &--card{
+                    padding: 8px;
+                    cursor: pointer;
+                    background-color: white;
+                    border-radius: 4px;
+                    margin-right: 8px;
+                    img{
+                        width: 100px;
+                        height: 100px;
+                    }
+                }
+              
+            }
+        }
+        &--right{
+            text-align: left;
+           &--price{
+            display: flex;
+            font-size: 16px;
+            &--price {
+                color: #ccc;
+                text-decoration: line-through;
+                font-weight: 400;
+                margin: 4px 0;
+                padding-right:6px ;
+            }
+            &--sale{
+                color: #ff9921;
+                font-weight: 600;
+                margin: 4px 0;
+            }
+           }
+           &--color{
+            margin-top: 4%;
+            span{
+                display: flex;
+               
+                align-items: center;
+            }
+            span{
+                display: flex;
+                font-size: 16px;
+                font-weight: 500;
+                p{
+                    padding-left: 4px;
+                }
+            }
+           }
+           &--des{
+            width: 100%;
+            border-radius: 8px;
+            background-color: #2F3033;
+           }
+        }
+        .btn{
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+            margin-top: 12px;
+            button{
+                width: 100%;
+                padding: 12px 0;
+                color: white;
+                background-color: #0071E3;
+                outline: none;
+                border-radius: 8px;
+                font-size: 16px;
+                border: none;
+                &:hover{
+                    opacity: 0.8;
+                }
+            }
+        }
+    }
+}

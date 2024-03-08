@@ -16,3 +16,11 @@ export const getProductCategory = async (category) => {
     console.log(e);
   }
 };
+export const getProductId = async (id) => {
+  try {
+    const res = await axios.get(`/product/get-product/${id}`);
+    return res.data;
+  } catch (e) {
+    console.log(e);
+  }
+};

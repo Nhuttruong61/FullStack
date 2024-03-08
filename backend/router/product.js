@@ -15,7 +15,7 @@ router.post(
       des: stringReq,
       price: numberReq,
       discount: numberReq,
-      quality: numberReq,
+      color: arrayReq,
     })
   ),
   verifyToken,
@@ -23,6 +23,8 @@ router.post(
   productController.createProduct
 );
 router.get("/get-products", productController.getProducts);
+router.get("/get-product/:id", productController.getProduct);
+
 // router.put(
 //   "/update-product/:id",
 //   validateDto(

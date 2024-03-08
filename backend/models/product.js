@@ -17,7 +17,12 @@ const productSchema = new mongoose.Schema(
     des: { type: String, required: true },
     price: { type: String, required: true },
     discount: { type: String },
-    quality: { type: Number, required: true },
+    color: [
+      {
+        color: { type: String, required: true },
+        quality: { type: Number, required: true },
+      },
+    ],
     reviews: [
       {
         user: {

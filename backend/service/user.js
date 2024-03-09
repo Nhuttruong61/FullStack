@@ -151,6 +151,21 @@ const refesToken = (id, role) => {
     }
   });
 };
+const deleteUser = (id) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const user = await User.findByIdAndDelete(id);
+      if (user) {
+        resolve({
+          success: true,
+          mes: "Xóa người dùng thành công",
+        });
+      }
+    } catch (err) {
+      reject(err);
+    }
+  });
+};
 
 module.exports = {
   register,
@@ -158,4 +173,5 @@ module.exports = {
   getUsers,
   getUserToken,
   refesToken,
+  deleteUser,
 };

@@ -79,8 +79,9 @@ const deleteCategory = (id) => {
   return new Promise(async (resolve, reject) => {
     try {
       const category = await Category.findById(id);
+      console.log(category.image.public_id);
       await cloudinary.uploader.destroy(category.image.public_id);
-      await Category.deleteById(id);
+      await Category.findByIdAndDelete(id);
       if (!category) {
         reject({
           success: false,

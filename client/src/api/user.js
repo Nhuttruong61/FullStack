@@ -11,3 +11,12 @@ export const userTK = async (data) => {
   const res = await axios.get("/user/get-user-token", data);
   return res.data;
 };
+
+export const getUsser = async () => {
+  const res = await axios.get("/user/get-users");
+  return res.data;
+};
+export const deleteUser = async (id) => {
+  const res = await axios.delete(`/user/delete/${id}`);
+  return res.data;
+};

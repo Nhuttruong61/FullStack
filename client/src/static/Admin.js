@@ -26,7 +26,7 @@ export const sidebar = [
   },
   {
     id: 5,
-    name: "Product",
+    name: "Order",
     icon: CiViewList,
   },
 ];

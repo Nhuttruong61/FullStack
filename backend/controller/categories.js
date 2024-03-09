@@ -51,7 +51,8 @@ const deleteCategory = async (req, res) => {
     const response = await CategogySerevice.deleteCategory(id);
     if (response)
       return res.status(200).json({
-        response,
+        success: true,
+        mes: "Xóa thành công",
       });
   } catch (e) {
     return res.status(500).json({

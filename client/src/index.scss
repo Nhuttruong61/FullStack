@@ -5,6 +5,7 @@ body {
     margin: 0;
     padding: 0;
     font-size: 14px;
+    max-width: 100%;
    
   }
   button{
@@ -23,6 +24,16 @@ body {
   .point{
   cursor: pointer;
   }
+  .btn{
+    padding: 4px 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .error-message{
+    color: red;
+    width: 100% !important; 
+  }
   @media screen and (max-width: 768px) {
     .content {
       width: 100%;
@@ -38,5 +49,18 @@ body {
     }
   }
 
-
+  .right-to-left-animation {
+    animation: example 0.5s ease-out forwards;
+  }
+  
+  @keyframes example {
+    from {
+      transform: translateX(100%);
+      opacity: 0; 
+    }
+    to {
+      transform: translateX(0); 
+      opacity: 1; 
+    }
+  }
   

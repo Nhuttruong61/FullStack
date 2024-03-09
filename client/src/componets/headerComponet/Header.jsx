@@ -28,6 +28,8 @@ function Header({ navigate, dispatch }) {
       const res = await userTK();
       if (res.success) {
         dispatch(getUser(res?.user));
+      } else {
+        dispatch(getUser(null));
       }
     } catch (e) {
       console.log(e);
@@ -118,7 +120,12 @@ function Header({ navigate, dispatch }) {
                 Login
               </div>
             )}
-            <p style={{ color: "white", paddingLeft: "8px" }}>{user?.name}</p>
+            <p
+              onClick={() => setShowInFor(!showInFor)}
+              style={{ color: "white", paddingLeft: "8px", cursor: "pointer" }}
+            >
+              {user?.name}
+            </p>
           </div>
         </div>
         <div className="search">

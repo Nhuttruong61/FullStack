@@ -14,12 +14,12 @@ function Header({ navigate }) {
           navigate("/");
         }}
       >
-        <p style={{ margin: 0, fontSize: "20px" }}>Top</p>
-        <p style={{ margin: 0, fontSize: "20px", color: "red" }}>P</p>
-        <p style={{ margin: 0, fontSize: "20px", color: "green" }}>h</p>
-        <p style={{ margin: 0, fontSize: "20px", color: "blue" }}>o</p>
-        <p style={{ margin: 0, fontSize: "20px", color: "pink" }}>n</p>
-        <p style={{ margin: 0, fontSize: "20px", color: "purple" }}>e</p>
+        <p style={{ margin: 0, fontSize: "28px" }}>Top</p>
+        <p style={{ margin: 0, fontSize: "28px", color: "red" }}>P</p>
+        <p style={{ margin: 0, fontSize: "28px", color: "green" }}>h</p>
+        <p style={{ margin: 0, fontSize: "28px", color: "blue" }}>o</p>
+        <p style={{ margin: 0, fontSize: "28px", color: "pink" }}>n</p>
+        <p style={{ margin: 0, fontSize: "28px", color: "purple" }}>e</p>
         <img src={Logo} className="right--image" alt="" />
       </div>
       <div className="header-ad--right">

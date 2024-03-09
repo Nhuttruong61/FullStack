@@ -29,5 +29,11 @@ router.get("/get-user-token", verifyToken, userController.getUserToken);
 router.get("/get-users", verifyToken, isAdmin, userController.getUsers);
 router.get("/refesToken", checkToken, userController.refesToken);
 router.put("/add-card", verifyToken, userController.addProductCard);
+router.delete(
+  "/delete/:id",
+  verifyToken,
+  isAdmin,
+  userController.deleteleteUser
+);
 
 module.exports = router;

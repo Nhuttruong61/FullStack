@@ -99,6 +99,20 @@ const refesToken = async (req, res) => {
     });
   }
 };
+const deleteleteUser = async (req, res) => {
+  try {
+    const response = await UserSerevice.deleteUser(req.params.id);
+    if (response)
+      return res.status(200).json({
+        success: true,
+        user: response.res,
+      });
+  } catch (e) {
+    return res.status(500).json({
+      mes: e.mes,
+    });
+  }
+};
 const addProductCard = async (req, res) => {
   clg;
 };
@@ -109,4 +123,5 @@ module.exports = {
   getUserToken,
   refesToken,
   addProductCard,
+  deleteleteUser,
 };

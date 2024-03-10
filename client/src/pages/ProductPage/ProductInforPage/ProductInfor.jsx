@@ -84,9 +84,9 @@ function ProductInfor() {
               </span>
             </div>
             <div className="productInfor--box--right--des">
-              <div style={{ padding: "4%" }}>{data?.des}</div>
+              <div dangerouslySetInnerHTML={{ __html: data.des }} />
             </div>
-            <div className="btn">
+            <div style={{ backgroundColor: "transparent" }} className="btn">
               <button>Mua ngay</button>
             </div>
           </div>

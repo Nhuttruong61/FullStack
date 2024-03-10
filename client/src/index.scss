@@ -29,6 +29,9 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: black;
+    color: white;
+    border-radius: 4px;
   }
   .error-message{
     color: red;
@@ -62,5 +65,13 @@ body {
       transform: translateX(0); 
       opacity: 1; 
     }
+  }
+
+  // quill
+  .ql-toolbar{
+    display: flex !important;
+  }
+  .ql-editor{
+    min-height: 30vh !important;
   }
   

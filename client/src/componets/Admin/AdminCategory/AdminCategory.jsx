@@ -64,7 +64,7 @@ function AdminCategory({ dispatch }) {
             <AiOutlineDelete />
           </span>
           <span
-            onClick={() => handleUpdate(row)}
+            onClick={() => handleOpenEdit(row)}
             style={{
               padding: "8px",
               border: "1px black solid",
@@ -82,6 +82,7 @@ function AdminCategory({ dispatch }) {
       ),
     },
   ];
+
   const handleDelete = async (data) => {
     try {
       const { _id } = data?.values;
@@ -130,18 +131,21 @@ function AdminCategory({ dispatch }) {
         setImage(null);
         reset();
         dispatch(fetchCategory());
+        setisOpen(false);
       }
     } catch (e) {
       setLoading(false);
       console.log(e);
     }
   };
+  const handleOpenEdit = (data) => {
+    setImage(null);
+    setValueUpdated(data?.values);
+    setValue("name", data?.values?.name);
+    setisOpenUpdate(true);
+  };
   const handleUpdate = async (res) => {
     try {
-      setImage(null);
-      setValueUpdated(res?.values);
-      setValue("name", res?.values?.name);
-      setisOpenUpdate(true);
       const data = {
         name: res?.name,
         image: image ? image : valueUpdated?.image?.url,
@@ -154,6 +158,7 @@ function AdminCategory({ dispatch }) {
         toast.success("Cập nhật danh mục thành công");
         dispatch(fetchCategory());
         reset();
+        setisOpenUpdate(false);
       }
     } catch (e) {
       setLoading(false);
@@ -172,7 +177,7 @@ function AdminCategory({ dispatch }) {
             <p>Tạo mới</p>
           </div>
         </div>
-        <Tabble title="Danh mục sản phẩm" data={data} columns={columns} />
+        <Tabble title="Danh mục sản phẩm" data={data || []} columns={columns} />
         <DrawerCpn isOpen={isOpen} setisOpen={setisOpen}>
           <div className="drawer-form">
             <form action="" onSubmit={handleSubmit(onCreate)}>
@@ -272,7 +277,7 @@ function AdminCategory({ dispatch }) {
                 )}
               </div>
               <div className="drawer-form--btn">
-                <button type="submit">Tạo mới</button>
+                <button type="submit">Cập nhật</button>
               </div>
             </form>
           </div>

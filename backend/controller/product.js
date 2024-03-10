@@ -60,4 +60,41 @@ const getProduct = async (req, res) => {
   }
 };
 
-module.exports = { createProduct, getProducts, getProduct };
+const deleteProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const response = await ProductSerevice.deleteProduct(id);
+    if (response)
+      return res.status(200).json({
+        success: true,
+        mes: "Xóa thành công",
+      });
+  } catch (e) {
+    return res.status(500).json({
+      mes: e.mes,
+    });
+  }
+};
+const updateProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const response = await ProductSerevice.updateProduct(id, req.body);
+    if (response)
+      return res.status(200).json({
+        success: true,
+        product: response.product,
+      });
+  } catch (e) {
+    return res.status(500).json({
+      mes: e.mes,
+    });
+  }
+};
+
+module.exports = {
+  createProduct,
+  getProducts,
+  getProduct,
+  deleteProduct,
+  updateProduct,
+};

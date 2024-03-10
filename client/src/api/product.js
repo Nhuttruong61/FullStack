@@ -24,3 +24,28 @@ export const getProductId = async (id) => {
     console.log(e);
   }
 };
+
+export const createProduct = async (data) => {
+  try {
+    const res = await axios.post("/product/creare-product", data);
+    return res.data;
+  } catch (e) {
+    console.log(e);
+  }
+};
+export const deleteProduct = async (id) => {
+  try {
+    const res = await axios.delete(`/product/delete-product/${id}`, id);
+    return res.data;
+  } catch (e) {
+    console.log(e);
+  }
+};
+export const updateProduct = async (id, data) => {
+  try {
+    const res = await axios.put(`/product/update-product/${id}`, data);
+    return res.data;
+  } catch (e) {
+    console.log(e);
+  }
+};

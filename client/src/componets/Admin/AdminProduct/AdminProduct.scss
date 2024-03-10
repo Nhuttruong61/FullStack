@@ -1,4 +1,4 @@
-.category{
+.product-admin{
     max-width: 100%;
     background-color: transparent;
     overflow-y: scroll;
@@ -6,20 +6,21 @@
         display: flex;
         justify-content: start;
         align-items: center;
-        padding: 4px 8px;
+        width: 100%;
         &--btn{
+            margin:  4px 8px;
             background-color: black;
-            display: flex;
             justify-content: center;
             align-items: center;
             width: 120px;
             color: white;
             cursor: pointer;
             border-radius: 8px;
+            display: flex;
         }
     }
-    .drawer-form{
-        width: 80%;
+    .drawer-form-product{
+        width: 60%;
        padding: 0 10%;
        label{
         font-weight: 600;
@@ -31,7 +32,7 @@
          color: black !important;
          padding: 4px 12px;
          margin-top: 4px;
-         max-width: 90% !important;
+         max-width: 96% !important;
          height: auto;
         }
        }
@@ -47,7 +48,7 @@
             }
        }
        &--btn{
-        width: 96%;
+        width: 100%;
         button{
             width: 100%;
             background-color: black;

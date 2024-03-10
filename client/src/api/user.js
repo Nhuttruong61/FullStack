@@ -11,6 +11,10 @@ export const userTK = async (data) => {
   const res = await axios.get("/user/get-user-token", data);
   return res.data;
 };
+export const resfesToken = async () => {
+  const res = await axios.get("/user/refesToken");
+  return res.data;
+};
 
 export const getUsser = async () => {
   const res = await axios.get("/user/get-users");

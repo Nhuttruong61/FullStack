@@ -10,7 +10,7 @@ import Input from "../common/inputComponet/Input";
 import { MdClose } from "react-icons/md";
 import Screen from "../screenOverlay/Screen";
 import withBase from "../../hocs/withBase";
-import { userTK } from "../../api/user";
+import { resfesToken, userTK } from "../../api/user";
 import { getUser } from "../../redux/slice/userSlice";
 import Cookies from "js-cookie";
 function Header({ navigate, dispatch }) {
@@ -28,11 +28,20 @@ function Header({ navigate, dispatch }) {
       const res = await userTK();
       if (res.success) {
         dispatch(getUser(res?.user));
-      } else {
-        dispatch(getUser(null));
       }
     } catch (e) {
-      console.log(e);
+      if (e?.response?.status === 401) {
+        try {
+          const reset = await resfesToken();
+          if (reset.success) {
+            Cookies.set("accesstoken", reset?.response?.token);
+          }
+        } catch (e2) {
+          dispatch(getUser(null));
+        }
+      } else {
+        console.log(e);
+      }
     }
   };
   const handleStatusSearch = () => {

@@ -118,4 +118,76 @@ const getProduct = (id) => {
   });
 };
 
-module.exports = { createProduct, getProducts, getProduct };
+const deleteProduct = (id) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const product = await Product.findById(id);
+      if (!product) {
+        resolve({
+          success: false,
+          message: "Không tìm thấy sản phẩm",
+        });
+        return;
+      }
+      for (const el of product.image) {
+        await cloudinary.uploader.destroy(el.public_id);
+      }
+      await Product.findByIdAndDelete(id);
+      resolve({
+        success: true,
+        message: "Sản phẩm đã được xóa thành công",
+      });
+    } catch (err) {
+      reject(err);
+    }
+  });
+};
+const updateProduct = (id, data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const product = await Product.findById(id);
+      if (!product) {
+        resolve({
+          success: false,
+          message: "Không tìm thấy sản phẩm",
+        });
+        return;
+      }
+      if (!data?.image[0].url.includes("cloudinary")) {
+        for (const el of product.image) {
+          await cloudinary.uploader.destroy(el.public_id);
+        }
+        const uploadImagesPromises = image.map(async (image) => {
+          const myCloud = await cloudinary.uploader.upload(image, {
+            folder: "CloneTopZone/Product",
+          });
+          return myCloud;
+        });
+        const listImage = await Promise.all(uploadImagesPromises);
+        product.image = listImage.map((item) => ({
+          public_id: item.public_id,
+          url: item.secure_url,
+        }));
+      }
+      product.name = data.name;
+      product.category = data.category;
+      product.des = data.des;
+      product.price = data.price;
+      product.discount = data.discount;
+      product.color = data.color;
+      resolve({
+        product,
+      });
+    } catch (err) {
+      reject(err);
+    }
+  });
+};
+
+module.exports = {
+  createProduct,
+  getProducts,
+  getProduct,
+  deleteProduct,
+  updateProduct,
+};

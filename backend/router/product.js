@@ -25,22 +25,27 @@ router.post(
 router.get("/get-products", productController.getProducts);
 router.get("/get-product/:id", productController.getProduct);
 
-// router.put(
-//   "/update-product/:id",
-//   validateDto(
-//     Joi.object({
-//       name: stringReq,
-//       image: stringReq,
-//     })
-//   ),
-//   verifyToken,
-//   isAdmin,
-//   productController.updateCategory
-// );
-// router.delete(
-//   "/delete-product/:id",
-//   verifyToken,
-//   isAdmin,
-//   productController.deleteCategory
-// );
+router.put(
+  "/update-product/:id",
+  validateDto(
+    Joi.object({
+      name: stringReq,
+      category: stringReq,
+      image: arrayReq,
+      des: stringReq,
+      price: numberReq,
+      discount: numberReq,
+      color: arrayReq,
+    })
+  ),
+  verifyToken,
+  isAdmin,
+  productController.updateProduct
+);
+router.delete(
+  "/delete-product/:id",
+  verifyToken,
+  isAdmin,
+  productController.deleteProduct
+);
 module.exports = router;

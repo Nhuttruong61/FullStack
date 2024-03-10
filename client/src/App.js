@@ -14,7 +14,6 @@ import LayoutAdmin from "./componets/Admin/LayoutAdmin.jsx";
 import AdminPage from "./pages/AdminPage/AdminPage.jsx";
 function App() {
   const { user } = useSelector((state) => state.user);
-  console.log(user?.role);
   const dispatch = useDispatch();
   const fetchdataCategory = async () => {
     dispatch(fetchCategory());

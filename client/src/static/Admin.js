@@ -30,3 +30,11 @@ export const sidebar = [
     icon: CiViewList,
   },
 ];
+
+export const colors = [
+  { name: "Red" },
+  { name: "Green" },
+  { name: "Blue" },
+  { name: "black" },
+  { name: "white" },
+];

@@ -2,8 +2,8 @@ import React, { Suspense, lazy } from "react";
 import "./Event.scss";
 import saleImage from "../../styles/image/icon-fs.png";
 import { useSelector } from "react-redux";
-import Loading from "../LoadingComponet/Loading";
-const SlickEvent = lazy(() => import("../SlickComponet/SlickEvent"));
+import Loading from "../Loading/Loading";
+const SlickEvent = lazy(() => import("../Slick/SlickEvent"));
 function Event() {
   const { data } = useSelector((state) => state.products);
   const dataEvent = data ? data.filter((el) => el?.discount > 0) : [];

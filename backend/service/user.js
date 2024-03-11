@@ -167,6 +167,30 @@ const deleteUser = (id) => {
   });
 };
 
+const updateUser = (id, data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const user = await User.findById(id);
+      if (!user) {
+        resolve({
+          success: false,
+          message: "Không tìm thấy người dùng",
+        });
+      }
+      user.name = data.name;
+      user.phone = data.phone;
+      user.address = data.address;
+      await user.save();
+      resolve({
+        success: true,
+        user,
+      });
+    } catch (err) {
+      reject(err);
+    }
+  });
+};
+
 module.exports = {
   register,
   login,
@@ -174,4 +198,5 @@ module.exports = {
   getUserToken,
   refesToken,
   deleteUser,
+  updateUser,
 };

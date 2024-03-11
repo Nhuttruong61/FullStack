@@ -2,16 +2,16 @@ import React, { memo, useEffect, useState, lazy, Suspense } from "react";
 import "./Homepage.scss";
 import { getBanner } from "../../api/banner";
 import Event from "../../componets/eventComponet/Event";
-import Category from "../../componets/categoryComponet/Category";
-import Product from "../../componets/productComponet/Product";
+import Category from "../../componets/category/Category";
+import Product from "../../componets/product/Product";
 import { useSelector } from "react-redux";
 import intro from "../../styles/videos/intro.mp4";
 import { FiCheckCircle } from "react-icons/fi";
 import { LuTruck } from "react-icons/lu";
 import { IoShieldOutline } from "react-icons/io5";
 import { FiRefreshCw } from "react-icons/fi";
-import Loading from "../../componets/LoadingComponet/Loading";
-const Slick = lazy(() => import("../../componets/SlickComponet/SlickBaner"));
+import Loading from "../../componets/Loading/Loading";
+const Slick = lazy(() => import("../../componets/Slick/SlickBaner"));
 function Hompage() {
   const [dataBanner, setDataBanner] = useState([]);
   const { data } = useSelector((state) => state.products);
@@ -37,15 +37,21 @@ function Hompage() {
         <Category />
       </div>
       <div className="container--product">
-        {category?.map((el) => {
-          const filteredData = data
-            ?.filter((item) => item?.category === el?.name)
-            .slice(0, 4);
-          if (filteredData?.length > 0) {
-            return <Product key={el.id} category={el} data={filteredData} />;
-          }
-          return null;
-        })}
+        <div className="content">
+          <div className="container--product--item">
+            {category?.map((el) => {
+              const filteredData = data
+                ?.filter((item) => item?.category === el?.name)
+                .slice(0, 4);
+              if (filteredData?.length > 0) {
+                return (
+                  <Product key={el.id} category={el} data={filteredData} />
+                );
+              }
+              return null;
+            })}
+          </div>
+        </div>
       </div>
       <div className="container--video">
         <video autoPlay muted loop>

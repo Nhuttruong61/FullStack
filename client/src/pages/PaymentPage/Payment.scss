@@ -1,0 +1,106 @@
+.payment{
+    width: 100%;
+    background-color: #F0F0F0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+   
+}
+.payment-box{
+    width: 600px;
+    
+    &--top{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    &--center{
+        box-shadow: 1px 1px 1px #ccc ;
+        background-color: white;
+        border-radius: 4px;
+        margin-bottom: 1%;
+        &--box{
+            display: flex;
+            justify-content: space-between;
+            padding: 2px 0;
+            align-items: center;
+            &--left{
+                width: 20%;
+                img{
+                    width: 100px;
+                    height: 100px;
+                }
+
+            }
+            &--center{
+                width: 50%;
+            }
+            &--right{
+                width: 20%;
+                display: flex;
+                p{
+                    padding:0 4px ;
+                    margin: 0;
+
+                }
+            }
+            &--delete{
+                width: 10%;
+                display: flex;
+                
+            }
+        }
+    }
+    &--user{
+        box-shadow: 1px 1px 1px #ccc ;
+        background-color: white;
+        border-radius: 4px;
+        margin-bottom: 1%;
+        span{
+           
+            width: 100%;
+            display: flex;
+            align-items: center;
+            padding-left: 2%;
+            p{
+            padding-right:10px ;
+            width: 20%;
+            font-weight: 600;
+            }
+            input{
+                width: 70%;
+                border: 1px solid #ccc;
+                color: black;
+            }
+        }
+    }
+    &--order{
+        box-shadow: 1px 1px 1px #ccc ;
+        background-color: white;
+        border-radius: 4px;
+        margin-bottom: 1%;
+        &--box{
+            display: flex;
+            justify-content: space-between;
+            padding:0 8px;
+            p{
+                font-weight: 600;
+            }
+        }
+        &--pay{
+            width: 100%;
+            button{
+                width: 96%;
+                border-radius: 8px;
+                background-color: blue;
+                color: white;
+                font-weight: 600;
+                outline: none;
+                padding: 12px 0;
+                border: none;
+                margin: 2%;
+                font-size: 16px;
+            }
+        }
+    }
+}

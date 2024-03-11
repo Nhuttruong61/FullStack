@@ -69,6 +69,21 @@
           justify-content: space-between;
           align-items: center;
 
+          &--card{
+            position: relative;
+            &--number{
+                display: block;
+                position: absolute;
+                right: -8px;
+                top: -20px;
+                padding: 2px 6px;
+                border-radius: 100%;
+                font-weight: 600;
+                color: white;
+                background-color: red;
+                
+            }
+        }
           label{
             display: flex;
             justify-content: center;
@@ -79,10 +94,12 @@
             font-size: 16px;
             cursor: pointer;
             margin-left: 12px;
+         
             &:hover {
                 background-color: #5E5E60;
             }
         }
+
         &--user{
             position: relative;
             &--show{
@@ -114,14 +131,16 @@
            
         }
         }
-    } &--search{
+       
+    } 
+    &--search{
         display: flex;
         justify-content: center;
         width: 462px;
         align-items: center; 
         height: 100%;
         z-index: 20;
-        
+        position: relative;
         label{
             display: flex;
             justify-content: center;
@@ -131,6 +150,36 @@
             margin-left: 12px;
             &:hover {
                 opacity: 0.8;
+            }
+          }
+          &--list{
+            position: absolute;
+            background-color: white;
+            height: auto;
+            width: 100%;
+            top: 60px;
+            box-shadow: #101010;
+            justify-content: space-between;
+            border-radius: 8px;
+            color: black;
+            &--box{
+                display: flex;
+                align-items: center;
+                &:hover{
+                    background-color: #5E5E60;
+                    cursor: pointer;
+                    color: #fff;
+                }
+                &--left{
+                    width: 20%;
+                    img{
+                        height: 100px;
+                        width: 100px;
+                    }
+                }
+                &--right{
+                    width: 80%;
+                }
             }
           }
     }

@@ -113,6 +113,22 @@ const deleteleteUser = async (req, res) => {
     });
   }
 };
+
+const updateUser = async (req, res) => {
+  try {
+    const response = await UserSerevice.updateUser(req.params.id, req.body);
+    if (response)
+      return res.status(200).json({
+        success: true,
+        user: response.user,
+      });
+  } catch (e) {
+    return res.status(500).json({
+      mes: e.mes,
+    });
+  }
+};
+
 const addProductCard = async (req, res) => {
   clg;
 };
@@ -124,4 +140,5 @@ module.exports = {
   refesToken,
   addProductCard,
   deleteleteUser,
+  updateUser,
 };

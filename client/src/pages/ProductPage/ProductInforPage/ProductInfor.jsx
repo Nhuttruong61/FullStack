@@ -3,7 +3,9 @@ import "./ProductInfor.scss";
 import { useParams } from "react-router-dom";
 import { getProductId } from "../../../api/product";
 import { formatNumber } from "../../../helper/format";
-function ProductInfor() {
+import withBase from "../../../hocs/withBase.js";
+import { addCard } from "../../../redux/slice/cardSlice.js";
+function ProductInfor({ dispatch }) {
   const { id } = useParams();
   const [data, setData] = useState(null);
   const [activeImage, setActiveImage] = useState(null);
@@ -20,13 +22,30 @@ function ProductInfor() {
       console.log(err.reponse);
     }
   };
-  useEffect(() => {
-    fetchData();
-  }, [id]);
 
+  let price = data?.price - (data?.price * data?.discount) / 100;
   const handleSeleteColor = (item) => {
     setActiveQuanity(item);
   };
+  const handleAddCard = () => {
+    const formatdata = {
+      id: data._id,
+      name: data.name,
+      image: data.image,
+      price: price ? price : data.price,
+      color: activequanity ? activequanity?.color : data?.color[0]?.color,
+      totalQuality: activequanity
+        ? activequanity?.quality
+        : data?.color[0]?.quality,
+
+      quality: 1,
+    };
+    dispatch(addCard(formatdata));
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [id]);
   return (
     <div className="productInfor">
       <div className="content">
@@ -55,9 +74,7 @@ function ProductInfor() {
                 {formatNumber(data?.price)}
               </p>
               <p className="productInfor--box--right--price--sale">
-                {formatNumber(
-                  data?.price - (data?.price * data?.discount) / 100
-                )}
+                {formatNumber(price)}
               </p>
             </div>
             <div className="productInfor--box--right--color">
@@ -84,10 +101,13 @@ function ProductInfor() {
               </span>
             </div>
             <div className="productInfor--box--right--des">
-              <div dangerouslySetInnerHTML={{ __html: data.des }} />
+              <div dangerouslySetInnerHTML={{ __html: data?.des }} />
             </div>
-            <div style={{ backgroundColor: "transparent" }} className="btn">
-              <button>Mua ngay</button>
+            <div
+              style={{ backgroundColor: "transparent", padding: "8px 0" }}
+              className="btn"
+            >
+              <button onClick={handleAddCard}>Mua ngay</button>
             </div>
           </div>
         </div>
@@ -96,4 +116,4 @@ function ProductInfor() {
   );
 }
 
-export default memo(ProductInfor);
+export default withBase(memo(ProductInfor));

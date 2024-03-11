@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema(
     role: { type: String, default: "user" },
     phone: { type: String },
     card: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
+    address: { type: String },
   },
   {
     timestamps: true,

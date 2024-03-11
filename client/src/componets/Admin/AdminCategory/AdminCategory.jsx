@@ -12,7 +12,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import withBase from "../../../hocs/withBase";
 import { fetchCategory } from "../../../redux/slice/categorySlice";
-import LoadingItem from "../../LoadingComponet/LoadingItem";
+import LoadingItem from "../../Loading/LoadingItem";
 function AdminCategory({ dispatch }) {
   const { data } = useSelector((state) => state.category);
   const [isOpen, setisOpen] = useState(false);

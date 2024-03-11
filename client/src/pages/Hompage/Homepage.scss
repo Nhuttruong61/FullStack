@@ -18,6 +18,9 @@
        display: flex;
        justify-content: center;
        margin-bottom: 20px;
+       &--item{
+        width: 100%;
+       }
        }
          &--video{
         width: 100%;

@@ -24,6 +24,14 @@ export const getProductId = async (id) => {
     console.log(e);
   }
 };
+export const getProductSearch = async (name) => {
+  try {
+    const res = await axios.get(`/product/get-products?name=${name}`);
+    return res.data;
+  } catch (e) {
+    console.log(e);
+  }
+};
 
 export const createProduct = async (data) => {
   try {

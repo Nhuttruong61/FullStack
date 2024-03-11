@@ -28,7 +28,25 @@ router.post(
 router.get("/get-user-token", verifyToken, userController.getUserToken);
 router.get("/get-users", verifyToken, isAdmin, userController.getUsers);
 router.get("/refesToken", checkToken, userController.refesToken);
-router.put("/add-card", verifyToken, userController.addProductCard);
+router.put(
+  "/update-user/:id",
+  validateDto(
+    Joi.object({
+      name: stringReq,
+      phone: stringReq,
+      address: stringReq,
+    })
+  ),
+  verifyToken,
+  userController.updateUser
+);
+
+router.put(
+  "/add-card",
+
+  verifyToken,
+  userController.addProductCard
+);
 router.delete(
   "/delete/:id",
   verifyToken,

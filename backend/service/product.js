@@ -51,7 +51,7 @@ const getProducts = (options) => {
         const product = await Product.find({ name: regex })
           .skip(skip)
           .limit(limit);
-        if (user) {
+        if (product) {
           resolve({
             success: true,
             product,
@@ -175,6 +175,7 @@ const updateProduct = (id, data) => {
       product.price = data.price;
       product.discount = data.discount;
       product.color = data.color;
+      await product.save();
       resolve({
         product,
       });

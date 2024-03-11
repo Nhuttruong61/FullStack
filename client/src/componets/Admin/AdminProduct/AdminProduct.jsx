@@ -11,7 +11,7 @@ import DrawerCpn from "../../common/Drawer/Drawer";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import withBase from "../../../hocs/withBase";
-import LoadingItem from "../../LoadingComponet/LoadingItem";
+import LoadingItem from "../../Loading/LoadingItem";
 import { colors } from "../../../static/Admin";
 import Edittor from "../../common/inputComponet/Edittor";
 import { fetchProduct } from "../../../redux/slice/productSlice";
@@ -221,7 +221,6 @@ function AdminProduct({ dispatch }) {
   };
   const handleUpdate = async (e) => {
     e.preventDefault();
-
     try {
       const data = {
         name: valueUpdated.name,

@@ -12,6 +12,8 @@ import "react-toastify/dist/ReactToastify.css";
 import ProductInfor from "./pages/ProductPage/ProductInforPage/ProductInfor.jsx";
 import LayoutAdmin from "./componets/Admin/LayoutAdmin.jsx";
 import AdminPage from "./pages/AdminPage/AdminPage.jsx";
+import Pertional from "./pages/PertionalPage/Pertional.jsx";
+import Payment from "./pages/PaymentPage/Payment.jsx";
 function App() {
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -52,6 +54,22 @@ function App() {
             element={
               <Layout>
                 <ProductInfor />
+              </Layout>
+            }
+          />
+          <Route
+            path="/user"
+            element={
+              <Layout>
+                <Pertional />
+              </Layout>
+            }
+          />
+          <Route
+            path="/payment"
+            element={
+              <Layout>
+                <Payment />
               </Layout>
             }
           />

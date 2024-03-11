@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { memo } from "react";
 import Logo from "../../styles/image/Logo.png";
@@ -13,12 +13,18 @@ import withBase from "../../hocs/withBase";
 import { resfesToken, userTK } from "../../api/user";
 import { getUser } from "../../redux/slice/userSlice";
 import Cookies from "js-cookie";
+import { getProductSearch } from "../../api/product";
+import { formatNumber } from "../../helper/format";
 function Header({ navigate, dispatch }) {
   const { data, isLoading } = useSelector((state) => state.category);
   const { user } = useSelector((state) => state.user);
   const [active, setActive] = useState(-1);
   const [showSearch, setShowSearch] = useState(false);
   const [showInFor, setShowInFor] = useState(false);
+  const [valueSearch, setValueSearch] = useState("");
+  const [listSearch, setListSearch] = useState([]);
+  const refSearch = useRef(null);
+  const { data: card } = useSelector((state) => state.car);
   const handleNavigate = (active, el) => {
     setActive(active);
     navigate(`/category/${el.name}`);
@@ -50,6 +56,30 @@ function Header({ navigate, dispatch }) {
   useEffect(() => {
     fetchUser();
   }, []);
+  const handleSearch = (e) => {
+    const value = e.target.value;
+    setValueSearch(value);
+    if (refSearch.current !== null) {
+      clearTimeout(refSearch.current);
+    }
+    refSearch.current = setTimeout(() => {
+      if (valueSearch !== " ") {
+        getDataSearch();
+      }
+    }, 500);
+  };
+  const getDataSearch = async () => {
+    const res = await getProductSearch(valueSearch);
+    if (res.success) {
+      setListSearch(res?.products);
+    }
+  };
+  const handleClickSearch = (item) => {
+    navigate(`/product/${item._id}`);
+    setValueSearch(" ");
+    setListSearch([]);
+    setShowSearch(false);
+  };
   return (
     <div className="header">
       <div className="content">
@@ -90,9 +120,17 @@ function Header({ navigate, dispatch }) {
               <label onClick={handleStatusSearch}>
                 <RiSearchLine />
               </label>
-              <label>
-                <IoBagOutline />
-              </label>
+              <div
+                className="header--content--right--card"
+                onClick={() => navigate("/payment")}
+              >
+                <label>
+                  <IoBagOutline />
+                </label>
+                <p className="header--content--right--card--number">
+                  {card?.length || 0}
+                </p>
+              </div>
             </div>
             {user ? (
               <div
@@ -109,7 +147,7 @@ function Header({ navigate, dispatch }) {
                         <p onClick={() => navigate("/admin")}>Quản lý</p>
                       </div>
                     )}
-                    <div>
+                    <div onClick={() => navigate("/user")}>
                       <p>Tài khoản</p>
                     </div>
                     <div
@@ -143,10 +181,26 @@ function Header({ navigate, dispatch }) {
               <label>
                 <RiSearchLine />
               </label>
-              <Input placeholder="Tìm kiếm sản phẩm" />
+              <Input placeholder="Tìm kiếm sản phẩm" onChange={handleSearch} />
               <label onClick={handleStatusSearch}>
                 <MdClose />
               </label>
+              <div className="header--search--list">
+                {listSearch?.map((item) => (
+                  <div
+                    className="header--search--list--box"
+                    onClick={() => handleClickSearch(item)}
+                  >
+                    <div className="header--search--list--box--left">
+                      <img src={item?.image[0]?.url} alt="" />
+                    </div>
+                    <div className="header--search--list--box--right">
+                      <h3>{item?.name}</h3>
+                      <h2>{formatNumber(item?.price)}</h2>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </div>

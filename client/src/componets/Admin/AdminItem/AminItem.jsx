@@ -4,6 +4,7 @@ import Dashboard from "../Dashboard/Dashboard";
 import Category from "../AdminCategory/AdminCategory";
 import Product from "../AdminProduct/AdminProduct";
 import Order from "../AdminOrder/AdminOrder";
+import Banner from "../AdminBanner/Banner";
 
 function AminItem({ active }) {
   let content = null;
@@ -23,6 +24,9 @@ function AminItem({ active }) {
       break;
     case 5:
       content = <Order />;
+      break;
+    case 6:
+      content = <Banner />;
       break;
     default:
       content = <div>AminItem</div>;

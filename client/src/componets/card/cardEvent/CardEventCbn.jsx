@@ -20,9 +20,7 @@ function CardEventCbn({ data, navigate }) {
           {formatNumber(data?.price - (data?.price * data.discount) / 100)}
         </p>
         <div className="box-card-event--content--loader">
-          <div className="box-card-event--content--loader--color">
-            Còn {data?.quality}
-          </div>
+          <div className="box-card-event--content--loader--color"></div>
         </div>
       </div>
     </div>

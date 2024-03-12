@@ -150,6 +150,9 @@ function Header({ navigate, dispatch }) {
                     <div onClick={() => navigate("/user")}>
                       <p>Tài khoản</p>
                     </div>
+                    <div onClick={() => navigate("/order")}>
+                      <p>Đơn hàng</p>
+                    </div>
                     <div
                       onClick={() => {
                         Cookies.remove("accesstoken");

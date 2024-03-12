@@ -3,8 +3,15 @@ import "./Payment.scss";
 import { useSelector } from "react-redux";
 import { formatNumber } from "../../helper/format";
 import withBase from "../../hocs/withBase";
-import { decreate, deleteCard, increate } from "../../redux/slice/cardSlice";
+import {
+  clearCart,
+  decreate,
+  deleteCard,
+  increate,
+} from "../../redux/slice/cartSlice";
 import Swal from "sweetalert2";
+import { createOrder } from "../../api/order";
+import { toast } from "react-toastify";
 
 function Payment({ dispatch, navigate }) {
   const { data } = useSelector((state) => state.car);
@@ -19,8 +26,18 @@ function Payment({ dispatch, navigate }) {
     dispatch(deleteCard(data));
   };
   const totalPrice = data?.reduce((acc, cur) => acc + cur.price, 0);
-  const handleOrder = () => {
-    if (!user.name || !user.phone || !user.address) {
+  const handleOrder = async () => {
+    if (!user) {
+      Swal.fire({
+        title: "Bạn phải đăng nhập trước khi thanh toán",
+        showCancelButton: true,
+        confirmButtonText: "Đăng nhập",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          navigate("/auth");
+        }
+      });
+    } else if (!user?.name || !user?.phone || !user?.address) {
       Swal.fire({
         title: "Bạn phải cập nhật thông tin trước khi thanh toán?",
         showCancelButton: true,
@@ -31,6 +48,21 @@ function Payment({ dispatch, navigate }) {
         }
       });
     } else {
+      const dataSend = {
+        user: user,
+        product: data,
+        totalPrice: totalPrice,
+      };
+      try {
+        const res = await createOrder(dataSend);
+        if (res.success) {
+          toast.success("Đặt hàng thành công");
+          navigate("/");
+          dispatch(clearCart());
+        }
+      } catch (e) {
+        console.log(e);
+      }
     }
   };
   return (
@@ -108,7 +140,7 @@ function Payment({ dispatch, navigate }) {
           </div>
 
           <div className="payment-box--order--pay" onClick={handleOrder}>
-            <button>Thanh Toán</button>
+            <button>Đặt hàng</button>
           </div>
         </div>
       </div>

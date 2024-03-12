@@ -129,9 +129,7 @@ const updateUser = async (req, res) => {
   }
 };
 
-const addProductCard = async (req, res) => {
-  clg;
-};
+const addProductCard = async (req, res) => {};
 module.exports = {
   rerister,
   login,

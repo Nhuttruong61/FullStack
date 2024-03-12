@@ -131,11 +131,10 @@ function AdminProduct({ dispatch }) {
   ];
 
   const handleDelete = async (data) => {
-    console.log(data);
     try {
       const { _id } = data?.values;
       Swal.fire({
-        title: "Bạn có muốn xóa sản phẩm này này?",
+        title: "Bạn có muốn xóa sản phẩm này?",
         showCancelButton: true,
         confirmButtonText: "Xóa",
       }).then(async (result) => {

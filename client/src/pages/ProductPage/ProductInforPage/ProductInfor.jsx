@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { getProductId } from "../../../api/product";
 import { formatNumber } from "../../../helper/format";
 import withBase from "../../../hocs/withBase.js";
-import { addCard } from "../../../redux/slice/cardSlice.js";
+import { addCard } from "../../../redux/slice/cartSlice.js";
 function ProductInfor({ dispatch }) {
   const { id } = useParams();
   const [data, setData] = useState(null);
@@ -107,7 +107,12 @@ function ProductInfor({ dispatch }) {
               style={{ backgroundColor: "transparent", padding: "8px 0" }}
               className="btn"
             >
-              <button onClick={handleAddCard}>Mua ngay</button>
+              <button
+                disabled={activequanity?.quality == 0}
+                onClick={handleAddCard}
+              >
+                Mua ngay
+              </button>
             </div>
           </div>
         </div>

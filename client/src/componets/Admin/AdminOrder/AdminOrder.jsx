@@ -1,7 +1,167 @@
-import React from "react";
-
+import React, { memo, useEffect, useState } from "react";
+import { AiOutlineDelete } from "react-icons/ai";
+import Tabble from "../../common/Tabble/Tabble";
+import LoadingItem from "../../Loading/LoadingItem";
+import { deleteOrder, getOrders, updateStatusOrder } from "../../../api/order";
+import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 function AdminOrder() {
-  return <div>AdminOrder</div>;
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const fetchData = async () => {
+    try {
+      const res = await getOrders();
+
+      if (res.success) {
+        if (res.success) {
+          const processedData = res.response.map((item) => ({
+            id: item._id,
+            name: item.user.name,
+            phone: item.user.phone,
+            price: item.totalPrice,
+            status: item.status,
+            product: item.product,
+          }));
+          setData(processedData);
+        }
+      }
+    } catch (e) {}
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
+  const columns = [
+    {
+      Header: "id",
+      accessor: "id",
+    },
+    {
+      Header: "Name",
+      accessor: "name",
+    },
+    {
+      Header: "Phone",
+      accessor: "phone",
+    },
+    {
+      Header: "Product",
+      accessor: "product",
+      Cell: ({ value }) => (
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <img
+            src={value[0]?.image[0]?.url}
+            alt=""
+            style={{ width: "50px", height: "50px", marginRight: "8px" }}
+          />
+          <div>
+            <p style={{ padding: "0", margin: "0" }}>{value[0]?.name}</p>
+            <p style={{ padding: "0", margin: "0" }}>{value[0]?.quality}</p>
+            <p style={{ padding: "0", margin: "0" }}>{value[0]?.color}</p>
+          </div>
+        </div>
+      ),
+    },
+    {
+      Header: "Price",
+      accessor: "price",
+    },
+    {
+      Header: "Status",
+      accessor: "status",
+      Cell: ({ row }) => (
+        <div className="">
+          {row.values.status === "Đã hủy" || row.values.status === "Đã giao" ? (
+            <span>{row.values.status}</span>
+          ) : (
+            <select
+              defaultValue={row.values?.status}
+              onChange={(e) => handleStatusChange(e, row.values)}
+            >
+              <option>{row.values.status}</option>
+              {row.values.status !== "Đã chuyển hàng" && (
+                <option value="Đã chuyển hàng">Đã chuyển hàng</option>
+              )}
+              {row.values.status !== "Đã giao" && (
+                <option value="Đã giao">Đã giao</option>
+              )}
+            </select>
+          )}
+        </div>
+      ),
+    },
+    {
+      Header: "Actions",
+      Cell: ({ row }) => (
+        <div style={{ display: "flex" }}>
+          <span
+            onClick={() => handleDelete(row)}
+            style={{
+              padding: "8px",
+              border: "1px black solid",
+              borderRadius: "4px",
+              display: "flex",
+              justifyContent: "center",
+              alignContent: "center",
+              marginRight: "2px",
+              color: "red",
+              cursor: "pointer",
+            }}
+          >
+            <AiOutlineDelete />
+          </span>
+        </div>
+      ),
+    },
+  ];
+  const handleStatusChange = async (e, values) => {
+    try {
+      const value = e.target.value;
+      const { id } = values;
+      setLoading(true);
+      const res = await updateStatusOrder(id, { status: value });
+      setLoading(false);
+      if (res.success) {
+        toast.success("Cập nhật trạng thái thành công");
+        fetchData();
+      }
+    } catch (e) {
+      setLoading(fetch);
+      console.log(e);
+    }
+  };
+  const handleDelete = async (data) => {
+    try {
+      const { id } = data.values;
+      Swal.fire({
+        title: "Bạn có muốn xóa đơn hàng này?",
+        showCancelButton: true,
+        confirmButtonText: "Xóa",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          setLoading(true);
+          const res = await deleteOrder(id);
+          setLoading(false);
+          if (res?.success) {
+            toast.success(res?.mes);
+            fetchData();
+            Swal.fire("Đã xóa!", "", "Thành công");
+          }
+        }
+      });
+    } catch (e) {}
+  };
+  return (
+    <div>
+      <LoadingItem isLoading={loading}>
+        <div className="product-admin">
+          <div style={{ height: "90vh", overflowY: "scroll" }}>
+            <Tabble title="Sản phẩm" data={data || []} columns={columns} />
+          </div>
+        </div>
+      </LoadingItem>
+    </div>
+  );
 }
 
-export default AdminOrder;
+export default memo(AdminOrder);

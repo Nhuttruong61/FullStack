@@ -15,7 +15,7 @@ import {
 import userReducer from "./slice/userSlice";
 import categoryReducer from "./slice/categorySlice";
 import productReducer from "./slice/productSlice";
-import cardReducer from "./slice/cardSlice";
+import cardReducer from "./slice/cartSlice";
 
 const rootReducers = combineReducers({
   user: userReducer,

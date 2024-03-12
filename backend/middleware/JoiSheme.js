@@ -5,3 +5,4 @@ exports.numberReq = Joi.number().required();
 exports.number = Joi.string().allow(null, "");
 exports.array = Joi.array().allow(null, "");
 exports.arrayReq = Joi.array().required();
+exports.objectReq = Joi.object().required();

@@ -4,7 +4,7 @@ const initialState = {
   data: [],
 };
 
-export const cardSlice = createSlice({
+export const cartSlice = createSlice({
   name: "card",
   initialState: initialState,
   reducers: {
@@ -44,8 +44,12 @@ export const cardSlice = createSlice({
         state.data[checkIndex].quality = action.payload.quality - 1;
       }
     },
+    clearCart: (state, action) => {
+      state.data = [];
+    },
   },
 });
 
-export const { addCard, deleteCard, increate, decreate } = cardSlice.actions;
-export default cardSlice.reducer;
+export const { addCard, deleteCard, increate, decreate, clearCart } =
+  cartSlice.actions;
+export default cartSlice.reducer;

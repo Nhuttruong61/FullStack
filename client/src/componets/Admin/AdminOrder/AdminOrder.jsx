@@ -5,6 +5,8 @@ import LoadingItem from "../../Loading/LoadingItem";
 import { deleteOrder, getOrders, updateStatusOrder } from "../../../api/order";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
+import { formatNumber } from "../../../helper/format";
+
 function AdminOrder() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -65,6 +67,7 @@ function AdminOrder() {
     {
       Header: "Price",
       accessor: "price",
+      Cell: ({ value }) => <p>{formatNumber(value)}</p>,
     },
     {
       Header: "Status",

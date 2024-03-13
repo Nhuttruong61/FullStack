@@ -15,6 +15,8 @@ import LoadingItem from "../../Loading/LoadingItem";
 import { colors } from "../../../static/Admin";
 import Edittor from "../../common/inputComponet/Edittor";
 import { fetchProduct } from "../../../redux/slice/productSlice";
+import { formatNumber } from "../../../helper/format";
+
 function AdminProduct({ dispatch }) {
   const { data } = useSelector((state) => state.products);
   const { data: category } = useSelector((state) => state.category);
@@ -47,6 +49,7 @@ function AdminProduct({ dispatch }) {
     {
       Header: "Category",
       accessor: "category",
+      Cell: ({ value }) => <p>{value?.name}</p>,
     },
     {
       Header: "Discount",
@@ -66,10 +69,14 @@ function AdminProduct({ dispatch }) {
     {
       Header: "Price",
       accessor: "price",
+      Cell: ({ value }) => <p>{formatNumber(value)}</p>,
     },
     {
       Header: "Description",
       accessor: "des",
+      Cell: ({ value }) => (
+        <div dangerouslySetInnerHTML={{ __html: value }}></div>
+      ),
     },
     {
       Header: "Quantity",

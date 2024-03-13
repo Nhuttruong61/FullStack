@@ -1,4 +1,3 @@
-const Category = require("../models/category");
 const Product = require("../models/product");
 const cloudinary = require("cloudinary").v2;
 const createProduct = (props) => {
@@ -19,12 +18,10 @@ const createProduct = (props) => {
         });
         return myCloud;
       });
-
       const listImage = await Promise.all(uploadImagesPromises);
-      const dataCategory = await Category.findById(category);
       const product = await Product.create({
         name: name,
-        category: dataCategory.name,
+        category: category,
         des: des,
         price: price,
         discount: discount,
@@ -44,13 +41,14 @@ const createProduct = (props) => {
 const getProducts = (options) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const { name, limit, page, category } = options;
-      const skip = (page - 1) * limit;
-      if (options?.name) {
+      const { name, limit, category } = options;
+      if (name) {
         const regex = new RegExp(name, "i");
-        const product = await Product.find({ name: regex })
-          .skip(skip)
-          .limit(limit);
+        const product = await Product.find({ name: regex }).populate(
+          "category"
+        );
+        // .skip(skip);
+        // .limit(limit);
         if (product) {
           resolve({
             success: true,
@@ -62,11 +60,12 @@ const getProducts = (options) => {
             message: "Không tìm thấy sản phẩm",
           });
         }
-      } else if (options?.category) {
-        const regex = new RegExp(category, "i");
-        const product = await Product.find({ category: regex })
-          .skip(skip)
-          .limit(limit);
+      } else if (category) {
+        const product = await Product.find({ category: category }).populate(
+          "category"
+        );
+        // .skip(skip);
+        // .limit(limit);
         if (product) {
           resolve({
             success: true,
@@ -79,7 +78,9 @@ const getProducts = (options) => {
           });
         }
       } else {
-        const product = await Product.find().skip(skip).limit(limit);
+        const product = await Product.find().populate("category");
+        // .limit(limit);
+
         if (product) {
           resolve({
             success: true,
@@ -100,7 +101,7 @@ const getProducts = (options) => {
 const getProduct = (id) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const product = await Product.findById(id);
+      const product = await Product.findById(id).populate("category");
       if (product) {
         resolve({
           success: true,
@@ -153,11 +154,11 @@ const updateProduct = (id, data) => {
         });
         return;
       }
-      if (!data?.image[0].url.includes("cloudinary")) {
+      if (!data?.image[0]) {
         for (const el of product.image) {
           await cloudinary.uploader.destroy(el.public_id);
         }
-        const uploadImagesPromises = image.map(async (image) => {
+        const uploadImagesPromises = data.image.map(async (image) => {
           const myCloud = await cloudinary.uploader.upload(image, {
             folder: "CloneTopZone/Product",
           });

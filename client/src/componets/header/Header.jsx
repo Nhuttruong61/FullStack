@@ -27,7 +27,7 @@ function Header({ navigate, dispatch }) {
   const { data: card } = useSelector((state) => state.car);
   const handleNavigate = (active, el) => {
     setActive(active);
-    navigate(`/category/${el.name}`);
+    navigate(`/category/${el._id}`);
   };
   const fetchUser = async () => {
     try {

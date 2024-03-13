@@ -41,7 +41,7 @@ function Hompage() {
           <div className="container--product--item">
             {category?.map((el) => {
               const filteredData = data
-                ?.filter((item) => item?.category === el?.name)
+                ?.filter((item) => item?.category.name === el?.name)
                 .slice(0, 4);
               if (filteredData?.length > 0) {
                 return (

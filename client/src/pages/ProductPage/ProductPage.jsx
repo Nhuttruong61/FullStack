@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import "./ProductPage.scss";
 import { useParams } from "react-router-dom";
 import { getProductCategory } from "../../api/product";
 import Logo from "../../styles/image/Logo.png";
 import CardProductCbn from "../../componets/card/cardProduct/CardProductCbn";
+import { useSelector } from "react-redux";
 function ProductPage() {
   const [dataProduct, setDataProduct] = useState([]);
   const [loading, setLoading] = useState(false);
   let { category } = useParams();
+  const { data } = useSelector((state) => state.category);
   const fetchdataProduct = async () => {
     try {
       setLoading(true);
@@ -21,12 +23,13 @@ function ProductPage() {
   useEffect(() => {
     fetchdataProduct();
   }, [category]);
+  const nameCategory = data?.filter((el) => el?._id === category);
   return (
     <div className="product">
       <div className="content">
         <div className="product--name">
           <img src={Logo} className="right--image" alt="" />
-          <h1>{category}</h1>
+          <h1>{nameCategory[0]?.name}</h1>
         </div>
         {dataProduct.length > 0 ? (
           <div className="product--list">
@@ -44,4 +47,4 @@ function ProductPage() {
   );
 }
 
-export default ProductPage;
+export default memo(ProductPage);

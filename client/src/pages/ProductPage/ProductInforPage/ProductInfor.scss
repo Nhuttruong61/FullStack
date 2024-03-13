@@ -96,3 +96,18 @@
         }
     }
 }
+.suggest{
+    display: flex;
+    justify-content: center;
+    background-color: #3E3E3F;
+    padding:  1% 0;
+    h2{
+        color: white;
+    }
+    &--list{
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        grid-gap: 20px; 
+
+    }
+}

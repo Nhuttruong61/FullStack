@@ -25,7 +25,10 @@ function Payment({ dispatch, navigate }) {
   const handleDeleteCard = (data) => {
     dispatch(deleteCard(data));
   };
-  const totalPrice = data?.reduce((acc, cur) => acc + cur.price, 0);
+  const totalPrice = data?.reduce(
+    (acc, cur) => acc + cur?.price * cur?.quality,
+    0
+  );
   const handleOrder = async () => {
     if (!user) {
       Swal.fire({
@@ -65,6 +68,7 @@ function Payment({ dispatch, navigate }) {
       }
     }
   };
+  console.log(data);
   return (
     <div className="payment">
       <div className="payment-box">

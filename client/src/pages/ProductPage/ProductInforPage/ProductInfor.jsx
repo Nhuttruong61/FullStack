@@ -4,16 +4,18 @@ import { useParams } from "react-router-dom";
 import { getProductId } from "../../../api/product";
 import { formatNumber } from "../../../helper/format";
 import withBase from "../../../hocs/withBase.js";
-import { addCard } from "../../../redux/slice/cartSlice.js";
+import { getCartUser } from "../../../redux/slice/cartSlice.js";
 import { useSelector } from "react-redux";
-import Product from "../../../componets/product/Product.jsx";
 import CardProductCbn from "../../../componets/card/cardProduct/CardProductCbn.jsx";
+import { addCart } from "../../../api/user.js";
+import { toast } from "react-toastify";
 function ProductInfor({ dispatch }) {
   const { id } = useParams();
   const [data, setData] = useState(null);
   const [activeImage, setActiveImage] = useState(null);
   const [activequanity, setActiveQuanity] = useState(null);
   const { data: listData } = useSelector((state) => state.products);
+  const { user } = useSelector((state) => state.user);
   const fetchData = async () => {
     try {
       const res = await getProductId(id);
@@ -29,20 +31,19 @@ function ProductInfor({ dispatch }) {
   const handleSeleteColor = (item) => {
     setActiveQuanity(item);
   };
-  const handleAddCard = () => {
-    const formatdata = {
-      id: data._id,
-      name: data.name,
-      image: data.image,
-      price: price ? price : data.price,
-      color: activequanity ? activequanity?.color : data?.color[0]?.color,
-      totalQuality: activequanity
-        ? activequanity?.quality
-        : data?.color[0]?.quality,
-
-      quality: 1,
-    };
-    dispatch(addCard(formatdata));
+  const handleAddCard = async () => {
+    try {
+      const dataFm = {
+        idProduct: data._id,
+        color: activequanity?.color
+          ? activequanity?.color
+          : data?.color[0]?.color,
+      };
+      const res = await addCart(user._id, dataFm);
+      dispatch(getCartUser(res?.user.cart));
+    } catch (err) {
+      toast.warning(err?.response?.data?.mes);
+    }
   };
   const listSuggest = listData
     ?.filter((el) => el?.category._id == data?.category._id)

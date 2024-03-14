@@ -15,6 +15,7 @@ import { getUser } from "../../redux/slice/userSlice";
 import Cookies from "js-cookie";
 import { getProductSearch } from "../../api/product";
 import { formatNumber } from "../../helper/format";
+import { getCartUser } from "../../redux/slice/cartSlice";
 function Header({ navigate, dispatch }) {
   const { data, isLoading } = useSelector((state) => state.category);
   const { user } = useSelector((state) => state.user);
@@ -24,7 +25,7 @@ function Header({ navigate, dispatch }) {
   const [valueSearch, setValueSearch] = useState("");
   const [listSearch, setListSearch] = useState([]);
   const refSearch = useRef(null);
-  const { data: card } = useSelector((state) => state.car);
+  const { data: cart } = useSelector((state) => state.car);
   const handleNavigate = (active, el) => {
     setActive(active);
     navigate(`/category/${el._id}`);
@@ -34,6 +35,7 @@ function Header({ navigate, dispatch }) {
       const res = await userTK();
       if (res.success) {
         dispatch(getUser(res?.user));
+        dispatch(getCartUser(res?.user?.cart));
       }
     } catch (e) {
       if (e?.response?.status === 401) {
@@ -44,6 +46,7 @@ function Header({ navigate, dispatch }) {
           }
         } catch (e2) {
           dispatch(getUser(null));
+          dispatch(getCartUser(null));
         }
       } else {
         console.log(e);
@@ -128,7 +131,7 @@ function Header({ navigate, dispatch }) {
                   <IoBagOutline />
                 </label>
                 <p className="header--content--right--card--number">
-                  {card?.length || 0}
+                  {cart?.length || 0}
                 </p>
               </div>
             </div>

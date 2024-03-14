@@ -32,7 +32,6 @@ function Pertional({ navigate, dispatch }) {
         toast.warning("Bạn phải điền đầy đủ thông tin");
       } else {
         const res = await updateUser(user._id, valueUser);
-        console.log(res);
         if (res?.success) {
           toast.success("Cập nhật thành công");
           dispatch(getUser(res.user));

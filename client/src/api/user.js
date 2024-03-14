@@ -29,3 +29,13 @@ export const updateUser = async (id, data) => {
   const res = await axios.put(`/user/update-user/${id}`, data);
   return res.data;
 };
+
+export const addCart = async (id, data) => {
+  const res = await axios.patch(`/user/add-card/${id}`, data);
+  return res.data;
+};
+
+export const removeCart = async (id, data) => {
+  const res = await axios.patch(`/user/remove-card/${id}`, data);
+  return res.data;
+};

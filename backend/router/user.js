@@ -41,17 +41,13 @@ router.put(
   userController.updateUser
 );
 
-router.put(
-  "/add-card",
-
-  verifyToken,
-  userController.addProductCard
-);
 router.delete(
   "/delete/:id",
   verifyToken,
   isAdmin,
   userController.deleteleteUser
 );
+router.patch("/add-card/:id", verifyToken, userController.addProductCart);
+router.patch("/remove-card/:id", verifyToken, userController.removeProductCart);
 
 module.exports = router;

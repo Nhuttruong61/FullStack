@@ -6,7 +6,13 @@ const userSchema = new mongoose.Schema(
     password: { type: String, required: true },
     role: { type: String, default: "user" },
     phone: { type: String },
-    card: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
+    cart: [
+      {
+        product: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
+        quantity: { type: Number, default: 1 },
+        color: { type: String, required: true },
+      },
+    ],
     address: { type: String },
   },
   {

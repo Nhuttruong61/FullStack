@@ -129,14 +129,45 @@ const updateUser = async (req, res) => {
   }
 };
 
-const addProductCard = async (req, res) => {};
+const addProductCart = async (req, res) => {
+  try {
+    const response = await UserSerevice.addProductCart(req.params.id, req.body);
+    if (response)
+      return res.status(200).json({
+        success: true,
+        user: response.response,
+      });
+  } catch (e) {
+    return res.status(500).json({
+      mes: e.mes,
+    });
+  }
+};
+const removeProductCart = async (req, res) => {
+  try {
+    const response = await UserSerevice.removeProductCart(
+      req.params.id,
+      req.body
+    );
+    if (response)
+      return res.status(200).json({
+        success: true,
+        user: response.response,
+      });
+  } catch (e) {
+    return res.status(500).json({
+      mes: e.mes,
+    });
+  }
+};
 module.exports = {
   rerister,
   login,
   getUsers,
   getUserToken,
   refesToken,
-  addProductCard,
+  addProductCart,
   deleteleteUser,
   updateUser,
+  removeProductCart,
 };

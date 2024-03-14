@@ -1,47 +1,39 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  data: [],
+  data: null,
 };
 
 export const cartSlice = createSlice({
   name: "card",
   initialState: initialState,
   reducers: {
-    addCard: (state, action) => {
-      const checkIndex = state.data.findIndex(
-        (item) => item.id === action.payload.id
-      );
-      if (checkIndex !== -1) {
-        state.data[checkIndex] = action.payload;
-      } else {
-        state.data.push(action.payload);
-      }
+    getCartUser: (state, action) => {
+      state.data = action.payload;
     },
-    deleteCard: (state, action) => {
-      const listData = state.data.filter(
-        (item) => item.id !== action.payload.id
-      );
-      if (listData) {
-        state.data = listData;
-      }
-    },
+
+    // deleteCard: (state, action) => {
+    //   const listData = state.data.filter(
+    //     (item) => item.id !== action.payload.id
+    //   );
+    //   if (listData) {
+    //     state.data = listData;
+    //   }
+    // },
     increate: (state, action) => {
       const checkIndex = state.data.findIndex(
-        (item) => item.id === action.payload.id
+        (item) => item._id === action.payload._id
       );
       if (checkIndex !== -1) {
-        console.log(action.payload);
-        state.data[checkIndex].quality = action.payload.quality + 1;
+        state.data[checkIndex].quantity = action.payload.quantity + 1;
       }
     },
     decreate: (state, action) => {
       const checkIndex = state.data.findIndex(
-        (item) => item.id === action.payload.id
+        (item) => item._id === action.payload._id
       );
       if (checkIndex !== -1) {
-        console.log(action.payload);
-        state.data[checkIndex].quality = action.payload.quality - 1;
+        state.data[checkIndex].quantity = action.payload.quantity - 1;
       }
     },
     clearCart: (state, action) => {
@@ -50,6 +42,6 @@ export const cartSlice = createSlice({
   },
 });
 
-export const { addCard, deleteCard, increate, decreate, clearCart } =
+export const { deleteCard, increate, decreate, clearCart, getCartUser } =
   cartSlice.actions;
 export default cartSlice.reducer;

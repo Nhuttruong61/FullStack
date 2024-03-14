@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const orderSchema = new mongoose.Schema(
   {
     user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-    product: { type: Array },
+    product: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
     totalPrice: { type: String, required: true },
     status: { type: String, default: "Chờ xử lý" },
   },

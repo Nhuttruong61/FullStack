@@ -1,6 +1,7 @@
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const redis = require("../config/redisConnect");
 const register = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -80,7 +81,9 @@ const login = (data) => {
 const getUserToken = (id) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const res = await User.findById(id).select("-password");
+      const res = await User.findById(id)
+        .select("-password")
+        .populate("cart.product");
       resolve({
         res,
       });
@@ -94,12 +97,11 @@ const getUsers = (options) => {
     try {
       const { name, limit, page } = options;
       const skip = (page - 1) * limit;
-      if (options?.name) {
+      if (name) {
         const regex = new RegExp(name, "i");
-        const user = await User.find({ name: regex })
-          .skip(skip)
-          .limit(limit)
-          .select("-password");
+        const user = await User.find({ name: regex }).select("-password");
+        // .skip(skip)
+        // .limit(limit)
         if (user) {
           resolve({
             success: true,
@@ -112,10 +114,18 @@ const getUsers = (options) => {
           });
         }
       } else {
-        const user = await User.find()
-          .skip(skip)
-          .limit(limit)
-          .select("-password");
+        // const dataRedis = await redis.get("getUsers");
+        // if (dataRedis) {
+        //   let user = JSON.parse(dataRedis);
+        //   resolve({
+        //     success: true,
+        //     user,
+        //   });
+        // }
+        const user = await User.find().select("-password");
+        // .skip(skip)
+        // .limit(limit)
+        // redis.set("getUsers", JSON.stringify(user));
         if (user) {
           resolve({
             success: true,
@@ -191,6 +201,76 @@ const updateUser = (id, data) => {
   });
 };
 
+const addProductCart = (id, data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const { idProduct, color } = data;
+      const user = await User.findById(id);
+      if (!user) {
+        resolve({
+          success: false,
+          message: "Không tìm thấy người dùng",
+        });
+      }
+      const isProductInCart = user.cart.some(
+        (item) => item.product.toString() === idProduct
+      );
+
+      if (!isProductInCart) {
+        user.cart.push({
+          product: idProduct,
+          quantity: data.quantity || 1,
+          color: color,
+        });
+      } else {
+        reject({
+          mes: "Sản phẩm đã có trong giỏ hàng",
+        });
+        return;
+      }
+      await user.save();
+      const response = await User.findById(id).populate("cart.product");
+      resolve({
+        success: true,
+        response,
+      });
+    } catch (err) {
+      reject(err);
+    }
+  });
+};
+const removeProductCart = (id, data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const { _id } = data;
+      const user = await User.findById(id);
+      if (!user) {
+        resolve({
+          success: false,
+          message: "Không tìm thấy người dùng",
+        });
+      }
+      const filter = user.cart.filter((item) => item._id.toString() !== _id);
+
+      if (filter) {
+        user.cart = filter;
+      } else {
+        reject({
+          mes: "Sản phẩm đã có trong giỏ hàng",
+        });
+        return;
+      }
+      await user.save();
+      const response = await User.findById(id).populate("cart.product");
+      resolve({
+        success: true,
+        response,
+      });
+    } catch (err) {
+      reject(err);
+    }
+  });
+};
 module.exports = {
   register,
   login,
@@ -199,4 +279,6 @@ module.exports = {
   refesToken,
   deleteUser,
   updateUser,
+  addProductCart,
+  removeProductCart,
 };

@@ -52,7 +52,7 @@ function AdminOrder() {
       Cell: ({ value }) => (
         <div style={{ display: "flex", alignItems: "center" }}>
           <img
-            src={value[0]?.image[0]?.url}
+            src={value[0]?.product?.image[0]?.url}
             alt=""
             style={{ width: "50px", height: "50px", marginRight: "8px" }}
           />

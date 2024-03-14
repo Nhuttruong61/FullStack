@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from "react";
+import React, { memo } from "react";
 import "./Payment.scss";
 import { useSelector } from "react-redux";
 import { formatNumber } from "../../helper/format";
@@ -6,12 +6,13 @@ import withBase from "../../hocs/withBase";
 import {
   clearCart,
   decreate,
-  deleteCard,
+  getCartUser,
   increate,
 } from "../../redux/slice/cartSlice";
 import Swal from "sweetalert2";
 import { createOrder } from "../../api/order";
 import { toast } from "react-toastify";
+import { removeCart } from "../../api/user";
 
 function Payment({ dispatch, navigate }) {
   const { data } = useSelector((state) => state.car);
@@ -22,11 +23,14 @@ function Payment({ dispatch, navigate }) {
   const handleIncreate = (data) => {
     dispatch(increate(data));
   };
-  const handleDeleteCard = (data) => {
-    dispatch(deleteCard(data));
+  const handleDeleteCard = async (data) => {
+    try {
+      const res = await removeCart(user._id, { _id: data._id });
+      dispatch(getCartUser(res?.user.cart));
+    } catch (e) {}
   };
   const totalPrice = data?.reduce(
-    (acc, cur) => acc + cur?.price * cur?.quality,
+    (acc, cur) => acc + cur?.product?.price * cur?.quantity,
     0
   );
   const handleOrder = async () => {
@@ -53,9 +57,10 @@ function Payment({ dispatch, navigate }) {
     } else {
       const dataSend = {
         user: user,
-        product: data,
+        product: data?.map((el) => el._id),
         totalPrice: totalPrice,
       };
+
       try {
         const res = await createOrder(dataSend);
         if (res.success) {
@@ -68,7 +73,7 @@ function Payment({ dispatch, navigate }) {
       }
     }
   };
-  console.log(data);
+
   return (
     <div className="payment">
       <div className="payment-box">
@@ -83,12 +88,12 @@ function Payment({ dispatch, navigate }) {
             return (
               <div className="payment-box--center--box">
                 <div className="payment-box--center--box--left">
-                  <img src={el?.image[0].url} alt="" />
+                  <img src={el?.product?.image[0]?.url} alt="" />
                 </div>
                 <div className="payment-box--center--box--center">
-                  <h3>{el?.name}</h3>
+                  <h3>{el?.product?.name}</h3>
                   <p>Màu: {el?.color}</p>
-                  <h4>{formatNumber(el?.price)}</h4>
+                  <h4>{formatNumber(el?.product?.price)}</h4>
                 </div>
                 <div className="payment-box--center--box--right">
                   <button
@@ -97,7 +102,7 @@ function Payment({ dispatch, navigate }) {
                   >
                     -
                   </button>
-                  <p>{el?.quality}</p>
+                  <p>{el?.quantity}</p>
                   <button
                     disabled={el.quality >= el.totalQuality}
                     onClick={() => handleIncreate(el)}

@@ -28,6 +28,7 @@ const getOrders = () => {
   return new Promise(async (resolve, reject) => {
     try {
       const res = await Order.find().populate("user");
+      console.log(res);
       if (!res) {
         reject({
           success: false,
@@ -45,7 +46,8 @@ const getOrders = () => {
 const getOrderUser = (id) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const res = await Order.find({ user: id });
+      const res = await Order.find({ user: id }).populate("product");
+      console.log(res);
       if (!res) {
         reject({
           success: false,
@@ -110,30 +112,31 @@ const updateStatusOrder = (id, data) => {
       if (order.status == "Chờ xử lý") {
         let checkQuality = true;
         order.product.forEach(async (el) => {
-          const product = await Product.findById(el.id);
-          const selectedColor = product.color.find((c) => c.color === el.color);
-          if (selectedColor.quality < el.quality) {
-            checkQuality = false;
-          }
+          const product = await Product.findById(el._id);
+
+          // const selectedColor = product.color.find((c) => c.color === el.color);
+          // if (selectedColor.quality < el.quality) {
+          //   checkQuality = false;
+          // }
         });
-        if (!checkQuality) {
-          reject({
-            success: false,
-            mes: "không đủ số lượng",
-          });
-          return;
-        }
-        order.product.forEach(async (el) => {
-          const product = await Product.findById(el.id);
-          const selectedColor = product.color.find((c) => c.color === el.color);
-          selectedColor.quality -= el.quality;
-          product.sold_out += el.quality;
-          await product.save();
-        });
+        // if (!checkQuality) {
+        //   reject({
+        //     success: false,
+        //     mes: "không đủ số lượng",
+        //   });
+        //   return;
       }
-      order.status = data.status;
-      await order.save();
-      resolve(order);
+      //   order.product.forEach(async (el) => {
+      //     const product = await Product.findById(el.id);
+      //     const selectedColor = product.color.find((c) => c.color === el.color);
+      //     selectedColor.quality -= el.quality;
+      //     product.sold_out += el.quality;
+      //     await product.save();
+      //   });
+      // }
+      // order.status = data.status;
+      // await order.save();
+      // resolve(order);
     } catch (e) {
       reject(e);
     }

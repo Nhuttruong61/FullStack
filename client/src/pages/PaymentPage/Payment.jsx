@@ -77,6 +77,7 @@ function Payment({ dispatch, navigate }) {
       }
     }
   };
+  console.log(data);
   return (
     <div className="payment">
       <div className="payment-box">
@@ -114,7 +115,11 @@ function Payment({ dispatch, navigate }) {
                   </button>
                 </div>
                 <div className="payment-box--center--box--delete">
-                  <button onClick={() => handleDeleteCard(el)} className="btn">
+                  <button
+                    disabled={data?.length == 0}
+                    onClick={() => handleDeleteCard(el)}
+                    className="btn"
+                  >
                     Xóa
                   </button>
                 </div>
@@ -151,8 +156,10 @@ function Payment({ dispatch, navigate }) {
             <p>{formatNumber(totalPrice || 0)}</p>
           </div>
 
-          <div className="payment-box--order--pay" onClick={handleOrder}>
-            <button>Đặt hàng</button>
+          <div disabled className="payment-box--order--pay">
+            <button disabled={data?.length === 0} onClick={handleOrder}>
+              Đặt hàng
+            </button>
           </div>
         </div>
       </div>

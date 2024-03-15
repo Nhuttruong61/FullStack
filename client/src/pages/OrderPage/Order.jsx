@@ -32,7 +32,6 @@ function Order() {
   useEffect(() => {
     fetchDataOrder();
   }, [user]);
-  console.log(dataOrder);
   return (
     <div className="order">
       <div className="content">
@@ -40,12 +39,12 @@ function Order() {
           return (
             <div className="order--list">
               <div className="order--list--left">
-                {el?.product.map((item) => {
+                {el?.products.map((item) => {
                   return (
                     <div className="order--list--left--box">
                       <img src={item?.product?.image[0].url} alt="" />
                       <p>Màu: {item.color}</p>
-                      <h4>Số lượng: {item.quality}</h4>
+                      <h4>Số lượng: {item.quantity}</h4>
                     </div>
                   );
                 })}

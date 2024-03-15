@@ -205,6 +205,7 @@ const addProductCart = (id, data) => {
   return new Promise(async (resolve, reject) => {
     try {
       const { idProduct, color } = data;
+      console.log(idProduct);
       const user = await User.findById(id);
       if (!user) {
         resolve({

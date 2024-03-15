@@ -57,7 +57,11 @@ function Payment({ dispatch, navigate }) {
     } else {
       const dataSend = {
         user: user,
-        product: data?.map((el) => el._id),
+        products: data?.map((el) => ({
+          product: el?.product?._id,
+          quantity: el?.quantity,
+          color: el?.color,
+        })),
         totalPrice: totalPrice,
       };
 
@@ -73,7 +77,6 @@ function Payment({ dispatch, navigate }) {
       }
     }
   };
-
   return (
     <div className="payment">
       <div className="payment-box">
@@ -97,14 +100,14 @@ function Payment({ dispatch, navigate }) {
                 </div>
                 <div className="payment-box--center--box--right">
                   <button
-                    disabled={el.quality <= 1}
+                    disabled={el.quantity <= 1}
                     onClick={() => handleDereate(el)}
                   >
                     -
                   </button>
                   <p>{el?.quantity}</p>
                   <button
-                    disabled={el.quality >= el.totalQuality}
+                    disabled={el.quantity >= el.totalquantity}
                     onClick={() => handleIncreate(el)}
                   >
                     +

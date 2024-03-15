@@ -52,7 +52,6 @@ function ProductInfor({ dispatch }) {
   useEffect(() => {
     fetchData();
   }, [id]);
-
   return (
     <div className="">
       <div className="productInfor">
@@ -111,7 +110,7 @@ function ProductInfor({ dispatch }) {
                 </div>
                 <span>
                   <p>Số lượng: </p>
-                  <p>{activeImage?.quality || data?.color[0]?.quality}</p>
+                  <p>{activeImage?.quantity || data?.color[0]?.quantity}</p>
                 </span>
               </div>
               <div className="productInfor--box--right--des">
@@ -122,7 +121,7 @@ function ProductInfor({ dispatch }) {
                 className="btn"
               >
                 <button
-                  disabled={activequanity?.quality == 0}
+                  disabled={activequanity?.quantity == 0}
                   onClick={handleAddCard}
                 >
                   Mua ngay

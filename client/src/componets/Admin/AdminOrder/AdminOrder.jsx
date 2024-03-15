@@ -6,6 +6,7 @@ import { deleteOrder, getOrders, updateStatusOrder } from "../../../api/order";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import { formatNumber } from "../../../helper/format";
+import { fetchProduct } from "../../../redux/slice/productSlice";
 
 function AdminOrder() {
   const [data, setData] = useState([]);
@@ -23,7 +24,7 @@ function AdminOrder() {
             phone: item.user.phone,
             price: item.totalPrice,
             status: item.status,
-            product: item.product,
+            product: item.products,
           }));
           setData(processedData);
         }
@@ -33,6 +34,7 @@ function AdminOrder() {
   useEffect(() => {
     fetchData();
   }, []);
+
   const columns = [
     {
       Header: "id",
@@ -50,20 +52,34 @@ function AdminOrder() {
       Header: "Product",
       accessor: "product",
       Cell: ({ value }) => (
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <img
-            src={value[0]?.product?.image[0]?.url}
-            alt=""
-            style={{ width: "50px", height: "50px", marginRight: "8px" }}
-          />
-          <div>
-            <p style={{ padding: "0", margin: "0" }}>{value[0]?.name}</p>
-            <p style={{ padding: "0", margin: "0" }}>{value[0]?.quality}</p>
-            <p style={{ padding: "0", margin: "0" }}>{value[0]?.color}</p>
-          </div>
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          {value?.map((product, index) => (
+            <div key={index} style={{ marginBottom: "10px" }}>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <img
+                  src={product?.product?.image[0]?.url}
+                  alt=""
+                  style={{ width: "50px", height: "50px", marginRight: "8px" }}
+                />
+                <div>
+                  <p style={{ padding: "0", margin: "0" }}>
+                    {product?.product?.name}
+                  </p>
+                  <p style={{ padding: "0", margin: "0" }}>
+                    Quantity: {product?.quantity}
+                  </p>
+                  <p style={{ padding: "0", margin: "0" }}>
+                    Color: {product?.color}
+                  </p>
+                </div>
+              </div>
+              <br />
+            </div>
+          ))}
         </div>
       ),
     },
+
     {
       Header: "Price",
       accessor: "price",
@@ -127,6 +143,7 @@ function AdminOrder() {
       if (res.success) {
         toast.success("Cập nhật trạng thái thành công");
         fetchData();
+        fetchProduct();
       }
     } catch (e) {
       setLoading(fetch);

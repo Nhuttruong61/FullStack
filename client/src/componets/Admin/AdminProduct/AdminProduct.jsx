@@ -27,7 +27,7 @@ function AdminProduct({ dispatch }) {
   const [valueUpdated, setValueUpdated] = useState(null);
   const [color, setColor] = useState({
     color: "",
-    quality: "",
+    quantity: "",
   });
   const [listColor, setListColor] = useState([]);
   const [des, setDes] = useState("");
@@ -79,7 +79,7 @@ function AdminProduct({ dispatch }) {
       ),
     },
     {
-      Header: "Quantity",
+      Header: "quantity",
       accessor: "color",
       Cell: ({ value }) => (
         <div st>
@@ -90,7 +90,7 @@ function AdminProduct({ dispatch }) {
                 <p>{item.color}</p>
               </span>
               <span style={{ display: "flex", paddingLeft: "4px" }}>
-                <p>{item.quality}</p>
+                <p>{item?.quantity}</p>
               </span>
             </div>
           ))}
@@ -213,7 +213,7 @@ function AdminProduct({ dispatch }) {
     setColor({ ...color, color: e.target.value });
   };
   const handleAddColor = () => {
-    if (!color.color || !color.quality) {
+    if (!color.color || !color.quantity) {
       toast.warning("Bạn không được bỏ trống");
     } else if (!listColor?.some((item) => item.color === color.color)) {
       setListColor((prevListColor) => [...prevListColor, color]);
@@ -363,7 +363,7 @@ function AdminProduct({ dispatch }) {
                     color: "black",
                   }}
                   onChange={(e) =>
-                    setColor({ ...color, quality: e.target.value })
+                    setColor({ ...color, quantity: e.target.value })
                   }
                   placeholder="Vui lòng nhập số lượng"
                 />
@@ -397,7 +397,7 @@ function AdminProduct({ dispatch }) {
                   </div>
                   <div style={{ display: "flex" }}>
                     <p style={{ fontWeight: "bold" }}>Số lượng: </p>
-                    <p style={{ paddingLeft: "8px" }}>{item?.quality}</p>
+                    <p style={{ paddingLeft: "8px" }}>{item?.quantity}</p>
                   </div>
                   <button
                     style={{ marginLeft: "8px" }}

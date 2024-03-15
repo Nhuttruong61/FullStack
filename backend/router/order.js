@@ -16,7 +16,7 @@ router.post(
   validateDto(
     Joi.object({
       user: objectReq,
-      product: arrayReq,
+      products: arrayReq,
       totalPrice: numberReq,
     })
   ),

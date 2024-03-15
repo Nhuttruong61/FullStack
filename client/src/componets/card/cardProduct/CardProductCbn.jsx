@@ -36,7 +36,7 @@ function CardProductCbn({ data, navigate }) {
 
         <div className="box-card-product--content--loader">
           <div className="box-card-product--content--loader--color">
-            Còn {data?.quality}
+            Còn {data?.quantity}
           </div>
         </div>
       </div>

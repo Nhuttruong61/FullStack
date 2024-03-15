@@ -20,7 +20,7 @@ const productSchema = new mongoose.Schema(
     color: [
       {
         color: { type: String, required: true },
-        quality: { type: Number, required: true },
+        quantity: { type: Number, required: true },
       },
     ],
     reviews: [

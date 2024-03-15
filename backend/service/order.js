@@ -3,11 +3,11 @@ const Product = require("../models/product");
 
 const createOrder = (props) => {
   return new Promise(async (resolve, reject) => {
-    const { user, product, totalPrice } = props;
+    const { user, products, totalPrice } = props;
     try {
       const res = await Order.create({
-        user: user,
-        product: product,
+        user: user._id,
+        products: products,
         totalPrice: totalPrice,
       });
       if (!res) {
@@ -27,8 +27,9 @@ const createOrder = (props) => {
 const getOrders = () => {
   return new Promise(async (resolve, reject) => {
     try {
-      const res = await Order.find().populate("user");
-      console.log(res);
+      const res = await Order.find()
+        .populate("products.product")
+        .populate("user");
       if (!res) {
         reject({
           success: false,
@@ -46,8 +47,7 @@ const getOrders = () => {
 const getOrderUser = (id) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const res = await Order.find({ user: id }).populate("product");
-      console.log(res);
+      const res = await Order.find({ user: id }).populate("products.product");
       if (!res) {
         reject({
           success: false,
@@ -101,7 +101,11 @@ const deleteOrder = (id) => {
 const updateStatusOrder = (id, data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const order = await Order.findById(id);
+      const order = await Order.findById(id).populate({
+        path: "products.product",
+        model: "Product",
+        select: "name price color",
+      });
       if (!order) {
         reject({
           success: false,
@@ -110,33 +114,33 @@ const updateStatusOrder = (id, data) => {
         return;
       }
       if (order.status == "Chờ xử lý") {
-        let checkQuality = true;
-        order.product.forEach(async (el) => {
-          const product = await Product.findById(el._id);
-
-          // const selectedColor = product.color.find((c) => c.color === el.color);
-          // if (selectedColor.quality < el.quality) {
-          //   checkQuality = false;
-          // }
+        let checkquantity = true;
+        order.products.forEach(async (el) => {
+          const product = await Product.findById(el.product);
+          const selectedColor = product.color.find((c) => c.color === el.color);
+          if (selectedColor.quantity < el.quantity) {
+            checkquantity = false;
+          }
         });
-        // if (!checkQuality) {
-        //   reject({
-        //     success: false,
-        //     mes: "không đủ số lượng",
-        //   });
-        //   return;
+        if (!checkquantity) {
+          reject({
+            success: false,
+            mes: "không đủ số lượng",
+          });
+          return;
+        }
+        order.products.forEach(async (el) => {
+          const product = await Product.findById(el.product);
+
+          const selectedColor = product.color.find((c) => c.color === el.color);
+          selectedColor.quantity -= el.quantity;
+          product.sold_out += el.quantity;
+          await product.save();
+        });
       }
-      //   order.product.forEach(async (el) => {
-      //     const product = await Product.findById(el.id);
-      //     const selectedColor = product.color.find((c) => c.color === el.color);
-      //     selectedColor.quality -= el.quality;
-      //     product.sold_out += el.quality;
-      //     await product.save();
-      //   });
-      // }
-      // order.status = data.status;
-      // await order.save();
-      // resolve(order);
+      order.status = data.status;
+      await order.save();
+      resolve(order);
     } catch (e) {
       reject(e);
     }

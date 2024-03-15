@@ -1,5 +1,6 @@
 const Order = require("../models/order");
 const Product = require("../models/product");
+const User = require("../models/user");
 
 const createOrder = (props) => {
   return new Promise(async (resolve, reject) => {
@@ -10,6 +11,7 @@ const createOrder = (props) => {
         products: products,
         totalPrice: totalPrice,
       });
+      const response = await User.findById(user._id);
       if (!res) {
         reject({
           success: false,
@@ -17,6 +19,8 @@ const createOrder = (props) => {
         });
         return;
       }
+      response.cart = [];
+      await response.save();
       resolve(res);
     } catch (e) {
       reject(e);

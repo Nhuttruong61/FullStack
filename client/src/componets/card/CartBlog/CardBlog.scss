@@ -3,7 +3,7 @@
     background-color: #323232;
     background-color: #323232;
     border-radius: 10px;
-    height: 320px;
+    height: 280px;
     cursor: pointer;
     &:hover {box-shadow: white 1px 1px 1px }
     &--image{
@@ -19,5 +19,9 @@
     }
     &--content{
         color: white;
+        p{
+            padding: 0;
+            margin: 0;
+        }
     }
 }

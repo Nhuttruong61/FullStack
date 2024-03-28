@@ -104,7 +104,6 @@ function User() {
       }).then(async (result) => {
         if (result.isConfirmed) {
           const res = await UserApi.deleteUser(id);
-          console.log(res);
           if (res.success) {
             Swal.fire("Đã xóa!", "", "Thành công");
             getUsers();

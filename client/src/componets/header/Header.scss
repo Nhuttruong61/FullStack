@@ -191,3 +191,8 @@
     align-items: center;
     height: 100%;
 }
+@media screen and (max-width: 480px) {
+    .header{
+     display: none;
+    }
+  }

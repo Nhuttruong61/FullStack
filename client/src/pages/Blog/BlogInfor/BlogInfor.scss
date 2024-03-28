@@ -1,0 +1,13 @@
+.blogInfor{
+    width: 100%;
+    background-color: #101010;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    &--box{
+        &--content{
+            text-align: left;
+        }
+    }
+}

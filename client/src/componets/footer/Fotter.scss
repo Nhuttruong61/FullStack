@@ -1,5 +1,5 @@
 .footer{
-    width: 100%;
+    max-width: 100%;
     background-color: #101010;
     color: white;
     display: flex;
@@ -81,3 +81,30 @@
         }
     }
 }
+@media screen and (max-width: 480px) {
+    .footer{
+    max-width: 100%;
+    overflow: hidden;
+     display: block;
+     &--bottom{
+        display: block;
+        &--right{
+            display: block !important
+        }
+     }
+    }
+  }
+  @media screen and (max-width: 720px) {
+    .footer{
+    max-width: 100%;
+    display: block;
+    overflow: hidden;
+
+     &--bottom{
+        display: block;
+        &--right{
+            display: block !important
+        }
+     }
+    }
+  }

@@ -65,18 +65,19 @@ export default function Footter() {
           <div className="footer--bottom--left">
             <p>
               © 2018. Công ty cổ phần TopPhone. GPDKKD: 0303217354 do sở KH & ĐT
-              TP.HCM cấp ngày 02/01/2007.
+              TP.HCM
             </p>
             <p>
               © 2018. Công ty cổ phần TopPhone. GPDKKD: 0303217354 do sở KH & ĐT
-              TP.HCM cấp ngày 02/01/2007.
+              TP.HCM
             </p>
             <p>
               Địa chỉ: 128 Trần Quang Khải, P.Tân Định, Q.1, TP. Hồ Chí Minh.
-              Điện thoại: 028 38125960. Địa chỉ liên hệ và gửi chứng từ: Lô
-              T2-1.2, Đường D1, Đ. D1, P.Tân Phú, TP.Thủ Đức, TP.Hồ Chí Minh.
-              Chịu trách nhiệm nội dung: Huỳnh Văn Tốt. Email:
-              Tot.huynhA@topPhone.com.
+              Điện thoại: 028 38125960.
+            </p>
+            <p>
+              Chịu trách nhiệm nội dung: Huỳnh Văn Tốt.
+              Email:huynhA@topPhone.com.
             </p>
           </div>
           <div className="footer--bottom--right">

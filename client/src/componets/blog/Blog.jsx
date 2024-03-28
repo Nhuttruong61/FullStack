@@ -2,6 +2,7 @@ import React, { memo, useEffect, useState } from "react";
 import { getBlogs } from "../../api/blog";
 import "./Blog.scss";
 import CardbBlog from "../card/CartBlog/CardBlog";
+
 function Blog() {
   const [data, setData] = useState(null);
   const fetchData = async () => {
@@ -14,9 +15,15 @@ function Blog() {
       console.log(e);
     }
   };
+
   useEffect(() => {
     fetchData();
   }, []);
+
+  if (data == null || data.length === 0) {
+    return <div className="blogitem"></div>;
+  }
+
   return (
     <div className="blogitem">
       <div className="blogitem--name">
@@ -25,7 +32,7 @@ function Blog() {
       <div className="content">
         <div className="blogitem--list">
           {data?.map((item) => {
-            return <CardbBlog data={item} />;
+            return <CardbBlog data={item} key={item._id} />;
           })}
         </div>
       </div>

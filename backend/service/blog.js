@@ -52,6 +52,7 @@ const getBlogs = () => {
 const getBlog = (id) => {
   return new Promise(async (resolve, reject) => {
     try {
+      console.log(id);
       const blog = await Blog.findById(id);
       if (!blog) {
         reject({
@@ -69,4 +70,57 @@ const getBlog = (id) => {
     }
   });
 };
-module.exports = { createBlog, getBlogs, getBlog };
+const deleteBlog = (id) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const blog = await Blog.findById(id);
+      await cloudinary.uploader.destroy(blog.avatar.public_id);
+      await Blog.findByIdAndDelete(id);
+      if (!blog) {
+        reject({
+          success: false,
+          mes: "Không tìm thấy",
+        });
+        return;
+      }
+
+      resolve({
+        success: true,
+        mes: "Xóa thành công",
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+const updateBlog = (id, props) => {
+  return new Promise(async (resolve, reject) => {
+    const { avatar, title, content } = props;
+    try {
+      const blog = await Blog.findById(id);
+      if (!avatar.includes("cloudinary")) {
+        await cloudinary.uploader.destroy(blog.avatar.public_id);
+        const myCloud = await cloudinary.uploader.upload(blog, {
+          folder: "CloneTopZone/Blog",
+        });
+        blog.avatar = {
+          public_id: myCloud.public_id,
+          url: myCloud.secure_url,
+        };
+      }
+      blog.title = title;
+      blog.content = content;
+
+      await blog.save();
+      resolve({
+        success: true,
+        blog,
+      });
+    } catch (e) {
+      reject({
+        success: false,
+      });
+    }
+  });
+};
+module.exports = { createBlog, getBlogs, getBlog, deleteBlog, updateBlog };

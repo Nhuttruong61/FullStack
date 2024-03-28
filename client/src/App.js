@@ -15,6 +15,7 @@ import AdminPage from "./pages/AdminPage/AdminPage.jsx";
 import Pertional from "./pages/PertionalPage/Pertional.jsx";
 import Payment from "./pages/PaymentPage/Payment.jsx";
 import Order from "./pages/OrderPage/Order.jsx";
+import BlogInfor from "./pages/Blog/BlogInfor/BlogInfor.jsx";
 function App() {
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -79,6 +80,14 @@ function App() {
             element={
               <Layout>
                 <Order />
+              </Layout>
+            }
+          />
+          <Route
+            path="/blog/:id"
+            element={
+              <Layout>
+                <BlogInfor />
               </Layout>
             }
           />

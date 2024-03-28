@@ -16,18 +16,19 @@ const createBlog = async (req, res) => {
 const getBlogs = async (req, res) => {
   try {
     const response = await BlogSerevice.getBlogs();
-    const formattedBlogs = response.blog.map((blog) => ({
-      id: blog._id,
-      title: blog.title,
-      avatar: blog.avatar,
-      content: blog.content.toString("utf-8"),
-    }));
 
-    if (response)
+    if (response) {
+      const formattedBlogs = response.blog.map((blog) => ({
+        id: blog._id,
+        title: blog.title,
+        avatar: blog.avatar,
+        content: blog.content.toString("utf-8"),
+      }));
       return res.status(200).json({
         success: true,
         blog: formattedBlogs,
       });
+    }
   } catch (e) {
     return res.status(500).json({
       mes: e.mes,
@@ -37,13 +38,20 @@ const getBlogs = async (req, res) => {
 
 const getBlog = async (req, res) => {
   try {
-    const { id } = req.params.id;
+    const { id } = req.params;
     const response = await BlogSerevice.getBlog(id);
-    if (response)
+    if (response) {
+      const formatData = {
+        id: response.blog._id,
+        title: response.blog.title,
+        avatar: response.blog.avatar,
+        content: response.blog.content.toString("utf-8"),
+      };
       return res.status(200).json({
         success: true,
-        blog: response.blog,
+        blog: formatData,
       });
+    }
   } catch (e) {
     return res.status(500).json({
       mes: e.mes,
@@ -58,7 +66,7 @@ const updateBlog = async (req, res) => {
     if (response)
       return res.status(200).json({
         success: true,
-        category: response.category,
+        blog: response.blog,
       });
   } catch (e) {
     return res.status(500).json({
@@ -81,4 +89,5 @@ const deleteBlog = async (req, res) => {
     });
   }
 };
+
 module.exports = { createBlog, getBlogs, getBlog, updateBlog, deleteBlog };

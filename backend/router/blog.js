@@ -20,5 +20,12 @@ router.post(
 );
 router.get("/get-blogs", blogController.getBlogs);
 router.get("/get-blog/:id", blogController.getBlog);
+router.delete(
+  "/delete-blog/:id",
+  verifyToken,
+  isAdmin,
+  blogController.deleteBlog
+);
+router.put("/update-blog/:id", verifyToken, isAdmin, blogController.updateBlog);
 
 module.exports = router;

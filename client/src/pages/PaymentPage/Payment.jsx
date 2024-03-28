@@ -77,7 +77,6 @@ function Payment({ dispatch, navigate }) {
       }
     }
   };
-  console.log(data);
   return (
     <div className="payment">
       <div className="payment-box">

@@ -56,3 +56,11 @@
 
     }
 }
+.ModalEdit{
+    width: 100%;
+    text-align: center;
+    &--close{
+        text-align: end;
+        cursor: pointer;
+    }
+}

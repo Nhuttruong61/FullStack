@@ -1,9 +1,9 @@
-import React from "react";
+import React, { memo } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./Slick.scss";
-export default function Slick(props) {
+const Slick = (props) => {
   const { data, slidesToShow, slidesToScroll } = props;
   var settings = {
     dots: true,
@@ -24,4 +24,5 @@ export default function Slick(props) {
       })}
     </Slider>
   );
-}
+};
+export default memo(Slick);

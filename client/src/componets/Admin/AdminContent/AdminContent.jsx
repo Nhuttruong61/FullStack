@@ -6,8 +6,12 @@ function AdminContent() {
   const [active, setActive] = useState(1);
   return (
     <div className="AdminCT">
-      <SideBar active={active} setActive={setActive} />
-      <AdminItem active={active} />
+      <div className="AdminCT--left">
+        <SideBar cl active={active} setActive={setActive} />
+      </div>
+      <div className="AdminCT--right">
+        <AdminItem active={active} setActive={setActive} />
+      </div>
     </div>
   );
 }

@@ -32,11 +32,11 @@ router.delete(
 );
 router.patch(
   "/update-order/:id",
-  validateDto(
-    Joi.object({
-      status: stringReq,
-    })
-  ),
+  // validateDto(
+  //   Joi.object({
+  //     status: stringReq,
+  //   })
+  // ),
   verifyToken,
   isAdmin,
   orderController.updateStatusOrder

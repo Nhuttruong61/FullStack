@@ -48,4 +48,17 @@ router.delete(
   isAdmin,
   productController.deleteProduct
 );
+router.post(
+  "/create-reviews/:id",
+  validateDto(
+    Joi.object({
+      rating: numberReq,
+      comment: stringReq,
+    })
+  ),
+  verifyToken,
+  isAdmin,
+
+  productController.createReviews
+);
 module.exports = router;

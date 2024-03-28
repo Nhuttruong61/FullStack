@@ -146,8 +146,8 @@ function Header({ navigate, dispatch }) {
                 {showInFor && (
                   <div className="header--content--right--user--show">
                     {user?.role == "Admin" && (
-                      <div>
-                        <p onClick={() => navigate("/admin")}>Quản lý</p>
+                      <div onClick={() => navigate("/admin")}>
+                        <p>Quản lý</p>
                       </div>
                     )}
                     <div onClick={() => navigate("/user")}>

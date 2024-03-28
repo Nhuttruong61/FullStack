@@ -1,0 +1,22 @@
+.blog{
+    max-width: 100%;
+    background-color: transparent;
+    overflow-y: scroll;
+    &--create {
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        padding: 4px 8px;
+        &--btn{
+            background-color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 120px;
+            color: white;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+    }
+
+}

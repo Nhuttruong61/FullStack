@@ -57,3 +57,8 @@ export const updateProduct = async (id, data) => {
     console.log(e);
   }
 };
+
+export const createReview = async (id, data) => {
+  const res = await axios.post(`/product/create-reviews/${id}`, data);
+  return res.data;
+};

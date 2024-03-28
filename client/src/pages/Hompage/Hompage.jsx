@@ -11,6 +11,7 @@ import { LuTruck } from "react-icons/lu";
 import { IoShieldOutline } from "react-icons/io5";
 import { FiRefreshCw } from "react-icons/fi";
 import Loading from "../../componets/Loading/Loading";
+const Blog = lazy(() => import("../../componets/blog/Blog"));
 const Slick = lazy(() => import("../../componets/Slick/SlickBaner"));
 function Hompage() {
   const [dataBanner, setDataBanner] = useState([]);
@@ -20,6 +21,7 @@ function Hompage() {
     const res = await getBanner();
     setDataBanner(res?.response);
   };
+
   useEffect(() => {
     fetchbanner();
   }, []);
@@ -52,6 +54,11 @@ function Hompage() {
             })}
           </div>
         </div>
+      </div>
+      <div className="container--blog">
+        <Suspense fallback={<Loading />}>
+          <Blog />
+        </Suspense>
       </div>
       <div className="container--video">
         <video autoPlay muted loop>

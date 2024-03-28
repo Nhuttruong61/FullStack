@@ -5,8 +5,10 @@ import Category from "../AdminCategory/AdminCategory";
 import Product from "../AdminProduct/AdminProduct";
 import Order from "../AdminOrder/AdminOrder";
 import Banner from "../AdminBanner/Banner";
+import ManageBlog from "../AdminBlog/manageBlog/ManageBlog";
+import CreateBlog from "../AdminBlog/createBlog/CreateBlog";
 
-function AminItem({ active }) {
+function AminItem({ active, setActive }) {
   let content = null;
 
   switch (active) {
@@ -27,6 +29,12 @@ function AminItem({ active }) {
       break;
     case 6:
       content = <Banner />;
+      break;
+    case 7:
+      content = <ManageBlog setActive={setActive} />;
+      break;
+    case 8:
+      content = <CreateBlog setActive={setActive} />;
       break;
     default:
       content = <div>AminItem</div>;

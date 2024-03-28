@@ -17,6 +17,7 @@ const productSchema = new mongoose.Schema(
     des: { type: String, required: true },
     price: { type: String, required: true },
     discount: { type: String },
+    quantity: { type: String },
     color: [
       {
         color: { type: String, required: true },
@@ -36,7 +37,7 @@ const productSchema = new mongoose.Schema(
         },
         createAt: {
           type: Date,
-          default: Date.now(),
+          default: Date.now,
         },
       },
     ],
@@ -45,11 +46,12 @@ const productSchema = new mongoose.Schema(
       default: 0,
     },
     ratings: {
-      type: String,
+      type: Number,
     },
   },
   {
     timestamps: true,
   }
 );
+
 module.exports = mongoose.model("Product", productSchema);

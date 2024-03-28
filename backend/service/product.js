@@ -1,4 +1,7 @@
 const Product = require("../models/product");
+const Order = require("../models/order");
+const User = require("../models/user");
+
 const cloudinary = require("cloudinary").v2;
 const createProduct = (props) => {
   return new Promise(async (resolve, reject) => {
@@ -185,6 +188,54 @@ const updateProduct = (id, data) => {
     }
   });
 };
+const createReviews = (productId, data, userId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const { comment, rating } = data;
+      const user = await User.findById(userId).select("name");
+      const product = await Product.findById(productId);
+      if (!product) {
+        reject({
+          success: false,
+          message: "Không tìm thấy sản phẩm",
+        });
+        return;
+      }
+      const orders = await Order.find({
+        user: userId,
+        status: "Đã giao",
+      }).populate("products.product");
+      const checkOrder = orders.some((order) =>
+        order.products.some((orderProduct) =>
+          orderProduct.product.equals(product._id)
+        )
+      );
+      if (!checkOrder) {
+        reject({
+          success: false,
+          message: "Bạn chưa mua sản phẩm này",
+        });
+        return;
+      }
+      product.reviews.unshift({
+        user: user,
+        rating: rating,
+        comment: comment,
+      });
+      const total =
+        product.reviews.reduce((acc, cur) => acc + cur.rating, 0) /
+        product.reviews.length;
+      product.ratings = total;
+      await product.save();
+      resolve({
+        success: true,
+        product,
+      });
+    } catch (err) {
+      reject(err);
+    }
+  });
+};
 
 module.exports = {
   createProduct,
@@ -192,4 +243,5 @@ module.exports = {
   getProduct,
   deleteProduct,
   updateProduct,
+  createReviews,
 };

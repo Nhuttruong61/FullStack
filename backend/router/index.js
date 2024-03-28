@@ -3,6 +3,7 @@ const user = require("./user");
 const slider = require("./slider");
 const product = require("./product");
 const order = require("./order");
+const blog = require("./blog");
 
 const initialRouter = (app) => {
   app.use("/api/v1/user", user);
@@ -10,6 +11,7 @@ const initialRouter = (app) => {
   app.use("/api/v1/product", product);
   app.use("/api/v1/slider", slider);
   app.use("/api/v1/order", order);
+  app.use("/api/v1/blog", blog);
   app.use("/", (req, res) => {
     return res.send("Server on");
   });

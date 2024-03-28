@@ -1,7 +1,6 @@
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const redis = require("../config/redisConnect");
 const register = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -114,18 +113,9 @@ const getUsers = (options) => {
           });
         }
       } else {
-        // const dataRedis = await redis.get("getUsers");
-        // if (dataRedis) {
-        //   let user = JSON.parse(dataRedis);
-        //   resolve({
-        //     success: true,
-        //     user,
-        //   });
-        // }
         const user = await User.find().select("-password");
         // .skip(skip)
         // .limit(limit)
-        // redis.set("getUsers", JSON.stringify(user));
         if (user) {
           resolve({
             success: true,
@@ -205,7 +195,6 @@ const addProductCart = (id, data) => {
   return new Promise(async (resolve, reject) => {
     try {
       const { idProduct, color } = data;
-      console.log(idProduct);
       const user = await User.findById(id);
       if (!user) {
         resolve({

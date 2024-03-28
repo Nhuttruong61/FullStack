@@ -60,6 +60,7 @@ function AdminProduct({ dispatch }) {
       accessor: "image",
       Cell: ({ value }) => (
         <img
+          loading="lazy"
           src={value[0].url}
           alt=""
           style={{ width: "50px", height: "50px" }}
@@ -74,9 +75,10 @@ function AdminProduct({ dispatch }) {
     {
       Header: "Description",
       accessor: "des",
-      Cell: ({ value }) => (
-        <div dangerouslySetInnerHTML={{ __html: value }}></div>
-      ),
+      Cell: ({ value }) => {
+        const desc = value?.slice(0, 100);
+        return <div dangerouslySetInnerHTML={{ __html: desc }}></div>;
+      },
     },
     {
       Header: "quantity",
@@ -180,6 +182,8 @@ function AdminProduct({ dispatch }) {
   const onCreate = async (res) => {
     try {
       if (image.length == 0) return toast.warning("Ảnh không được để trống");
+      if (listColor.length == 0)
+        return toast.warning("Bạn phải nhập số lượng và màu sắc");
       const data = {
         name: res?.name,
         category: res.category,

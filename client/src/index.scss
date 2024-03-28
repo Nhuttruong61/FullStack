@@ -17,6 +17,7 @@ body {
     text-align: center;
     height: 100%;
    
+   
   }
   .none {
     display: none;
@@ -74,4 +75,6 @@ body {
   .ql-editor{
     min-height: 30vh !important;
   }
-  
+  .ql-formats{
+    display: flex !important;
+}

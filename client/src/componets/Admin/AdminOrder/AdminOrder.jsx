@@ -7,8 +7,8 @@ import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import { formatNumber } from "../../../helper/format";
 import { fetchProduct } from "../../../redux/slice/productSlice";
-
-function AdminOrder() {
+import withBase from "../../../hocs/withBase";
+function AdminOrder({ dispatch }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -98,10 +98,10 @@ function AdminOrder() {
               onChange={(e) => handleStatusChange(e, row.values)}
             >
               <option>{row.values.status}</option>
-              {row.values.status !== "Đã chuyển hàng" && (
+              {row.values.status === "Chờ xử lý" && (
                 <option value="Đã chuyển hàng">Đã chuyển hàng</option>
               )}
-              {row.values.status !== "Đã giao" && (
+              {row.values.status === "Đã chuyển hàng" && (
                 <option value="Đã giao">Đã giao</option>
               )}
             </select>
@@ -143,7 +143,7 @@ function AdminOrder() {
       if (res.success) {
         toast.success("Cập nhật trạng thái thành công");
         fetchData();
-        fetchProduct();
+        dispatch(fetchProduct());
       }
     } catch (e) {
       setLoading(fetch);
@@ -184,4 +184,4 @@ function AdminOrder() {
   );
 }
 
-export default memo(AdminOrder);
+export default withBase(memo(AdminOrder));

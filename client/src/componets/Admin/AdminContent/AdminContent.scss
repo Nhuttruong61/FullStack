@@ -2,5 +2,12 @@
     width: 100%;
     display: grid;
     grid-template-columns: 1fr 9fr;
+    &--left{
+        min-width: 30%;
+    }
+    &--right{
+        min-width: 70%;
+        overflow-x: auto;
+    }
 
 }

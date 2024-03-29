@@ -1,0 +1,42 @@
+.blogPage{
+    width: 100%;
+    background-color: #3E3E3F;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  
+    &--new {
+        text-align: left;
+        color: white;
+    }
+    &--box{
+        display: flex;
+        justify-content: space-between;
+        text-align: left;
+        margin-top: 4px;
+        color: white;
+        &:hover{
+            color: #2997FF !important;
+        }
+        &--left{
+            width: 20%;
+            img{
+                max-width: 100%;
+                object-fit: cover;
+                border-radius: 4px;
+            }
+        }
+        &--right{
+            width: 80%;
+            padding-left: 4px;
+          
+            h2{
+                margin:  0;
+            }
+            p{
+                color: #ccc !important;
+            }
+        }
+    }
+}

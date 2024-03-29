@@ -5,7 +5,7 @@ function CardBlog({ data, navigate }) {
   return (
     <div className="cardBlog" onClick={() => navigate(`/blog/${data.id}`)}>
       <div className="cardBlog--image">
-        <img src={data?.avatar?.url} alt="" srcset="" />
+        <img src={data?.avatar?.url} alt="" />
       </div>
       <div className="cardBlog--content">
         <p>

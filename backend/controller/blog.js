@@ -16,13 +16,13 @@ const createBlog = async (req, res) => {
 const getBlogs = async (req, res) => {
   try {
     const response = await BlogSerevice.getBlogs();
-
     if (response) {
       const formattedBlogs = response.blog.map((blog) => ({
         id: blog._id,
         title: blog.title,
         avatar: blog.avatar,
         content: blog.content.toString("utf-8"),
+        updatedAt: blog.updatedAt,
       }));
       return res.status(200).json({
         success: true,

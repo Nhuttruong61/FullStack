@@ -24,12 +24,18 @@ function Header({ navigate, dispatch }) {
   const [showInFor, setShowInFor] = useState(false);
   const [valueSearch, setValueSearch] = useState("");
   const [listSearch, setListSearch] = useState([]);
+  const [activeHeader, setActiveHeader] = useState(false);
   const refSearch = useRef(null);
   const { data: cart } = useSelector((state) => state.car);
   const handleNavigate = (active, el) => {
     setActive(active);
     navigate(`/category/${el._id}`);
   };
+  const handleNavigateBlog = () => {
+    setActive(7);
+    navigate("/blog");
+  };
+
   const fetchUser = async () => {
     try {
       const res = await userTK();
@@ -83,8 +89,22 @@ function Header({ navigate, dispatch }) {
     setListSearch([]);
     setShowSearch(false);
   };
+  useEffect(() => {
+    const handleScroll = () => {
+      var scrollPosition = window.scrollY;
+      if (scrollPosition > 100) {
+        setActiveHeader(true);
+      } else {
+        setActiveHeader(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
   return (
-    <div className="header">
+    <div className={`header ${activeHeader && "activeHeader"}`}>
       <div className="content">
         <div className={`header--content ${showSearch && "none"}`}>
           <div
@@ -117,6 +137,12 @@ function Header({ navigate, dispatch }) {
                 </div>
               );
             })}
+            <div
+              className={`box  ${active === 7 && "active"}`}
+              onClick={handleNavigateBlog}
+            >
+              <p className="item">Tin Tức</p>
+            </div>
           </div>
           <div className="header--content--right">
             <div style={{ display: "flex" }}>

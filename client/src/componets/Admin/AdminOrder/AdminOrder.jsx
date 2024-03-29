@@ -22,6 +22,7 @@ function AdminOrder({ dispatch }) {
             id: item._id,
             name: item.user.name,
             phone: item.user.phone,
+            address: item.user.address,
             price: item.totalPrice,
             status: item.status,
             product: item.products,
@@ -47,6 +48,10 @@ function AdminOrder({ dispatch }) {
     {
       Header: "Phone",
       accessor: "phone",
+    },
+    {
+      Header: "Address",
+      accessor: "address",
     },
     {
       Header: "Product",

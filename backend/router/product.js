@@ -57,8 +57,6 @@ router.post(
     })
   ),
   verifyToken,
-  isAdmin,
-
   productController.createReviews
 );
 module.exports = router;

@@ -1,23 +1,33 @@
 .container{
     width: 100%;
     background-color: #757575;
+    box-sizing: border-box;
  
     &--event{
      width: 100%;
      display: flex;
      justify-content: center;
      align-items: center;
+     box-sizing: border-box;
+     padding-left: 12px;
+     padding-right: 12px;
     }
     &--category{
         width: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
+        box-sizing: border-box;
+        padding-left: 12px;
+        padding-right: 12px;
        }
        &--product{
        display: flex;
        justify-content: center;
        margin-bottom: 20px;
+       box-sizing: border-box;
+        padding-left: 12px;
+        padding-right: 12px;
        &--item{
         width: 100%;
        }
@@ -27,6 +37,9 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        box-sizing: border-box;
+        padding-left: 12px;
+        padding-right: 12px;
        }
          &--video{
         width: 100%;
@@ -70,6 +83,4 @@
            }
         }
 
-
- 
 }

@@ -16,6 +16,7 @@ import Cookies from "js-cookie";
 import { getProductSearch } from "../../api/product";
 import { formatNumber } from "../../helper/format";
 import { getCartUser } from "../../redux/slice/cartSlice";
+import { IoMenu } from "react-icons/io5";
 function Header({ navigate, dispatch }) {
   const { data, isLoading } = useSelector((state) => state.category);
   const { user } = useSelector((state) => state.user);
@@ -25,6 +26,7 @@ function Header({ navigate, dispatch }) {
   const [valueSearch, setValueSearch] = useState("");
   const [listSearch, setListSearch] = useState([]);
   const [activeHeader, setActiveHeader] = useState(false);
+  const [listMenuRpt, setListMenuRp] = useState(false);
   const refSearch = useRef(null);
   const { data: cart } = useSelector((state) => state.car);
   const handleNavigate = (active, el) => {
@@ -125,6 +127,11 @@ function Header({ navigate, dispatch }) {
               <img src={Logo} className="right--image" alt="" />
             </div>
           </div>
+          <div className="header--content--reponsive">
+            <span onClick={() => setListMenuRp(true)}>
+              <IoMenu size={24} />
+            </span>
+          </div>
           <div className="header--content--center">
             {data?.map((el, index) => {
               return (
@@ -145,7 +152,7 @@ function Header({ navigate, dispatch }) {
             </div>
           </div>
           <div className="header--content--right">
-            <div style={{ display: "flex" }}>
+            <div className="header--content--right--search">
               <label onClick={handleStatusSearch}>
                 <RiSearchLine />
               </label>

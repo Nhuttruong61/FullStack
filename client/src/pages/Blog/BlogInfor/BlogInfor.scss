@@ -8,6 +8,21 @@
     &--box{
         &--content{
             text-align: left;
+            img{
+                width: 100%;
+                height: auto;
+                object-fit: cover;
+            }
         }
     }
 }
+@media screen and (max-width: 480px) {
+    .blogInfor {
+        &--box{
+            box-sizing: border-box;
+            padding-left: 12px;
+            padding-right: 12px; 
+        }
+     
+    }
+  }

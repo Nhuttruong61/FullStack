@@ -16,7 +16,6 @@ import { IoMdClose } from "react-icons/io";
 import { IoStar } from "react-icons/io5";
 import { IoStarOutline } from "react-icons/io5";
 import Swal from "sweetalert2";
-import { fetchProduct } from "../../../redux/slice/productSlice.js";
 const moment = require("moment");
 function ProductInfor({ dispatch, navigate }) {
   const { id } = useParams();
@@ -116,7 +115,7 @@ function ProductInfor({ dispatch, navigate }) {
             <div className="productInfor--box--left">
               <img src={activeImage || data?.image[0]?.url} alt="" />
               <div className="productInfor--box--left--listImg">
-                {data?.image?.slice(0, 4)?.map((item) => {
+                {data?.image?.slice(0, 3)?.map((item) => {
                   return (
                     <div
                       className="productInfor--box--left--listImg--card"
@@ -173,10 +172,7 @@ function ProductInfor({ dispatch, navigate }) {
               <div className="productInfor--box--right--des">
                 <div dangerouslySetInnerHTML={{ __html: data?.des }} />
               </div>
-              <div
-                style={{ backgroundColor: "transparent", padding: "8px 0" }}
-                className="btn"
-              >
+              <div style={{ backgroundColor: "transparent" }} className="btn">
                 <button
                   disabled={activequanity?.quantity == 0}
                   onClick={handleAddCard}

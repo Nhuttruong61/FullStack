@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./BlogInfor.scss";
 import { getBlog } from "../../../api/blog";
@@ -31,4 +31,4 @@ function BlogInfor() {
   );
 }
 
-export default BlogInfor;
+export default memo(BlogInfor);

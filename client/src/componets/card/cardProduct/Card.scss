@@ -4,6 +4,8 @@
     width: 100%;
     cursor: pointer;
     height: 390px;
+    box-sizing: border-box;
+  
     &:hover {box-shadow: white 1px 1px 1px }
     &--image{
         width: 100%;

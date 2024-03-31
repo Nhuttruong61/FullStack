@@ -1,7 +1,7 @@
 import React, { memo } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import ImageUploader from "react-quill-image-uploader"; // Import plugin image-uploader
+import ImageUploader from "react-quill-image-uploader";
 
 const Edittor = (props) => {
   const modules = {
@@ -17,6 +17,9 @@ const Edittor = (props) => {
       handlers: {
         image: ImageUploader.handler,
       },
+    },
+    imageResize: {
+      displaySize: true,
     },
   };
 

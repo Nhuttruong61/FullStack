@@ -19,7 +19,6 @@ function BlogPage({ navigate }) {
   useEffect(() => {
     fetchData();
   }, []);
-  console.log(data);
   return (
     <div className="blogPage">
       <div className="content">

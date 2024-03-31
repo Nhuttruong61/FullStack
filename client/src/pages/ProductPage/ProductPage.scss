@@ -19,11 +19,12 @@ padding: 4% 0;
 } 
 &--list{
     margin-top: 2%;
-display: grid;
- grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));
-justify-content: center;
-align-items: center;
-gap: 20px;
+
+    display: grid;
+    grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
 }
 &--null{
     margin: 2% 0;
@@ -33,3 +34,13 @@ gap: 20px;
     color: white;
 }
 }
+@media screen and (max-width: 480px) {
+    .product{
+      &--list{
+        box-sizing: border-box;
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+     
+    }
+  }

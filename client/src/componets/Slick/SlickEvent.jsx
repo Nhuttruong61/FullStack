@@ -16,6 +16,12 @@ export default function SlickEvent(props) {
     slidesToScroll: slidesToScroll ? slidesToScroll : 1,
     responsive: [
       {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+      {
         breakpoint: 900,
         settings: {
           slidesToShow: 2,
@@ -24,7 +30,7 @@ export default function SlickEvent(props) {
       {
         breakpoint: 1150,
         settings: {
-          slidesToShow: 3,
+          slidesToShow: 2,
         },
       },
     ],

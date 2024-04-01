@@ -153,12 +153,14 @@ function ManageBlog({ setActive }) {
         avatar: image,
         content: dataEdit?.content,
       };
+
       setLoading(true);
       const res = await updateBlog(dataEdit.id, data);
       setLoading(false);
 
       if (res.success) {
         toast.success("Cập nhật thành công");
+        setIsEdit(false);
         fetchData();
       }
     } catch (e) {
@@ -204,7 +206,7 @@ function ManageBlog({ setActive }) {
               <Edittor
                 value={dataEdit?.content}
                 setValue={(value) =>
-                  set({
+                  setDataEdit({
                     ...dataEdit,
                     content: value,
                   })

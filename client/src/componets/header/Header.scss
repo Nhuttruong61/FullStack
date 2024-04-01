@@ -269,8 +269,6 @@
     text-align: start;
     &--box{
     box-sizing: border-box;
-
-        padding: 2px 12px;
         font-size: 18px;
         &:hover{
             background-color: #101010;
@@ -280,7 +278,9 @@
   }
 
   .active {
-    background-color: #2d2d2d;
+    background-color: #3E3E3F;
+    padding: 0 !important;
     width: 100%;
-    color: white !important
+    color: white !important;
+    margin-left: 0 !important;
 }

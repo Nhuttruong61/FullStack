@@ -35,8 +35,10 @@ function BlogPage({ navigate }) {
                 <img src={item?.avatar?.url} alt="" />
               </div>
               <div className="blogPage--box--right">
-                <h2>{item?.title}</h2>
-                <p>{moment(item?.updatedAt).fromNow()}</p>
+                <p className="blogPage--box--right--title">{item?.title}</p>
+                <p className="blogPage--box--right--time">
+                  {moment(item?.updatedAt).fromNow()}
+                </p>
               </div>
             </div>
           );

@@ -17,6 +17,7 @@ import { getProductSearch } from "../../api/product";
 import { formatNumber } from "../../helper/format";
 import { getCartUser } from "../../redux/slice/cartSlice";
 import { IoMenu } from "react-icons/io5";
+import Sidebar from "../sidebar/Sidebar";
 function Header({ navigate, dispatch }) {
   const { data, isLoading } = useSelector((state) => state.category);
   const { user } = useSelector((state) => state.user);
@@ -35,6 +36,7 @@ function Header({ navigate, dispatch }) {
   };
   const handleNavigateBlog = () => {
     setActive(7);
+    setListMenuRp(false);
     navigate("/blog");
   };
 
@@ -132,6 +134,14 @@ function Header({ navigate, dispatch }) {
               <IoMenu size={24} />
             </span>
           </div>
+          <div className="header--content--logo" onClick={() => navigate("/")}>
+            <p>Top</p>
+            <p style={{ color: "red" }}>P</p>
+            <p style={{ color: "green" }}>h</p>
+            <p style={{ color: "blue" }}>o</p>
+            <p style={{ color: "pink" }}>n</p>
+            <p style={{ color: "purple" }}>e</p>
+          </div>
           <div className="header--content--center">
             {data?.map((el, index) => {
               return (
@@ -144,12 +154,14 @@ function Header({ navigate, dispatch }) {
                 </div>
               );
             })}
-            <div
-              className={`box  ${active === 7 && "active"}`}
-              onClick={handleNavigateBlog}
-            >
-              <p className="item">Tin Tức</p>
-            </div>
+            {data && (
+              <div
+                className={`box  ${active === 7 && "active"}`}
+                onClick={handleNavigateBlog}
+              >
+                <p className="item">Tin Tức</p>
+              </div>
+            )}
           </div>
           <div className="header--content--right">
             <div className="header--content--right--search">
@@ -244,6 +256,36 @@ function Header({ navigate, dispatch }) {
           )}
         </div>
         {showSearch && <Screen />}
+        {listMenuRpt && (
+          <Sidebar setListMenuRp={setListMenuRp}>
+            <div className="sidebarItem">
+              {data?.map((el, index) => {
+                return (
+                  <div
+                    className={`sidebarItem--box  ${
+                      index === active && "active"
+                    }`}
+                    key={el?.id}
+                    onClick={() => {
+                      handleNavigate(index, el);
+                      setListMenuRp(false);
+                    }}
+                  >
+                    <p className="item">{el?.name}</p>
+                  </div>
+                );
+              })}
+              {data && (
+                <div
+                  className={`sidebarItem--box  ${active === 7 && "active"}`}
+                  onClick={handleNavigateBlog}
+                >
+                  <p className="item">Tin Tức</p>
+                </div>
+              )}
+            </div>
+          </Sidebar>
+        )}
       </div>
     </div>
   );

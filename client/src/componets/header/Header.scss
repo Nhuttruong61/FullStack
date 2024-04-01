@@ -43,7 +43,9 @@
         &--reponsive{
             display: none;
         }
-
+&--logo{
+    display: none;
+}
         &--center {
             display: flex;
             align-items: center; 
@@ -66,9 +68,7 @@
                     background-color: #2d2d2d;
                 }
             }
-            .active {
-                background-color: #2d2d2d;
-            }
+            
           }
           
         
@@ -113,8 +113,8 @@
             position: relative;
             &--show{
                 position: absolute;
-                top: 120%;
-                right: 0;
+                top: 122%;
+                right: -30px;
                 height:auto;
                 background-color: #2d2d2d;
                 z-index: 20;
@@ -213,9 +213,15 @@
                 font-size: 20px;
             }
             &--right{
+                padding-right: 4px;
                 &--search{
                     display: none;
                 }
+            }
+            &--logo{
+                display: flex;
+                font-size: 20px;
+                width: 33%;
             }
         &--center{
             display: none;
@@ -233,7 +239,7 @@
             display: none;
         }
         &--right{
-           
+            padding-right: 4px;
         }
     }
     }
@@ -243,19 +249,38 @@
         &--content{
             &--left{
                 display: none;
-               
-               
             }
-          
-            
             &--reponsive{
                 display: block;
+                width: 33%;
+                text-align: start;
                 span{
                     padding: 0 4px;
                 }
             }
+          
         &--center{
             display: none;
         }}
     }
   }
+  .sidebarItem{
+    width: 100%;
+    text-align: start;
+    &--box{
+    box-sizing: border-box;
+
+        padding: 2px 12px;
+        font-size: 18px;
+        &:hover{
+            background-color: #101010;
+            color: white;
+        }
+    }
+  }
+
+  .active {
+    background-color: #2d2d2d;
+    width: 100%;
+    color: white !important
+}

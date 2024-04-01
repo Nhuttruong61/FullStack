@@ -31,7 +31,7 @@ function ProductPage() {
           <img src={Logo} className="right--image" alt="" />
           <h1>{nameCategory[0]?.name}</h1>
         </div>
-        {dataProduct.length > 0 ? (
+        {dataProduct?.length > 0 ? (
           <div className="product--list">
             {dataProduct?.map((el) => (
               <CardProductCbn key={el.id} data={el} />

@@ -52,7 +52,6 @@ const getBlogs = () => {
 const getBlog = (id) => {
   return new Promise(async (resolve, reject) => {
     try {
-      console.log(id);
       const blog = await Blog.findById(id);
       if (!blog) {
         reject({

@@ -21,7 +21,7 @@ function Blog() {
   }, []);
 
   if (data == null || data.length === 0) {
-    return <div className="blogitem"></div>;
+    return null;
   }
 
   return (

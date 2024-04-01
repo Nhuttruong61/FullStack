@@ -6,7 +6,7 @@ function Product({ data, category }) {
   return (
     <div className="content">
       <div className="box-product">
-        {data && data?.length > 0 && (
+        {data && data?.length > 0 ? (
           <div className="box-product--main">
             <div
               style={{
@@ -30,7 +30,7 @@ function Product({ data, category }) {
               ))}
             </div>
           </div>
-        )}
+        ) : null}
       </div>
     </div>
   );

@@ -35,9 +35,7 @@ function Hompage() {
       <div className="container--event">
         <Event />
       </div>
-      <div className="container--category">
-        <Category />
-      </div>
+      <div className="container--category">{category && <Category />}</div>
       <div className="container--product">
         <div className="content">
           <div className="container--product--item">

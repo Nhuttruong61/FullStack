@@ -7,7 +7,7 @@ const SlickEvent = lazy(() => import("../Slick/SlickEvent"));
 function Event() {
   const { data } = useSelector((state) => state.products);
   const dataEvent = data ? data.filter((el) => el?.discount > 0) : [];
-  return (
+  return !data || data?.length < 3 ? null : (
     <div className="content">
       <div className="event-container">
         <div className="event-container--top">

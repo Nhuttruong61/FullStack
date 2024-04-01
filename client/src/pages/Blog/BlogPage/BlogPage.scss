@@ -31,12 +31,32 @@
             width: 80%;
             padding-left: 4px;
           
-            h2{
+            &--title{
                 margin:  0;
+                font-size: 20px;
+                font-weight: 500;
             }
-            p{
+            &--time{
                 color: #ccc !important;
             }
+        }
+    }
+}
+@media screen and (max-width: 480px) { 
+    .blogPage--box--left{
+        width: 50%;
+    }
+    &--right{
+        width: 50%;
+        padding-left: 4px;
+      
+        &--title{
+            font-size: 14px !important;
+            font-weight: 600;
+
+        }
+        &--time{
+            color: #ccc !important;
         }
     }
 }

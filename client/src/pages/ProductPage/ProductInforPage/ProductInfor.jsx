@@ -200,7 +200,7 @@ function ProductInfor({ dispatch, navigate }) {
         <div className="content--product">
           <div className="comment--box">
             <div className="comment--box--title">
-              <h2>Đánh giá trên {data?.name}</h2>
+              <h3>Đánh giá trên {data?.name}</h3>
             </div>
             <div className="comment--box--star">
               <div className="comment--box--star--title">

@@ -3,6 +3,8 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./Slick.scss";
+import Loading from "../Loading/Loading";
+
 const Slick = (props) => {
   const { data, slidesToShow, slidesToScroll } = props;
   var settings = {
@@ -13,7 +15,9 @@ const Slick = (props) => {
     slidesToShow: slidesToShow ? slidesToShow : 1,
     slidesToScroll: slidesToScroll ? slidesToScroll : 1,
   };
-  return (
+  return !data ? (
+    <Loading />
+  ) : (
     <Slider {...settings}>
       {data?.map((el, index) => {
         return (
@@ -25,4 +29,5 @@ const Slick = (props) => {
     </Slider>
   );
 };
+
 export default memo(Slick);

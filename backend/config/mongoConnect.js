@@ -6,7 +6,7 @@ const DataBaseConnect = () => {
     .then(() => {
       console.log("Connected mongoose successfully");
     })
-    .catch(() => {
+    .catch((e) => {
       console.log("Failed to connect");
     });
 };

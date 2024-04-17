@@ -31,10 +31,15 @@ function Pertional({ navigate, dispatch }) {
       if (!valueUser.name || !valueUser.address || !valueUser.phone) {
         toast.warning("Bạn phải điền đầy đủ thông tin");
       } else {
+        const url = sessionStorage.getItem("urlPayment");
         const res = await updateUser(user._id, valueUser);
         if (res?.success) {
           toast.success("Cập nhật thành công");
           dispatch(getUser(res.user));
+          if (url) {
+            navigate(url);
+            sessionStorage.removeItem("urlPayment");
+          }
         }
       }
     } catch (e) {

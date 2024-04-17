@@ -20,10 +20,16 @@ function Auth({ navigate }) {
   const onSubmit = async (data) => {
     try {
       if (form === 1) {
+        const url = sessionStorage.getItem("url");
         const res = await UserService.login(data);
         if (res?.success) {
           Cookies.set("accesstoken", res.token);
-          navigate("/");
+          if (url) {
+            navigate(url);
+            sessionStorage.removeItem("url");
+          } else {
+            navigate("/");
+          }
           reset();
         }
       } else if (form === 2) {

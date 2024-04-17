@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useState } from "react";
 import "./ProductInfor.scss";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { createReview, getProductId } from "../../../api/product";
 import { formatNumber } from "../../../helper/format";
 import withBase from "../../../hocs/withBase.js";
@@ -19,6 +19,7 @@ import Swal from "sweetalert2";
 const moment = require("moment");
 function ProductInfor({ dispatch, navigate }) {
   const { id } = useParams();
+  const { pathname } = useLocation();
   const [data, setData] = useState(null);
   const [activeImage, setActiveImage] = useState(null);
   const [activequanity, setActiveQuanity] = useState(null);
@@ -54,6 +55,8 @@ function ProductInfor({ dispatch, navigate }) {
           confirmButtonText: "Đăng nhập",
         }).then(async (result) => {
           if (result.isConfirmed) {
+            sessionStorage.setItem("url", pathname);
+
             navigate("/auth");
           }
         });
@@ -89,6 +92,7 @@ function ProductInfor({ dispatch, navigate }) {
           confirmButtonText: "Đăng nhập",
         }).then(async (result) => {
           if (result.isConfirmed) {
+            sessionStorage.setItem("url", pathname);
             navigate("/auth");
           }
         });
@@ -107,6 +111,7 @@ function ProductInfor({ dispatch, navigate }) {
   useEffect(() => {
     fetchData();
   }, [id]);
+
   return (
     <div className="">
       <div className="productInfor">

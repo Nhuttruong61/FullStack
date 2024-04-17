@@ -13,8 +13,10 @@ import Swal from "sweetalert2";
 import { createOrder } from "../../api/order";
 import { toast } from "react-toastify";
 import { removeCart } from "../../api/user";
+import { useLocation } from "react-router-dom";
 
 function Payment({ dispatch, navigate }) {
+  const { pathname } = useLocation();
   const { data } = useSelector((state) => state.car);
   const { user } = useSelector((state) => state.user);
   const handleDereate = (data) => {
@@ -51,6 +53,7 @@ function Payment({ dispatch, navigate }) {
         confirmButtonText: "Cập nhật",
       }).then(async (result) => {
         if (result.isConfirmed) {
+          sessionStorage.getItem("urlPayment", pathname);
           navigate("/user");
         }
       });
@@ -77,6 +80,12 @@ function Payment({ dispatch, navigate }) {
       }
     }
   };
+  const handleEdit = () => {
+    navigate("/user");
+    sessionStorage.setItem("urlPayment", pathname);
+    navigate("/user");
+  };
+
   return (
     <div className="payment">
       <div className="payment-box">
@@ -143,7 +152,7 @@ function Payment({ dispatch, navigate }) {
             <p
               className="point "
               style={{ color: "red", fontWeight: "500" }}
-              onClick={() => navigate("/user")}
+              onClick={handleEdit}
             >
               Chỉnh sửa
             </p>

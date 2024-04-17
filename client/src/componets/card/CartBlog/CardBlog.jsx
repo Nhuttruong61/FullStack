@@ -3,7 +3,11 @@ import "./CardBlog.scss";
 import withBase from "../../../hocs/withBase";
 function CardBlog({ data, navigate }) {
   return (
-    <div className="cardBlog" onClick={() => navigate(`/blog/${data.id}`)}>
+    <div
+      key={data?.id}
+      className="cardBlog"
+      onClick={() => navigate(`/blog/${data.id}`)}
+    >
       <div className="cardBlog--image">
         <img src={data?.avatar?.url} alt="" />
       </div>

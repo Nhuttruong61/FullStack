@@ -74,6 +74,13 @@
             }
         }
     }
+    &--choose{
+        margin: 8px 0;
+        select{
+            outline: none;
+            border-radius: 2px;
+        }
+    }
     &--order{
         box-shadow: 1px 1px 1px #ccc ;
         background-color: white;

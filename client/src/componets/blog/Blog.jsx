@@ -1,11 +1,11 @@
-import React, { memo, useEffect, useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import { getBlogs } from "../../api/blog";
 import "./Blog.scss";
 import CardbBlog from "../card/CartBlog/CardBlog";
 
 function Blog() {
   const [data, setData] = useState(null);
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const res = await getBlogs();
       if (res.success) {
@@ -14,7 +14,7 @@ function Blog() {
     } catch (e) {
       console.log(e);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchData();

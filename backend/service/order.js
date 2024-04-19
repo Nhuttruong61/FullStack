@@ -4,12 +4,13 @@ const User = require("../models/user");
 
 const createOrder = (props) => {
   return new Promise(async (resolve, reject) => {
-    const { user, products, totalPrice } = props;
+    const { user, products, totalPrice, payments } = props;
     try {
       const res = await Order.create({
         user: user._id,
         products: products,
         totalPrice: totalPrice,
+        payments: payments,
       });
       const response = await User.findById(user._id);
       if (!res) {

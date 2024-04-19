@@ -49,19 +49,30 @@ function Order() {
                   );
                 })}
               </div>
+              <div className="order--list--payment">
+                <h4>Thanh toán</h4>
+                {el?.payments === "cod" && el?.status !== "Đã giao" ? (
+                  <p>Chưa thanh toán</p>
+                ) : (
+                  <p>Đã thanh toán</p>
+                )}
+              </div>
               <div className="order--list--center">
                 <div className="order--list--center--box">
                   <h4>{formatNumber(el?.totalPrice)}</h4>
                   <h4>{el?.status}</h4>
                 </div>
+                {el?.status === "Chờ xử lý" && el?.payments !== "online" && (
+                  <div style={{ marginLeft: "4px" }}>
+                    <button
+                      onClick={() => handleCancleOrder(el)}
+                      className="btn"
+                    >
+                      Hủy
+                    </button>
+                  </div>
+                )}
               </div>
-              {el?.status == "Chờ xử lý" && (
-                <div className="order--list--right">
-                  <button onClick={() => handleCancleOrder(el)} className="btn">
-                    Hủy
-                  </button>
-                </div>
-              )}
             </div>
           );
         })}

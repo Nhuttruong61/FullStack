@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useEffect, useState } from "react";
 import "./Payment.scss";
 import { useSelector } from "react-redux";
 import { formatNumber } from "../../helper/format";
@@ -13,12 +13,14 @@ import Swal from "sweetalert2";
 import { createOrder } from "../../api/order";
 import { toast } from "react-toastify";
 import { removeCart } from "../../api/user";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
+import { createOrderVNpay, returnPayment } from "../../api/vnpay";
 
 function Payment({ dispatch, navigate }) {
-  const { pathname } = useLocation();
+  const { pathname, search } = useLocation();
   const { data } = useSelector((state) => state.car);
   const { user } = useSelector((state) => state.user);
+  const [choosePayment, setChoosePayment] = useState("cod");
   const handleDereate = (data) => {
     dispatch(decreate(data));
   };
@@ -58,6 +60,7 @@ function Payment({ dispatch, navigate }) {
         }
       });
     } else {
+      const valuePayment = sessionStorage.getItem("payments");
       const dataSend = {
         user: user,
         products: data?.map((el) => ({
@@ -66,14 +69,26 @@ function Payment({ dispatch, navigate }) {
           color: el?.color,
         })),
         totalPrice: totalPrice,
+        payments: valuePayment || choosePayment,
       };
 
       try {
-        const res = await createOrder(dataSend);
-        if (res.success) {
-          toast.success("Đặt hàng thành công");
-          navigate("/");
-          dispatch(clearCart());
+        if (choosePayment === "online") {
+          const data = {
+            amount: totalPrice,
+          };
+          const res = await createOrderVNpay(data);
+          if (res.success) {
+            window.location.href = res.paymentUrl;
+          }
+        } else {
+          const res = await createOrder(dataSend);
+          if (res?.success) {
+            toast.success("Đặt hàng thành công");
+            navigate("/");
+            sessionStorage.removeItem("payments");
+            dispatch(clearCart());
+          }
         }
       } catch (e) {
         console.log(e);
@@ -85,7 +100,25 @@ function Payment({ dispatch, navigate }) {
     sessionStorage.setItem("urlPayment", pathname);
     navigate("/user");
   };
-
+  const handleChoosePayment = (e) => {
+    setChoosePayment(e.target.value);
+    sessionStorage.setItem("payments", e.target.value);
+  };
+  const fetchReturn = async () => {
+    try {
+      const res = await returnPayment(search);
+      if (res?.RspCode === "00") {
+        handleOrder();
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  useEffect(() => {
+    if (search) {
+      fetchReturn();
+    }
+  }, []);
   return (
     <div className="payment">
       <div className="payment-box">
@@ -157,6 +190,17 @@ function Payment({ dispatch, navigate }) {
               Chỉnh sửa
             </p>
           </span>
+        </div>
+        <div className="payment-box--choose">
+          <select
+            name=""
+            id=""
+            defaultValue="cod"
+            onChange={handleChoosePayment}
+          >
+            <option value="cod">Thanh toán khi nhận hàng</option>
+            <option value="online">Ví VNPay</option>
+          </select>
         </div>
         <div className="payment-box--order">
           <div className="payment-box--order--box">

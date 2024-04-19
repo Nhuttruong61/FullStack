@@ -27,6 +27,15 @@
                 }
             }
         }
+        &--payment{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+            p{
+                padding-left: 2px;
+            }
+        }
         &--center{
             display: flex;
             align-items: center;
@@ -40,11 +49,7 @@
                 }
             }
         }
-        &--right{
-            display: flex;
-            align-items: center;
-            
-        }
+      
     }
 }
 .background{

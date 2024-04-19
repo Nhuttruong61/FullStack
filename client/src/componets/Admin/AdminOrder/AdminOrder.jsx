@@ -24,6 +24,7 @@ function AdminOrder({ dispatch }) {
             phone: item.user.phone,
             address: item.user.address,
             price: item.totalPrice,
+            payments: item.payments,
             status: item.status,
             product: item.products,
           }));
@@ -89,6 +90,10 @@ function AdminOrder({ dispatch }) {
       Header: "Price",
       accessor: "price",
       Cell: ({ value }) => <p>{formatNumber(value)}</p>,
+    },
+    {
+      Header: "Payment",
+      accessor: "payments",
     },
     {
       Header: "Status",
@@ -158,6 +163,11 @@ function AdminOrder({ dispatch }) {
   const handleDelete = async (data) => {
     try {
       const { id } = data.values;
+      if (
+        data?.values?.payments === "online" &&
+        data?.values?.status === "Chờ xử lý"
+      )
+        return toast.warning("Bạn không thể xóa đơn hàng này");
       Swal.fire({
         title: "Bạn có muốn xóa đơn hàng này?",
         showCancelButton: true,

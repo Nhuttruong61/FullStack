@@ -15,6 +15,7 @@ import ModalCpn from "../../../componets/common/Modal/ModalCpn.jsx";
 import { IoMdClose } from "react-icons/io";
 import { IoStar } from "react-icons/io5";
 import { IoStarOutline } from "react-icons/io5";
+import { colors } from "../../../static/Admin.js";
 import Swal from "sweetalert2";
 const moment = require("moment");
 function ProductInfor({ dispatch, navigate }) {
@@ -161,7 +162,9 @@ function ProductInfor({ dispatch, navigate }) {
                           height: "50px",
                           width: "50px",
                           borderRadius: "100%",
-                          backgroundColor: `${item?.color}`,
+                          backgroundColor:
+                            colors.find((el) => el.name === item.color)?.hex ||
+                            item?.color,
                           cursor: "pointer",
                           marginRight: "8px",
                         }}

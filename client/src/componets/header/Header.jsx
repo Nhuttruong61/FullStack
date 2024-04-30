@@ -215,7 +215,7 @@ function Header({ navigate, dispatch }) {
               </div>
             ) : (
               <div className="authen" onClick={() => navigate("/auth")}>
-                Login
+                Đăng nhập
               </div>
             )}
             <p

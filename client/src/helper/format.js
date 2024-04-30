@@ -10,3 +10,14 @@ export const formatNumber = (value) => {
     />
   );
 };
+
+export const totalPrice = (value) => {
+  let total = 0;
+  value.forEach((el) => {
+    if (el.status === "Đã giao") {
+      total += el.price;
+    }
+  });
+
+  return Number(total);
+};

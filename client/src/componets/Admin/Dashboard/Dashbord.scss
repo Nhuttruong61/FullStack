@@ -1,6 +1,15 @@
 .dashbord{
     width: 100%;
     display: flex;
+    justify-content: space-around;
     align-items: center;
-
+    &--first{
+        &--total{
+            border: 1px solid #ccc;
+            background-color: #0B3BC2;
+            color: white;
+            border-radius: 4px;
+            padding: 0 12px ;
+        }
+    }
 }

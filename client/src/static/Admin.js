@@ -43,21 +43,21 @@ export const sidebar = [
 ];
 
 export const colors = [
-  { name: "Red", hex: "#FF0000", rgb: "255, 0, 0" },
-  { name: "Green", hex: "#00FF00", rgb: "0, 255, 0" },
-  { name: "Blue", hex: "#0000FF", rgb: "0, 0, 255" },
-  { name: "Black", hex: "#000000", rgb: "0, 0, 0" },
-  { name: "White", hex: "#FFFFFF", rgb: "255, 255, 255" },
-  { name: "Yellow", hex: "#FFFF00", rgb: "255, 255, 0" },
-  { name: "Cyan", hex: "#00FFFF", rgb: "0, 255, 255" },
-  { name: "Magenta", hex: "#FF00FF", rgb: "255, 0, 255" },
-  { name: "Gray", hex: "#808080", rgb: "128, 128, 128" },
-  { name: "Purple", hex: "#800080", rgb: "128, 0, 128" },
-  { name: "Orange", hex: "#FFA500", rgb: "255, 165, 0" },
-  { name: "Brown", hex: "#A52A2A", rgb: "165, 42, 42" },
-  { name: "Pink", hex: "#FFC0CB", rgb: "255, 192, 203" },
-  { name: "Gold", hex: "#FFD700", rgb: "255, 215, 0" },
-  { name: "Silver", hex: "#C0C0C0", rgb: "192, 192, 192" },
+  { name: "Đỏ", hex: "#FF0000", rgb: "255, 0, 0" },
+  { name: "Xanh lá cây", hex: "#00FF00", rgb: "0, 255, 0" },
+  { name: "Xanh dương", hex: "#0000FF", rgb: "0, 0, 255" },
+  { name: "Đen", hex: "#000000", rgb: "0, 0, 0" },
+  { name: "Trắng", hex: "#FFFFFF", rgb: "255, 255, 255" },
+  { name: "Vàng", hex: "#FFFF00", rgb: "255, 255, 0" },
+  { name: "Xanh lam", hex: "#00FFFF", rgb: "0, 255, 255" },
+  { name: "Đỏ tươi", hex: "#FF00FF", rgb: "255, 0, 255" },
+  { name: "Xám", hex: "#808080", rgb: "128, 128, 128" },
+  { name: "Tím", hex: "#800080", rgb: "128, 0, 128" },
+  { name: "Cam", hex: "#FFA500", rgb: "255, 165, 0" },
+  { name: "Nâu", hex: "#A52A2A", rgb: "165, 42, 42" },
+  { name: "Hồng", hex: "#FFC0CB", rgb: "255, 192, 203" },
+  { name: "Vàng đồng", hex: "#FFD700", rgb: "255, 215, 0" },
+  { name: "Bạc", hex: "#C0C0C0", rgb: "192, 192, 192" },
 ];
 
 export const statusOptions = [

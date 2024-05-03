@@ -13,7 +13,7 @@ import Swal from "sweetalert2";
 import { createOrder } from "../../api/order";
 import { toast } from "react-toastify";
 import { removeCart } from "../../api/user";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { createOrderVNpay, returnPayment } from "../../api/vnpay";
 
 function Payment({ dispatch, navigate }) {
@@ -119,54 +119,61 @@ function Payment({ dispatch, navigate }) {
       fetchReturn();
     }
   }, []);
+
   return (
     <div className="payment">
       <div className="payment-box">
         <div className="payment-box--top">
-          <span className="point">
+          <span className="point" onClick={() => navigate("/")}>
             <p>Về trang chủ</p>
           </span>
           <p>Giỏ hàng của bạn</p>
         </div>
         <div className="payment-box--center">
-          {data?.map((el) => {
-            return (
-              <div className="payment-box--center--box">
-                <div className="payment-box--center--box--left">
-                  <img src={el?.product?.image[0]?.url} alt="" />
+          {data?.length > 0 ? (
+            data?.map((el) => {
+              return (
+                <div className="payment-box--center--box">
+                  <div className="payment-box--center--box--left">
+                    <img src={el?.product?.image[0]?.url} alt="" />
+                  </div>
+                  <div className="payment-box--center--box--center">
+                    <h3>{el?.product?.name}</h3>
+                    <p>Màu: {el?.color}</p>
+                    <h4>{formatNumber(el?.product?.price)}</h4>
+                  </div>
+                  <div className="payment-box--center--box--right">
+                    <button
+                      disabled={el.quantity <= 1}
+                      onClick={() => handleDereate(el)}
+                    >
+                      -
+                    </button>
+                    <p>{el?.quantity}</p>
+                    <button
+                      disabled={el.quantity >= el.totalquantity}
+                      onClick={() => handleIncreate(el)}
+                    >
+                      +
+                    </button>
+                  </div>
+                  <div className="payment-box--center--box--delete">
+                    <button
+                      disabled={data?.length == 0}
+                      onClick={() => handleDeleteCard(el)}
+                      className="btn"
+                    >
+                      Xóa
+                    </button>
+                  </div>
                 </div>
-                <div className="payment-box--center--box--center">
-                  <h3>{el?.product?.name}</h3>
-                  <p>Màu: {el?.color}</p>
-                  <h4>{formatNumber(el?.product?.price)}</h4>
-                </div>
-                <div className="payment-box--center--box--right">
-                  <button
-                    disabled={el.quantity <= 1}
-                    onClick={() => handleDereate(el)}
-                  >
-                    -
-                  </button>
-                  <p>{el?.quantity}</p>
-                  <button
-                    disabled={el.quantity >= el.totalquantity}
-                    onClick={() => handleIncreate(el)}
-                  >
-                    +
-                  </button>
-                </div>
-                <div className="payment-box--center--box--delete">
-                  <button
-                    disabled={data?.length == 0}
-                    onClick={() => handleDeleteCard(el)}
-                    className="btn"
-                  >
-                    Xóa
-                  </button>
-                </div>
-              </div>
-            );
-          })}
+              );
+            })
+          ) : (
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <h2>Tạm thời chưa có sản phẩm nào!!!!</h2>
+            </div>
+          )}
         </div>
         <div className="payment-box--user">
           <span>

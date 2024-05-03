@@ -11,6 +11,7 @@ function LoadingItem({ isLoading, children }) {
   } else {
     return (
       <div className="loading-container">
+        {children && <div style={{ width: "100%" }}>{children}</div>}
         <div className="loading-spinner"></div>
       </div>
     );

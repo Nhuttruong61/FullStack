@@ -12,10 +12,11 @@ export const formatNumber = (value) => {
 };
 
 export const totalPrice = (value) => {
+  console.log(value);
   let total = 0;
   value.forEach((el) => {
     if (el.status === "Đã giao") {
-      total += el.price;
+      total += +el.price;
     }
   });
 

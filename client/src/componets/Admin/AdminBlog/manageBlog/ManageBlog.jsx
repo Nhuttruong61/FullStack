@@ -12,15 +12,13 @@ import Swal from "sweetalert2";
 import ModalCpn from "../../../common/Modal/ModalCpn";
 import { IoMdClose } from "react-icons/io";
 import Edittor from "../../../common/inputComponet/Edittor";
-import { set } from "react-hook-form";
-
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 function ManageBlog({ setActive }) {
-  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [dataEdit, setDataEdit] = useState(null);
   const [image, setImage] = useState(null);
-
+  const queryClient = useQueryClient();
   const columns = [
     {
       Header: "id",
@@ -89,12 +87,27 @@ function ManageBlog({ setActive }) {
     try {
       const res = await getBlogs();
       if (res.success) {
-        setData(res?.blog);
+        return res?.blog;
       }
     } catch (e) {
       console.log(e);
     }
   };
+  const {
+    isError,
+    isLoading,
+    data: dataBlog,
+  } = useQuery({
+    queryKey: ["blog"],
+    queryFn: fetchData,
+    retry: 1,
+    retryDelay: 1000,
+    refetchOnMount: false,
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
+    cacheTime: 50000,
+    staleTime: 1000 * 600,
+  });
   const handleDelete = async (data) => {
     try {
       const { id } = data?.values;
@@ -111,6 +124,7 @@ function ManageBlog({ setActive }) {
             if (res?.success) {
               fetchData();
               toast.success(res?.mes);
+              queryClient.invalidateQueries("blog");
               Swal.fire("Đã xóa!", "", "Thành công");
             }
           }
@@ -146,7 +160,6 @@ function ManageBlog({ setActive }) {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       const data = {
         title: dataEdit?.title,
@@ -161,7 +174,7 @@ function ManageBlog({ setActive }) {
       if (res.success) {
         toast.success("Cập nhật thành công");
         setIsEdit(false);
-        fetchData();
+        queryClient.invalidateQueries("blog");
       }
     } catch (e) {
       setLoading(false);
@@ -177,7 +190,11 @@ function ManageBlog({ setActive }) {
             <p>Tạo mới</p>
           </div>
         </div>
-        <Tabble title="Danh mục sản phẩm" data={data || []} columns={columns} />
+        <Tabble
+          title="Danh mục sản phẩm"
+          data={dataBlog || []}
+          columns={columns}
+        />
       </div>
       <ModalCpn isOpen={isEdit}>
         <div className="ModalEdit">

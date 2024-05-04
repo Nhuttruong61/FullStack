@@ -6,16 +6,16 @@ import { createBlog } from "../../../../api/blog";
 import withBase from "../../../../hocs/withBase.js";
 import LoadingItem from "../../../Loading/LoadingItem.jsx";
 import { toast } from "react-toastify";
+import { useQueryClient } from "@tanstack/react-query";
 function CreateBlog({ setActive }) {
   const [image, setImage] = useState(null);
   const [des, setDes] = useState(null);
   const [loading, setLoading] = useState(false);
+  const queryClient = useQueryClient();
   const {
     register,
     formState: { errors },
     handleSubmit,
-    setValue,
-    reset,
   } = useForm();
 
   const handleImg = (e) => {
@@ -42,6 +42,7 @@ function CreateBlog({ setActive }) {
       setLoading(false);
       if (respose.success) {
         setActive(7);
+        queryClient.invalidateQueries("blog");
       }
     } catch (e) {
       setLoading(false);

@@ -2,28 +2,38 @@ import React, { memo, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./BlogInfor.scss";
 import { getBlog } from "../../../api/blog";
+import { useQuery } from "@tanstack/react-query";
 function BlogInfor() {
   const { id } = useParams();
-  const [data, setData] = useState();
+
   const fetchlog = async () => {
     try {
       const res = await getBlog(id);
       if (res.success) {
-        setData(res?.blog);
+        return res?.blog;
       }
     } catch (e) {}
   };
-  useEffect(() => {
-    fetchlog();
-  }, [id]);
+
+  const { data: dataBlog } = useQuery({
+    queryKey: [`blog/${id}`],
+    queryFn: fetchlog,
+    retry: 1,
+    retryDelay: 1000,
+    refetchOnMount: false,
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
+    cacheTime: 50000,
+    staleTime: 1000 * 600,
+  });
   return (
     <div className="blogInfor">
       <div className="content">
         <div className="blogInfor--box">
-          <h2>{data?.title}</h2>
+          <h2>{dataBlog?.title}</h2>
           <div
             className="blogInfor--box--content"
-            dangerouslySetInnerHTML={{ __html: data?.content }}
+            dangerouslySetInnerHTML={{ __html: dataBlog?.content }}
           ></div>
         </div>
       </div>

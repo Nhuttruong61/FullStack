@@ -19,7 +19,7 @@ import { getCartUser } from "../../redux/slice/cartSlice";
 import { IoMenu } from "react-icons/io5";
 import Sidebar from "../sidebar/Sidebar";
 function Header({ navigate, dispatch }) {
-  const { data, isLoading } = useSelector((state) => state.category);
+  const { data } = useSelector((state) => state.category);
   const { user } = useSelector((state) => state.user);
   const [active, setActive] = useState(-1);
   const [showSearch, setShowSearch] = useState(false);

@@ -9,6 +9,7 @@ import LoadingItem from "../../componets/Loading/LoadingItem";
 function ProductPage() {
   const [dataProduct, setDataProduct] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [dataArrange, setDataArrange] = useState([]);
   let { category } = useParams();
   const { data } = useSelector((state) => state.category);
   const fetchdataProduct = async () => {
@@ -23,8 +24,32 @@ function ProductPage() {
   };
   useEffect(() => {
     fetchdataProduct();
+    setDataArrange([]);
   }, [category]);
   const nameCategory = data?.filter((el) => el?._id === category);
+  const handleSelect = (e) => {
+    const value = e.target.value;
+    let sortedData;
+    switch (value) {
+      case "new":
+        sortedData = dataProduct;
+        break;
+      case "asc":
+        sortedData = [...dataProduct].sort(
+          (a, b) => Number(a.price) - Number(b.price)
+        );
+        break;
+      case "dec":
+        sortedData = [...dataProduct].sort(
+          (a, b) => Number(b.price) - Number(a.price)
+        );
+        break;
+      default:
+        sortedData = dataProduct;
+        break;
+    }
+    setDataArrange(sortedData);
+  };
 
   return (
     <LoadingItem isLoading={loading}>
@@ -34,11 +59,22 @@ function ProductPage() {
             <img src={Logo} className="right--image" alt="" />
             <h1>{nameCategory ? nameCategory[0]?.name : null}</h1>
           </div>
+          <div className="product--arrange">
+            <select onChange={(e) => handleSelect(e)}>
+              <option value="new">Mới nhất</option>
+              <option value="dec">Giá cao đến thấp</option>
+              <option value="asc">Giá thấp đến cao</option>
+            </select>
+          </div>
           {dataProduct?.length > 0 ? (
             <div className="product--list">
-              {dataProduct?.map((el) => (
-                <CardProductCbn key={el.id} data={el} />
-              ))}
+              {dataArrange.length > 0
+                ? dataArrange?.map((el) => (
+                    <CardProductCbn key={el.id} data={el} />
+                  ))
+                : dataProduct?.map((el) => (
+                    <CardProductCbn key={el.id} data={el} />
+                  ))}
             </div>
           ) : (
             <div className="product--null">

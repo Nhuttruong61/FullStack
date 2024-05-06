@@ -17,6 +17,26 @@ padding: 4% 0;
         margin: 0;
     }
 } 
+&--arrange{
+  text-align: end;
+  color: white;
+  select{
+    color: white;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    padding: 2px 8px;
+    option{
+        background-color: transparent !important;
+        color: black !important;
+        border-radius: 2px;
+        &:hover{
+            background-color: transparent;
+        }
+    }
+
+  }
+}
 &--list{
     margin-top: 2%;
 

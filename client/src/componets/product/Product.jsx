@@ -24,6 +24,7 @@ function Product({ data, category }) {
               />
               <h1>{category?.name}</h1>
             </div>
+
             <div className="box-product--product">
               {data?.map((item) => (
                 <CardProductCbn data={item} key={item.id} />

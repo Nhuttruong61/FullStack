@@ -11,6 +11,7 @@ import { LuTruck } from "react-icons/lu";
 import { IoShieldOutline } from "react-icons/io5";
 import { FiRefreshCw } from "react-icons/fi";
 import Loading from "../../componets/Loading/Loading";
+import SlickProduct from "../../componets/Slick/SlickProduct";
 const Blog = lazy(() => import("../../componets/blog/Blog"));
 const Slick = lazy(() => import("../../componets/Slick/SlickBaner"));
 function Hompage() {
@@ -40,15 +41,23 @@ function Hompage() {
         <div className="content">
           <div className="container--product--item">
             {category?.map((el) => {
-              const filteredData = data
-                ?.filter((item) => item?.category.name === el?.name)
-                .slice(0, 4);
-              if (filteredData?.length > 0) {
+              const filteredData = data?.filter(
+                (item) => item?.category.name === el?.name
+              );
+              if (filteredData?.length > 0 && filteredData?.length <= 4) {
                 return (
                   <Product key={el.id} category={el} data={filteredData} />
                 );
               }
-              return null;
+              return (
+                <div>
+                  <SlickProduct
+                    data={filteredData}
+                    category={el}
+                    slidesToShow={4}
+                  />
+                </div>
+              );
             })}
           </div>
         </div>

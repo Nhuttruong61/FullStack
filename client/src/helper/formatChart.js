@@ -39,12 +39,12 @@ export const formatBarChartNoPadding = (data) => {
       if (!object[weekKey]) {
         object[weekKey] = {
           name: `${format(weekStart, "dd/MM")} - ${format(weekEnd, "dd/MM")}`,
-          revenue: el.price,
+          revenue: +el.price,
           weekNumber: weekNumber,
         };
         weekNumber++;
       } else {
-        object[weekKey].revenue += el.price;
+        object[weekKey].revenue += Number(el.price);
       }
     }
   });

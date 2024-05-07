@@ -12,6 +12,7 @@ function CreateBlog({ setActive }) {
   const [des, setDes] = useState(null);
   const [loading, setLoading] = useState(false);
   const queryClient = useQueryClient();
+
   const {
     register,
     formState: { errors },
@@ -41,8 +42,8 @@ function CreateBlog({ setActive }) {
       const respose = await createBlog(data);
       setLoading(false);
       if (respose.success) {
-        setActive(7);
         queryClient.invalidateQueries("blog");
+        setActive(7);
       }
     } catch (e) {
       setLoading(false);

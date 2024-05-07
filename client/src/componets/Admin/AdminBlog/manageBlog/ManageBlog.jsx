@@ -93,11 +93,7 @@ function ManageBlog({ setActive }) {
       console.log(e);
     }
   };
-  const {
-    isError,
-    isLoading,
-    data: dataBlog,
-  } = useQuery({
+  const { data: dataBlog } = useQuery({
     queryKey: ["blog"],
     queryFn: fetchData,
     retry: 1,

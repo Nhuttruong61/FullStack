@@ -48,16 +48,16 @@ function Hompage() {
                 return (
                   <Product key={el.id} category={el} data={filteredData} />
                 );
-              }
-              return (
-                <div>
-                  <SlickProduct
-                    data={filteredData}
-                    category={el}
-                    slidesToShow={4}
-                  />
-                </div>
-              );
+              } else if (filteredData?.length >= 5)
+                return (
+                  <div>
+                    <SlickProduct
+                      data={filteredData}
+                      category={el}
+                      slidesToShow={4}
+                    />
+                  </div>
+                );
             })}
           </div>
         </div>

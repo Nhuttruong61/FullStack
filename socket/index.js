@@ -7,8 +7,8 @@ require("dotenv").config();
 const io = socketIo(server, {
   cors: {
     origin: [
-      "http://localhost:3000",
       "https://full-stack-five-theta.vercel.app",
+      "http://localhost:3000",
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],

@@ -12,7 +12,7 @@ import socketIOClient from "socket.io-client";
 function AdminOrder({ dispatch }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const ENDPOINT = "http://localhost:8000";
+  const ENDPOINT = "https://fullstack-1-ewj9.onrender.com";
   const socketIo = socketIOClient(ENDPOINT, {
     transport: ["websocket"],
     withCredentials: true,

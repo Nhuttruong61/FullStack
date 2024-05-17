@@ -34,7 +34,7 @@ function ProductInfor({ dispatch, navigate }) {
     rating: 0,
     comment: "",
   });
-  const ENDPOINT = "http://localhost:8000";
+  const ENDPOINT = "https://fullstack-1-ewj9.onrender.com";
   const socketIo = socketIOClient(ENDPOINT, {
     transport: ["websocket"],
     withCredentials: true,

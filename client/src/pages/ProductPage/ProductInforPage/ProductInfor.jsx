@@ -17,6 +17,7 @@ import { IoStar } from "react-icons/io5";
 import { IoStarOutline } from "react-icons/io5";
 import { colors } from "../../../static/Admin.js";
 import Swal from "sweetalert2";
+import socketIOClient from "socket.io-client";
 const moment = require("moment");
 function ProductInfor({ dispatch, navigate }) {
   const { id } = useParams();
@@ -28,9 +29,15 @@ function ProductInfor({ dispatch, navigate }) {
   const { user } = useSelector((state) => state.user);
   const [limitComment, setLimitComment] = useState(4);
   const [isComent, setIsCommet] = useState(false);
+  const [idProduct, setIdProduct] = useState(null);
   const [dataComent, setDataComent] = useState({
     rating: 0,
     comment: "",
+  });
+  const ENDPOINT = "http://localhost:8000";
+  const socketIo = socketIOClient(ENDPOINT, {
+    transport: ["websocket"],
+    withCredentials: true,
   });
   const fetchData = async () => {
     try {
@@ -109,9 +116,21 @@ function ProductInfor({ dispatch, navigate }) {
       toast.warning(e?.response?.data?.message);
     }
   };
+
   useEffect(() => {
     fetchData();
   }, [id]);
+
+  useEffect(() => {
+    socketIo.on("getproduct", (data) => {
+      setIdProduct(data);
+      fetchData();
+    });
+
+    return () => {
+      socketIo.off("getproduct");
+    };
+  }, []);
 
   return (
     <div className="">

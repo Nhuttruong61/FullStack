@@ -8,10 +8,15 @@ import { toast } from "react-toastify";
 import { formatNumber } from "../../../helper/format";
 import { fetchProduct } from "../../../redux/slice/productSlice";
 import withBase from "../../../hocs/withBase";
+import socketIOClient from "socket.io-client";
 function AdminOrder({ dispatch }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
-
+  const ENDPOINT = "http://localhost:8000";
+  const socketIo = socketIOClient(ENDPOINT, {
+    transport: ["websocket"],
+    withCredentials: true,
+  });
   const fetchData = async () => {
     try {
       const res = await getOrders();
@@ -149,14 +154,16 @@ function AdminOrder({ dispatch }) {
       const { id } = values;
       setLoading(true);
       const res = await updateStatusOrder(id, { status: value });
+      console.log(res);
       setLoading(false);
-      if (res.success) {
+      if (res?.success) {
         toast.success("Cập nhật trạng thái thành công");
+        socketIo.emit("addproduct", id);
         fetchData();
         dispatch(fetchProduct());
       }
     } catch (e) {
-      setLoading(fetch);
+      setLoading(false);
       console.log(e);
     }
   };

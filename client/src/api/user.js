@@ -3,6 +3,10 @@ export const login = async (data) => {
   const res = await axios.post("/user/login", data);
   return res.data;
 };
+export const loginGoogle = async (data) => {
+  const res = await axios.post("/user/login-google", data);
+  return res.data;
+};
 export const register = async (data) => {
   const res = await axios.post("/user/register", data);
   return res.data;

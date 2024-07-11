@@ -58,37 +58,24 @@ function User() {
       Header: "Actions",
       Cell: ({ row }) => (
         <div style={{ display: "flex" }}>
-          <span
-            onClick={() => handleDelete(row)}
-            style={{
-              padding: "8px",
-              border: "1px black solid",
-              borderRadius: "4px",
-              display: "flex",
-              justifyContent: "center",
-              alignContent: "center",
-              marginRight: "2px",
-              color: "red",
-              cursor: "pointer",
-            }}
-          >
-            <AiOutlineDelete />
-          </span>
-          <span
-            onClick={() => handleUpdate(row)}
-            style={{
-              padding: "8px",
-              border: "1px black solid",
-              borderRadius: "4px",
-              display: "flex",
-              justifyContent: "center",
-              alignContent: "center",
-              color: "green",
-              cursor: "pointer",
-            }}
-          >
-            <FaPencilAlt />
-          </span>
+          {row?.values?.role !== "Admin" && (
+            <span
+              onClick={() => handleDelete(row)}
+              style={{
+                padding: "8px",
+                border: "1px black solid",
+                borderRadius: "4px",
+                display: "flex",
+                justifyContent: "center",
+                alignContent: "center",
+                marginRight: "2px",
+                color: "red",
+                cursor: "pointer",
+              }}
+            >
+              <AiOutlineDelete />
+            </span>
+          )}
         </div>
       ),
     },

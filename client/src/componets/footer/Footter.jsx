@@ -63,22 +63,10 @@ export default function Footter() {
         </div>
         <div className="footer--bottom">
           <div className="footer--bottom--left">
-            <p>
-              © 2018. Công ty cổ phần TopPhone. GPDKKD: 0303217354 do sở KH & ĐT
-              TP.HCM
-            </p>
-            <p>
-              © 2018. Công ty cổ phần TopPhone. GPDKKD: 0303217354 do sở KH & ĐT
-              TP.HCM
-            </p>
-            <p>
-              Địa chỉ: 128 Trần Quang Khải, P.Tân Định, Q.1, TP. Hồ Chí Minh.
-              Điện thoại: 028 38125960.
-            </p>
-            <p>
-              Chịu trách nhiệm nội dung: Huỳnh Văn Tốt.
-              Email:huynhA@topPhone.com.
-            </p>
+            <p>© 2018. Công ty cổ phần TopPhone. GPDKKD: 0303217354 do sở KH & ĐT TP.HCM</p>
+            <p>© 2018. Công ty cổ phần TopPhone. GPDKKD: 0303217354 do sở KH & ĐT TP.HCM</p>
+            <p>Địa chỉ: 128 Trần Quang Khải, P.Tân Định, Q.1, TP. Hồ Chí Minh. Điện thoại: 028 38125960.</p>
+            <p>Chịu trách nhiệm nội dung: Huỳnh Văn Tốt. Email:huynhA@topPhone.com.</p>
           </div>
           <div className="footer--bottom--right">
             <span>

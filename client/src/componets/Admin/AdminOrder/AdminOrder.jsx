@@ -21,20 +21,20 @@ function AdminOrder({ dispatch }) {
     try {
       const res = await getOrders();
 
-      if (res.success) {
-        if (res.success) {
-          const processedData = res.response.map((item) => ({
+      if (res?.success) {
+        const processedData =
+          res?.response?.map((item) => ({
             id: item._id,
-            name: item.user.name,
-            phone: item.user.phone,
-            address: item.user.address,
-            price: item.totalPrice,
-            payments: item.payments,
-            status: item.status,
-            product: item.products,
-          }));
-          setData(processedData);
-        }
+            name: item.user?.name ?? "N/A",
+            phone: item.user?.phone ?? "N/A",
+            address: item.user?.address ?? "N/A",
+            price: item.totalPrice ?? 0,
+            payments: item.payments ?? [],
+            status: item.status ?? "Unknown",
+            product: item.products ?? [],
+          })) ?? [];
+
+        setData(processedData);
       }
     } catch (e) {}
   };
@@ -73,15 +73,9 @@ function AdminOrder({ dispatch }) {
                   style={{ width: "50px", height: "50px", marginRight: "8px" }}
                 />
                 <div>
-                  <p style={{ padding: "0", margin: "0" }}>
-                    {product?.product?.name}
-                  </p>
-                  <p style={{ padding: "0", margin: "0" }}>
-                    Quantity: {product?.quantity}
-                  </p>
-                  <p style={{ padding: "0", margin: "0" }}>
-                    Color: {product?.color}
-                  </p>
+                  <p style={{ padding: "0", margin: "0" }}>{product?.product?.name}</p>
+                  <p style={{ padding: "0", margin: "0" }}>Quantity: {product?.quantity}</p>
+                  <p style={{ padding: "0", margin: "0" }}>Color: {product?.color}</p>
                 </div>
               </div>
               <br />
@@ -108,17 +102,10 @@ function AdminOrder({ dispatch }) {
           {row.values.status === "Đã hủy" || row.values.status === "Đã giao" ? (
             <span>{row.values.status}</span>
           ) : (
-            <select
-              defaultValue={row.values?.status}
-              onChange={(e) => handleStatusChange(e, row.values)}
-            >
+            <select defaultValue={row.values?.status} onChange={(e) => handleStatusChange(e, row.values)}>
               <option>{row.values.status}</option>
-              {row.values.status === "Chờ xử lý" && (
-                <option value="Đã chuyển hàng">Đã chuyển hàng</option>
-              )}
-              {row.values.status === "Đã chuyển hàng" && (
-                <option value="Đã giao">Đã giao</option>
-              )}
+              {row.values.status === "Chờ xử lý" && <option value="Đã chuyển hàng">Đã chuyển hàng</option>}
+              {row.values.status === "Đã chuyển hàng" && <option value="Đã giao">Đã giao</option>}
             </select>
           )}
         </div>
@@ -154,7 +141,6 @@ function AdminOrder({ dispatch }) {
       const { id } = values;
       setLoading(true);
       const res = await updateStatusOrder(id, { status: value });
-      console.log(res);
       setLoading(false);
       if (res?.success) {
         toast.success("Cập nhật trạng thái thành công");
@@ -170,10 +156,7 @@ function AdminOrder({ dispatch }) {
   const handleDelete = async (data) => {
     try {
       const { id } = data.values;
-      if (
-        data?.values?.payments === "online" &&
-        data?.values?.status === "Chờ xử lý"
-      )
+      if (data?.values?.payments === "online" && data?.values?.status === "Chờ xử lý")
         return toast.warning("Bạn không thể xóa đơn hàng này");
       Swal.fire({
         title: "Bạn có muốn xóa đơn hàng này?",
@@ -193,6 +176,7 @@ function AdminOrder({ dispatch }) {
       });
     } catch (e) {}
   };
+  console.log(data);
   return (
     <div>
       <LoadingItem isLoading={loading}>

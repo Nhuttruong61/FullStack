@@ -12,11 +12,7 @@ function Category({ navigate }) {
       <div className="box-category">
         {data?.map((el) => {
           return (
-            <div
-              key={el?.id}
-              className="box-category--card"
-              onClick={() => handleNavigate(el)}
-            >
+            <div key={el?.id} className="box-category--card" onClick={() => handleNavigate(el)}>
               <img src={el?.image?.url} alt="" />
               <p>{el?.name}</p>
             </div>

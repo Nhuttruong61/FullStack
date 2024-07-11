@@ -34,6 +34,7 @@ function ProductInfor({ dispatch, navigate }) {
     rating: 0,
     comment: "",
   });
+
   const ENDPOINT = "https://fullstack-1-ewj9.onrender.com";
   const socketIo = socketIOClient(ENDPOINT, {
     transport: ["websocket"],
@@ -54,6 +55,7 @@ function ProductInfor({ dispatch, navigate }) {
   const handleSeleteColor = (item) => {
     setActiveQuanity(item);
   };
+  console.log(activequanity);
   const handleAddCard = async () => {
     try {
       if (!user) {
@@ -71,9 +73,7 @@ function ProductInfor({ dispatch, navigate }) {
       }
       const dataFm = {
         idProduct: data._id,
-        color: activequanity?.color
-          ? activequanity?.color
-          : data?.color[0]?.color,
+        color: activequanity?.color ? activequanity?.color : data?.color[0]?.color,
       };
       const res = await addCart(user._id, dataFm);
       dispatch(getCartUser(res?.user.cart));
@@ -81,9 +81,7 @@ function ProductInfor({ dispatch, navigate }) {
       toast.warning(err?.response?.data?.mes);
     }
   };
-  const listSuggest = listData
-    ?.filter((el) => el?.category._id == data?.category._id)
-    .filter((el) => el._id !== id);
+  const listSuggest = listData?.filter((el) => el?.category._id == data?.category._id).filter((el) => el._id !== id);
 
   const handleSeeMore = () => {
     setLimitComment(data?.reviews?.length);
@@ -118,20 +116,21 @@ function ProductInfor({ dispatch, navigate }) {
   };
 
   useEffect(() => {
-    fetchData();
-  }, [id]);
-
-  useEffect(() => {
     socketIo.on("getproduct", (data) => {
       setIdProduct(data);
-      fetchData();
     });
 
     return () => {
       socketIo.off("getproduct");
     };
   }, []);
-
+  useEffect(() => {
+    fetchData();
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, [id, idProduct]);
   return (
     <div className="">
       <div className="productInfor">
@@ -157,12 +156,8 @@ function ProductInfor({ dispatch, navigate }) {
             <div className="productInfor--box--right">
               <h1>{data?.name}</h1>
               <div className="productInfor--box--right--price">
-                <p className="productInfor--box--right--price--price">
-                  {formatNumber(data?.price)}
-                </p>
-                <p className="productInfor--box--right--price--sale">
-                  {formatNumber(price)}
-                </p>
+                <p className="productInfor--box--right--price--price">{formatNumber(data?.price)}</p>
+                <p className="productInfor--box--right--price--sale">{formatNumber(price)}</p>
               </div>
               {<Rating star={Number(data?.ratings) || 5} size={20} />}
               <div className="productInfor--box--right--color">
@@ -172,18 +167,13 @@ function ProductInfor({ dispatch, navigate }) {
                 </span>
                 <div style={{ display: "flex" }}>
                   {data?.color.map((item) => (
-                    <div
-                      key={item?._id}
-                      onClick={() => handleSeleteColor(item)}
-                    >
+                    <div key={item?._id} onClick={() => handleSeleteColor(item)}>
                       <div
                         style={{
                           height: "50px",
                           width: "50px",
                           borderRadius: "100%",
-                          backgroundColor:
-                            colors.find((el) => el.name === item.color)?.hex ||
-                            item?.color,
+                          backgroundColor: colors.find((el) => el.name === item.color)?.hex || item?.color,
                           cursor: "pointer",
                           marginRight: "8px",
                         }}
@@ -193,17 +183,14 @@ function ProductInfor({ dispatch, navigate }) {
                 </div>
                 <span>
                   <p>Số lượng: </p>
-                  <p>{activeImage?.quantity || data?.color[0]?.quantity}</p>
+                  <p>{activequanity?.quantity || data?.color[0]?.quantity}</p>
                 </span>
               </div>
               <div className="productInfor--box--right--des">
                 <div dangerouslySetInnerHTML={{ __html: data?.des }} />
               </div>
               <div style={{ backgroundColor: "transparent" }} className="btn">
-                <button
-                  disabled={activequanity?.quantity == 0}
-                  onClick={handleAddCard}
-                >
+                <button disabled={activequanity?.quantity <= 0} onClick={handleAddCard}>
                   Mua ngay
                 </button>
               </div>
@@ -265,10 +252,7 @@ function ProductInfor({ dispatch, navigate }) {
               >
                 Tải thêm
               </button>
-              <button
-                className="comment--box--bottom--right"
-                onClick={() => setIsCommet(true)}
-              >
+              <button className="comment--box--bottom--right" onClick={() => setIsCommet(true)}>
                 Viết đánh giá
               </button>
             </div>
@@ -278,32 +262,18 @@ function ProductInfor({ dispatch, navigate }) {
           <div className="Modal">
             <div className="Modal--title">
               <h3>Đánh giá sản phẩm</h3>
-              <div
-                className="Modal--title--button"
-                onClick={() => setIsCommet(false)}
-              >
+              <div className="Modal--title--button" onClick={() => setIsCommet(false)}>
                 <IoMdClose size={24} />;
               </div>
             </div>
             <div className="Modal--content">
               <div className="Modal--content--star">
                 {[1, 2, 3, 4, 5].map((starValue) => (
-                  <span
-                    key={starValue}
-                    onClick={() => handleStarClick(starValue)}
-                    style={{ cursor: "pointer" }}
-                  >
+                  <span key={starValue} onClick={() => handleStarClick(starValue)} style={{ cursor: "pointer" }}>
                     {starValue <= dataComent.rating ? (
-                      <IoStar
-                        style={{ paddingRight: "8px" }}
-                        color="#FF9921"
-                        size={30}
-                      />
+                      <IoStar style={{ paddingRight: "8px" }} color="#FF9921" size={30} />
                     ) : (
-                      <IoStarOutline
-                        style={{ paddingRight: "8px" }}
-                        size={30}
-                      />
+                      <IoStarOutline style={{ paddingRight: "8px" }} size={30} />
                     )}
                   </span>
                 ))}
@@ -312,9 +282,7 @@ function ProductInfor({ dispatch, navigate }) {
                 className="Modal--content--input"
                 placeholder="Mời bạn chia sẻ thêm cảm nhận..."
                 rows={8}
-                onChange={(e) =>
-                  setDataComent({ ...dataComent, comment: e.target.value })
-                }
+                onChange={(e) => setDataComent({ ...dataComent, comment: e.target.value })}
               />
             </div>
             <button

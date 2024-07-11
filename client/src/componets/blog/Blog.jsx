@@ -32,7 +32,11 @@ function Blog() {
       <div className="content">
         <div className="blogitem--list">
           {data?.map((item) => {
-            return <CardbBlog data={item} key={item._id} />;
+            return (
+              <div key={item._id}>
+                <CardbBlog data={item} />
+              </div>
+            );
           })}
         </div>
       </div>

@@ -68,6 +68,10 @@ function Header({ navigate, dispatch }) {
   };
   useEffect(() => {
     fetchUser();
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   }, []);
   const handleSearch = (e) => {
     const value = e.target.value;
@@ -155,10 +159,7 @@ function Header({ navigate, dispatch }) {
               );
             })}
             {data && (
-              <div
-                className={`box  ${active === 7 && "active"}`}
-                onClick={handleNavigateBlog}
-              >
+              <div className={`box  ${active === 7 && "active"}`} onClick={handleNavigateBlog}>
                 <p className="item">Tin Tức</p>
               </div>
             )}
@@ -168,23 +169,15 @@ function Header({ navigate, dispatch }) {
               <label onClick={handleStatusSearch}>
                 <RiSearchLine />
               </label>
-              <div
-                className="header--content--right--card"
-                onClick={() => navigate("/payment")}
-              >
+              <div className="header--content--right--card" onClick={() => navigate("/payment")}>
                 <label>
                   <IoBagOutline />
                 </label>
-                <p className="header--content--right--card--number">
-                  {cart?.length || 0}
-                </p>
+                <p className="header--content--right--card--number">{cart?.length || 0}</p>
               </div>
             </div>
             {user ? (
-              <div
-                className="header--content--right--user"
-                onClick={() => setShowInFor(!showInFor)}
-              >
+              <div className="header--content--right--user" onClick={() => setShowInFor(!showInFor)}>
                 <label>
                   <FaRegUser />
                 </label>
@@ -238,10 +231,7 @@ function Header({ navigate, dispatch }) {
               </label>
               <div className="header--search--list">
                 {listSearch?.map((item) => (
-                  <div
-                    className="header--search--list--box"
-                    onClick={() => handleClickSearch(item)}
-                  >
+                  <div className="header--search--list--box" onClick={() => handleClickSearch(item)}>
                     <div className="header--search--list--box--left">
                       <img src={item?.image[0]?.url} alt="" />
                     </div>
@@ -262,9 +252,7 @@ function Header({ navigate, dispatch }) {
               {data?.map((el, index) => {
                 return (
                   <div
-                    className={`sidebarItem--box  ${
-                      index === active && "active"
-                    }`}
+                    className={`sidebarItem--box  ${index === active && "active"}`}
                     key={el?.id}
                     onClick={() => {
                       handleNavigate(index, el);
@@ -276,10 +264,7 @@ function Header({ navigate, dispatch }) {
                 );
               })}
               {data && (
-                <div
-                  className={`sidebarItem--box  ${active === 7 && "active"}`}
-                  onClick={handleNavigateBlog}
-                >
+                <div className={`sidebarItem--box  ${active === 7 && "active"}`} onClick={handleNavigateBlog}>
                   <p className="item">Tin Tức</p>
                 </div>
               )}

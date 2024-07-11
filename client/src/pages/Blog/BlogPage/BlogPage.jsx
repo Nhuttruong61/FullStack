@@ -38,18 +38,13 @@ function BlogPage({ navigate }) {
           </div>
           {listData?.map((item) => {
             return (
-              <div
-                className="blogPage--box"
-                onClick={() => navigate(`/blog/${item.id}`)}
-              >
+              <div className="blogPage--box" onClick={() => navigate(`/blog/${item.id}`)}>
                 <div className="blogPage--box--left">
                   <img src={item?.avatar?.url} alt="" />
                 </div>
                 <div className="blogPage--box--right">
                   <p className="blogPage--box--right--title">{item?.title}</p>
-                  <p className="blogPage--box--right--time">
-                    {moment(item?.updatedAt).fromNow()}
-                  </p>
+                  <p className="blogPage--box--right--time">{moment(item?.updatedAt).fromNow()}</p>
                 </div>
               </div>
             );

@@ -10,19 +10,20 @@ function Dashboard() {
   const fetchData = async () => {
     try {
       const res = await getOrders();
-      if (res.success) {
-        if (res.success) {
-          const processedData = res.response.map((item) => ({
+      if (res?.success) {
+        const processedData =
+          res?.response?.map((item) => ({
             id: item._id,
-            name: item.user.name,
-            phone: item.user.phone,
-            price: item.totalPrice,
-            status: item.status,
-            product: item.products,
-            createdAt: item.createdAt,
-          }));
-          setData(processedData);
-        }
+            name: item.user?.name ?? "N/A",
+            phone: item.user?.phone ?? "N/A",
+            address: item.user?.address ?? "N/A",
+            price: item.totalPrice ?? 0,
+            payments: item.payments ?? [],
+            status: item.status ?? "Unknown",
+            product: item.products ?? [],
+          })) ?? [];
+
+        setData(processedData);
       }
     } catch (e) {}
   };

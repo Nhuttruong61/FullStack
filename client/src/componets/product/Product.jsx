@@ -16,12 +16,7 @@ function Product({ data, category }) {
                 marginBottom: "20px",
               }}
             >
-              <img
-                src={Logo}
-                className="right--image"
-                alt=""
-                style={{ width: "50px", height: "50px" }}
-              />
+              <img src={Logo} className="right--image" alt="" style={{ width: "50px", height: "50px" }} />
               <h1>{category?.name}</h1>
             </div>
 

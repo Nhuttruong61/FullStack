@@ -1,4 +1,6 @@
+const User = require("../models/user");
 const UserSerevice = require("../service/user");
+const jwt = require("jsonwebtoken")
 
 const rerister = async (req, res) => {
   try {
@@ -17,6 +19,7 @@ const rerister = async (req, res) => {
         response,
       });
   } catch (e) {
+
     return res.status(500).json({
       mes: e.mes,
     });
@@ -46,6 +49,62 @@ const login = async (req, res) => {
     });
   }
 };
+const googleLogin = async (req, res) => {
+  try {
+    const { email, name } = req.body;
+    const existingUser = await User.findOne({ email: email });
+    if (!existingUser) {
+      const user = await User.create({ email: email, name: name });
+      if (user) {
+        const token = jwt.sign(
+          { id: user._id, role: user.role },
+          process.env.TOKEN_SECRET,
+          {
+            expiresIn: "10d",
+          }
+        );
+        const refesToken = jwt.sign(
+          { id: user._id, role: user.role },
+          process.env.TOKEN_SECRET,
+          {
+            expiresIn: "15d",
+          }
+        );
+        return res.status(200).json({
+          success: true,
+          token,
+          refesToken,
+        });
+      }
+    } else {
+      const token = jwt.sign(
+        { id: existingUser._id, role: existingUser.role },
+        process.env.TOKEN_SECRET,
+        {
+          expiresIn: "10d",
+        }
+      );
+      const refesToken = jwt.sign(
+        { id: existingUser._id, role: existingUser.role },
+        process.env.TOKEN_SECRET,
+        {
+          expiresIn: "15d",
+        }
+      );
+      return res.status(200).json({
+        success: true,
+        token,
+        refesToken,
+      });
+    }
+  } catch (e) {
+    console.log(e)
+    return res.status(500).json({
+      mes: e.message,
+    });
+  }
+};
+
 
 const getUserToken = async (req, res) => {
   try {
@@ -170,4 +229,5 @@ module.exports = {
   deleteleteUser,
   updateUser,
   removeProductCart,
+  googleLogin
 };

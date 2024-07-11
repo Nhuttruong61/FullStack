@@ -3,12 +3,7 @@ import "./Payment.scss";
 import { useSelector } from "react-redux";
 import { formatNumber } from "../../helper/format";
 import withBase from "../../hocs/withBase";
-import {
-  clearCart,
-  decreate,
-  getCartUser,
-  increate,
-} from "../../redux/slice/cartSlice";
+import { clearCart, decreate, getCartUser, increate } from "../../redux/slice/cartSlice";
 import Swal from "sweetalert2";
 import { createOrder } from "../../api/order";
 import { toast } from "react-toastify";
@@ -33,10 +28,7 @@ function Payment({ dispatch, navigate }) {
       dispatch(getCartUser(res?.user.cart));
     } catch (e) {}
   };
-  const totalPrice = data?.reduce(
-    (acc, cur) => acc + cur?.product?.price * cur?.quantity,
-    0
-  );
+  const totalPrice = data?.reduce((acc, cur) => acc + cur?.product?.price * cur?.quantity, 0);
   const handleOrder = async () => {
     if (!user) {
       Swal.fire({
@@ -143,26 +135,17 @@ function Payment({ dispatch, navigate }) {
                     <h4>{formatNumber(el?.product?.price)}</h4>
                   </div>
                   <div className="payment-box--center--box--right">
-                    <button
-                      disabled={el.quantity <= 1}
-                      onClick={() => handleDereate(el)}
-                    >
+                    <button disabled={el.quantity <= 1} onClick={() => handleDereate(el)}>
                       -
                     </button>
                     <p>{el?.quantity}</p>
-                    <button
-                      disabled={el.quantity >= el.totalquantity}
-                      onClick={() => handleIncreate(el)}
-                    >
+
+                    <button disabled={el.quantity >= el.totalquantity} onClick={() => handleIncreate(el)}>
                       +
                     </button>
                   </div>
                   <div className="payment-box--center--box--delete">
-                    <button
-                      disabled={data?.length == 0}
-                      onClick={() => handleDeleteCard(el)}
-                      className="btn"
-                    >
+                    <button disabled={data?.length == 0} onClick={() => handleDeleteCard(el)} className="btn">
                       Xóa
                     </button>
                   </div>
@@ -189,22 +172,13 @@ function Payment({ dispatch, navigate }) {
             <input readOnly type="text" defaultValue={user?.address} />
           </span>
           <span style={{ display: "flex", justifyContent: "end" }}>
-            <p
-              className="point "
-              style={{ color: "red", fontWeight: "500" }}
-              onClick={handleEdit}
-            >
+            <p className="point " style={{ color: "red", fontWeight: "500" }} onClick={handleEdit}>
               Chỉnh sửa
             </p>
           </span>
         </div>
         <div className="payment-box--choose">
-          <select
-            name=""
-            id=""
-            defaultValue="cod"
-            onChange={handleChoosePayment}
-          >
+          <select name="" id="" defaultValue="cod" onChange={handleChoosePayment}>
             <option value="cod">Thanh toán khi nhận hàng</option>
             <option value="online">Ví VNPay</option>
           </select>

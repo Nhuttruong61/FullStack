@@ -39,9 +39,7 @@ function ManageBlog({ setActive }) {
     {
       Header: "Avatar",
       accessor: "avatar",
-      Cell: ({ value }) => (
-        <img src={value.url} alt="" style={{ width: "50px", height: "50px" }} />
-      ),
+      Cell: ({ value }) => <img src={value.url} alt="" style={{ width: "50px", height: "50px" }} />,
     },
     {
       Header: "Actions",
@@ -186,11 +184,7 @@ function ManageBlog({ setActive }) {
             <p>Tạo mới</p>
           </div>
         </div>
-        <Tabble
-          title="Danh mục sản phẩm"
-          data={dataBlog || []}
-          columns={columns}
-        />
+        <Tabble title="Danh mục sản phẩm" data={dataBlog || []} columns={columns} />
       </div>
       <ModalCpn isOpen={isEdit}>
         <div className="ModalEdit">
@@ -209,9 +203,7 @@ function ManageBlog({ setActive }) {
                 type="text"
                 id="title"
                 value={dataEdit?.title}
-                onChange={(e) =>
-                  setDataEdit({ ...dataEdit, title: e.target.value })
-                }
+                onChange={(e) => setDataEdit({ ...dataEdit, title: e.target.value })}
               />
             </div>
 
@@ -230,12 +222,7 @@ function ManageBlog({ setActive }) {
               <label htmlFor="image" className="create--image--bt">
                 Ảnh
               </label>
-              <input
-                id="image"
-                type="file"
-                hidden
-                onChange={(e) => handleImg(e)}
-              />
+              <input id="image" type="file" hidden onChange={(e) => handleImg(e)} />
               {image && (
                 <img
                   style={{
@@ -249,11 +236,7 @@ function ManageBlog({ setActive }) {
               )}
             </div>
             <div className="create--submit">
-              <button
-                disabled={!dataEdit?.title || !image}
-                type="submit"
-                className="create--submit--btn"
-              >
+              <button disabled={!dataEdit?.title || !image} type="submit" className="create--submit--btn">
                 Tạo mới
               </button>
             </div>

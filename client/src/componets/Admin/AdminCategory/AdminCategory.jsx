@@ -39,9 +39,7 @@ function AdminCategory({ dispatch }) {
     {
       Header: "Image",
       accessor: "image",
-      Cell: ({ value }) => (
-        <img src={value.url} alt="" style={{ width: "50px", height: "50px" }} />
-      ),
+      Cell: ({ value }) => <img src={value.url} alt="" style={{ width: "50px", height: "50px" }} />,
     },
     {
       Header: "Actions",
@@ -169,10 +167,7 @@ function AdminCategory({ dispatch }) {
     <LoadingItem isLoading={loading}>
       <div className="category">
         <div className="category--create">
-          <div
-            className="category--create--btn"
-            onClick={() => setisOpen(true)}
-          >
+          <div className="category--create--btn" onClick={() => setisOpen(true)}>
             <CiCirclePlus size={24} />
             <p>Tạo mới</p>
           </div>
@@ -191,22 +186,13 @@ function AdminCategory({ dispatch }) {
                     {...register("name", { required: true })}
                   />
                 </span>
-                {errors?.name && (
-                  <p className="error-message">
-                    Tên danh mục không được bỏ trống
-                  </p>
-                )}
+                {errors?.name && <p className="error-message">Tên danh mục không được bỏ trống</p>}
               </div>
               <div className="drawer-form--image">
                 <label htmlFor="image" className="drawer-form--image--img">
                   Ảnh
                 </label>
-                <input
-                  id="image"
-                  type="file"
-                  hidden
-                  onChange={(e) => handleImg(e)}
-                />
+                <input id="image" type="file" hidden onChange={(e) => handleImg(e)} />
                 {image && (
                   <img
                     style={{
@@ -238,22 +224,13 @@ function AdminCategory({ dispatch }) {
                     {...register("name", { required: true })}
                   />
                 </span>
-                {errors?.name && (
-                  <p className="error-message">
-                    Tên danh mục không được bỏ trống
-                  </p>
-                )}
+                {errors?.name && <p className="error-message">Tên danh mục không được bỏ trống</p>}
               </div>
               <div className="drawer-form--image">
                 <label htmlFor="image" className="drawer-form--image--img">
                   Ảnh
                 </label>
-                <input
-                  id="image"
-                  type="file"
-                  hidden
-                  onChange={(e) => handleImg(e)}
-                />
+                <input id="image" type="file" hidden onChange={(e) => handleImg(e)} />
                 {image ? (
                   <img
                     style={{

@@ -58,14 +58,7 @@ function AdminProduct({ dispatch }) {
     {
       Header: "Image",
       accessor: "image",
-      Cell: ({ value }) => (
-        <img
-          loading="lazy"
-          src={value[0].url}
-          alt=""
-          style={{ width: "50px", height: "50px" }}
-        />
-      ),
+      Cell: ({ value }) => <img src={value[0].url} alt="" style={{ width: "50px", height: "50px" }} />,
     },
     {
       Header: "Price",
@@ -182,8 +175,7 @@ function AdminProduct({ dispatch }) {
   const onCreate = async (res) => {
     try {
       if (image.length == 0) return toast.warning("Ảnh không được để trống");
-      if (listColor.length == 0)
-        return toast.warning("Bạn phải nhập số lượng và màu sắc");
+      if (listColor.length == 0) return toast.warning("Bạn phải nhập số lượng và màu sắc");
       const data = {
         name: res?.name,
         category: res.category,
@@ -258,10 +250,7 @@ function AdminProduct({ dispatch }) {
     <LoadingItem isLoading={loading}>
       <div className="product-admin">
         <div className="product-admin--create">
-          <div
-            className="product-admin--create--btn"
-            onClick={() => setisOpen(true)}
-          >
+          <div className="product-admin--create--btn" onClick={() => setisOpen(true)}>
             <CiCirclePlus size={24} />
             <p>Tạo mới</p>
           </div>
@@ -282,11 +271,7 @@ function AdminProduct({ dispatch }) {
                     {...register("name", { required: true })}
                   />
                 </span>
-                {errors?.name && (
-                  <p className="error-message">
-                    Tên sản phẩm không được bỏ trống
-                  </p>
-                )}
+                {errors?.name && <p className="error-message">Tên sản phẩm không được bỏ trống</p>}
               </div>
               <div>
                 <label htmlFor="category">Loại sản phẩm</label>
@@ -302,9 +287,7 @@ function AdminProduct({ dispatch }) {
                     </option>
                   ))}
                 </select>
-                {errors.category && (
-                  <p className="error-message">Vui lòng chọn loại sản phẩm</p>
-                )}
+                {errors.category && <p className="error-message">Vui lòng chọn loại sản phẩm</p>}
               </div>
               <div>
                 <label htmlFor="">Giá sản phẩm</label>
@@ -316,11 +299,7 @@ function AdminProduct({ dispatch }) {
                     {...register("price", { required: true })}
                   />
                 </span>
-                {errors?.name && (
-                  <p className="error-message">
-                    Giá sản phẩm không được bỏ trống
-                  </p>
-                )}
+                {errors?.name && <p className="error-message">Giá sản phẩm không được bỏ trống</p>}
               </div>
               <div>
                 <label htmlFor="">Giảm giá</label>
@@ -332,11 +311,7 @@ function AdminProduct({ dispatch }) {
                     {...register("discount", { required: true })}
                   />
                 </span>
-                {errors?.discount && (
-                  <p className="error-message">
-                    Giảm giá sản phẩm không được bỏ trống
-                  </p>
-                )}
+                {errors?.discount && <p className="error-message">Giảm giá sản phẩm không được bỏ trống</p>}
               </div>
               <div
                 style={{
@@ -366,9 +341,7 @@ function AdminProduct({ dispatch }) {
                     padding: "0",
                     color: "black",
                   }}
-                  onChange={(e) =>
-                    setColor({ ...color, quantity: e.target.value })
-                  }
+                  onChange={(e) => setColor({ ...color, quantity: e.target.value })}
                   placeholder="Vui lòng nhập số lượng"
                 />
                 <p
@@ -403,11 +376,7 @@ function AdminProduct({ dispatch }) {
                     <p style={{ fontWeight: "bold" }}>Số lượng: </p>
                     <p style={{ paddingLeft: "8px" }}>{item?.quantity}</p>
                   </div>
-                  <button
-                    style={{ marginLeft: "8px" }}
-                    className="btn"
-                    onClick={() => handleDeleteColor(item)}
-                  >
+                  <button style={{ marginLeft: "8px" }} className="btn" onClick={() => handleDeleteColor(item)}>
                     Xóa
                   </button>
                 </div>
@@ -417,19 +386,10 @@ function AdminProduct({ dispatch }) {
               </div>
 
               <div className="drawer-form-product--image">
-                <label
-                  htmlFor="image"
-                  className="drawer-form-product--image--img"
-                >
+                <label htmlFor="image" className="drawer-form-product--image--img">
                   Ảnh
                 </label>
-                <input
-                  id="image"
-                  type="file"
-                  hidden
-                  multiple
-                  onChange={(e) => handleImg(e)}
-                />
+                <input id="image" type="file" hidden multiple onChange={(e) => handleImg(e)} />
                 {image && (
                   <div style={{ marginTop: "10px" }}>
                     {image.map((el) => (
@@ -463,16 +423,10 @@ function AdminProduct({ dispatch }) {
                     type="text"
                     id="name"
                     defaultValue={valueUpdated?.name}
-                    onChange={(e) =>
-                      setValueUpdated({ ...valueUpdated, name: e.target.value })
-                    }
+                    onChange={(e) => setValueUpdated({ ...valueUpdated, name: e.target.value })}
                   />
                 </span>
-                {!valueUpdated?.name && (
-                  <p className="error-message">
-                    Tên sản phẩm không được bỏ trống
-                  </p>
-                )}
+                {!valueUpdated?.name && <p className="error-message">Tên sản phẩm không được bỏ trống</p>}
               </div>
               <div>
                 <label htmlFor="category">Loại sản phẩm</label>
@@ -493,9 +447,7 @@ function AdminProduct({ dispatch }) {
                     </option>
                   ))}
                 </select>
-                {!valueUpdated?.category && (
-                  <p className="error-message">Vui lòng chọn loại sản phẩm</p>
-                )}
+                {!valueUpdated?.category && <p className="error-message">Vui lòng chọn loại sản phẩm</p>}
               </div>
               <div>
                 <label htmlFor="">Giá sản phẩm</label>
@@ -513,11 +465,7 @@ function AdminProduct({ dispatch }) {
                     }
                   />
                 </span>
-                {!valueUpdated?.price && (
-                  <p className="error-message">
-                    Giá sản phẩm không được bỏ trống
-                  </p>
-                )}
+                {!valueUpdated?.price && <p className="error-message">Giá sản phẩm không được bỏ trống</p>}
               </div>
               <div>
                 <label htmlFor="">Giảm giá</label>
@@ -535,35 +483,20 @@ function AdminProduct({ dispatch }) {
                     }
                   />
                 </span>
-                {!valueUpdated?.discount && (
-                  <p className="error-message">
-                    Giảm giá sản phẩm không được bỏ trống
-                  </p>
-                )}
+                {!valueUpdated?.discount && <p className="error-message">Giảm giá sản phẩm không được bỏ trống</p>}
               </div>
               <div style={{ width: "100%", overflowX: "auto" }} className="">
                 <Edittor
                   value={valueUpdated?.des}
-                  setValue={(value) =>
-                    setValueUpdated({ ...valueUpdated, des: value })
-                  }
+                  setValue={(value) => setValueUpdated({ ...valueUpdated, des: value })}
                 />
               </div>
 
               <div className="drawer-form-product--image">
-                <label
-                  htmlFor="image"
-                  className="drawer-form-product--image--img"
-                >
+                <label htmlFor="image" className="drawer-form-product--image--img">
                   Ảnh
                 </label>
-                <input
-                  id="image"
-                  type="file"
-                  hidden
-                  multiple
-                  onChange={(e) => handleImg(e)}
-                />
+                <input id="image" type="file" hidden multiple onChange={(e) => handleImg(e)} />
                 {image ? (
                   <div style={{ marginTop: "10px" }}>
                     {image.map((el) => (

@@ -20,7 +20,7 @@ const SlickProduct = (props) => {
       {
         breakpoint: 480,
         settings: {
-          slidesToShow: 4,
+          slidesToShow: 1,
         },
       },
       {
@@ -50,12 +50,7 @@ const SlickProduct = (props) => {
             color: "white",
           }}
         >
-          <img
-            src={Logo}
-            className="right--image"
-            alt=""
-            style={{ width: "50px", height: "50px" }}
-          />
+          <img src={Logo} className="right--image" alt="" style={{ width: "50px", height: "50px" }} />
           <h1>{category?.name}</h1>
         </div>
       </div>

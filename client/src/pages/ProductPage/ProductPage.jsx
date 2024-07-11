@@ -35,14 +35,10 @@ function ProductPage() {
         sortedData = dataProduct;
         break;
       case "asc":
-        sortedData = [...dataProduct].sort(
-          (a, b) => Number(a.price) - Number(b.price)
-        );
+        sortedData = [...dataProduct].sort((a, b) => Number(a.price) - Number(b.price));
         break;
       case "dec":
-        sortedData = [...dataProduct].sort(
-          (a, b) => Number(b.price) - Number(a.price)
-        );
+        sortedData = [...dataProduct].sort((a, b) => Number(b.price) - Number(a.price));
         break;
       default:
         sortedData = dataProduct;
@@ -69,12 +65,8 @@ function ProductPage() {
           {dataProduct?.length > 0 ? (
             <div className="product--list">
               {dataArrange.length > 0
-                ? dataArrange?.map((el) => (
-                    <CardProductCbn key={el.id} data={el} />
-                  ))
-                : dataProduct?.map((el) => (
-                    <CardProductCbn key={el.id} data={el} />
-                  ))}
+                ? dataArrange?.map((el) => <CardProductCbn key={el.id} data={el} />)
+                : dataProduct?.map((el) => <CardProductCbn key={el.id} data={el} />)}
             </div>
           ) : (
             <div className="product--null">

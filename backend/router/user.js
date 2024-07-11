@@ -25,6 +25,16 @@ router.post(
   ),
   userController.login
 );
+router.post(
+  "/login-google",
+  validateDto(
+    Joi.object({
+      email: stringReq,
+      name: stringReq,
+    })
+  ),
+  userController.googleLogin
+);
 router.get("/get-user-token", verifyToken, userController.getUserToken);
 router.get("/get-users", verifyToken, isAdmin, userController.getUsers);
 router.get("/refesToken", checkToken, userController.refesToken);

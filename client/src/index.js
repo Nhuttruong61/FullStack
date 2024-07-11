@@ -8,6 +8,7 @@ import { Provider } from "react-redux";
 import store, { persistor } from "./redux/store";
 import { PersistGate } from "redux-persist/integration/react";
 import "./index.scss";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 const queryClient = new QueryClient();
 root.render(
@@ -16,10 +17,11 @@ root.render(
     {/* The rest of your application */}
     <Provider store={store}>
       <PersistGate persistor={persistor}>
-        <App />
+        <GoogleOAuthProvider clientId="588058779692-nv0j989fso73b33k1eutg7o7a49o6ok0.apps.googleusercontent.com">
+          <App />
+        </GoogleOAuthProvider>
       </PersistGate>
     </Provider>
-    <ReactQueryDevtools initialIsOpen={false} />
   </QueryClientProvider>
 
   // </React.StrictMode>

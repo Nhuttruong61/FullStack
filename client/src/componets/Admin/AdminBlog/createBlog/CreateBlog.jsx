@@ -67,9 +67,7 @@ function CreateBlog({ setActive }) {
                 {...register("title", { required: true })}
               />
             </div>
-            {errors?.title && (
-              <p className="error-message">Tiêu đề không được bỏ trống</p>
-            )}
+            {errors?.title && <p className="error-message">Tiêu đề không được bỏ trống</p>}
             <div className="">
               <Edittor value={des} setValue={setDes} />
             </div>
@@ -77,12 +75,7 @@ function CreateBlog({ setActive }) {
               <label htmlFor="image" className="create--image--bt">
                 Ảnh
               </label>
-              <input
-                id="image"
-                type="file"
-                hidden
-                onChange={(e) => handleImg(e)}
-              />
+              <input id="image" type="file" hidden onChange={(e) => handleImg(e)} />
               {image && (
                 <img
                   style={{
@@ -96,11 +89,7 @@ function CreateBlog({ setActive }) {
               )}
             </div>
             <div className="create--submit">
-              <button
-                disabled={!des || !image}
-                type="submit"
-                className="create--submit--btn"
-              >
+              <button disabled={!des || !image} type="submit" className="create--submit--btn">
                 Tạo mới
               </button>
             </div>

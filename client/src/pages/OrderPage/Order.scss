@@ -10,14 +10,16 @@
         display: flex;
         justify-content: space-between;
         height: auto;
+        border-bottom: 1px solid #ccc;
+      
         &--left{
-            display: flex;
             align-items: center;
-
+            margin: 5px 0;
             &--box{
                 display: flex;
-                justify-content: center;
+                justify-content: start;
                 align-items: center;
+                margin: 5px 0;
                 img{
                     width: 100px;
                     height: 100px;
@@ -46,6 +48,7 @@
                
                 h4{
                     margin-left: 4px;
+                    padding-right: 8px;
                 }
             }
         }

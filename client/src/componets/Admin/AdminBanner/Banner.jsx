@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { lazy, useEffect, useState } from "react";
 import "./Banner.scss";
 import { createBaner, deleteBanner, getBanner } from "../../../api/banner";
 import { AiOutlineDelete } from "react-icons/ai";
@@ -105,12 +105,7 @@ function Banner() {
               <label htmlFor="image" className="drawer-bn--image--img">
                 Ảnh
               </label>
-              <input
-                id="image"
-                type="file"
-                hidden
-                onChange={(e) => handleImg(e)}
-              />
+              <input id="image" type="file" hidden onChange={(e) => handleImg(e)} />
               {image && (
                 <img
                   style={{

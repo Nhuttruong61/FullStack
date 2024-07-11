@@ -7,8 +7,11 @@ import * as UserService from "../../api/user";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
+import { FaRegEye, FaEyeSlash } from "react-icons/fa";
+import Google from "../../componets/auth/GoogleLogin";
 function Auth({ navigate }) {
   const { user } = useSelector((state) => state.user);
+  const [isShowPassword, setIsShowPassword] = useState(false);
   const {
     register,
     formState: { errors },
@@ -56,18 +59,13 @@ function Auth({ navigate }) {
         {form === 1 && (
           <div className="auth--left--login">
             <h1>Chào mừng bạn đến với trang đăng nhập của chúng tôi</h1>
-            <p>
-              Hãy đăng nhập để trải nghiệm tốt nhất từ dịch vụ của chúng tôi.
-            </p>
+            <p>Hãy đăng nhập để trải nghiệm tốt nhất từ dịch vụ của chúng tôi.</p>
           </div>
         )}
         {form === 2 && (
           <div className="auth--left--login">
             <h1>Chào mừng bạn đến với trang đăng ký của chúng tôi</h1>
-            <p>
-              Hãy đăng đăng ký cho mình một tài khoản để trải nghiệm tốt nhất từ
-              dịch vụ tốt nhất từ chúng tôi.
-            </p>
+            <p>Hãy đăng đăng ký cho mình một tài khoản để trải nghiệm tốt nhất từ dịch vụ tốt nhất từ chúng tôi.</p>
           </div>
         )}
       </div>
@@ -75,10 +73,7 @@ function Auth({ navigate }) {
         {form === 1 && (
           <div className="auth--right--login">
             <h1>Đăng nhập</h1>
-            <form
-              className="auth--right--login--form"
-              onSubmit={handleSubmit(onSubmit)}
-            >
+            <form className="auth--right--login--form" onSubmit={handleSubmit(onSubmit)}>
               <div className="auth--right--login--form--item">
                 <label htmlFor="email">Email:</label>
                 <input
@@ -87,26 +82,38 @@ function Auth({ navigate }) {
                   placeholder="Hãy nhập email của bạn"
                   {...register("email", { required: true })}
                 />
-                {errors.email && (
-                  <span className="error-message">Vui lòng nhập email</span>
-                )}
+                {errors.email && <span className="error-message">Vui lòng nhập email</span>}
               </div>
-              <div className="auth--right--login--form--item">
+              <div className="auth--right--login--form--item ">
                 <label htmlFor="password">Mật khẩu:</label>
                 <input
-                  type="password"
+                  type={!isShowPassword ? "password" : "text"}
                   id="password"
                   placeholder="Hãy nhập mật khẩu của bạn"
                   {...register("password", { required: true })}
                 />
-                {errors.password && (
-                  <span className="error-message">Vui lòng nhập mật khẩu</span>
-                )}
+                <div
+                  style={{
+                    position: "absolute ",
+                    top: "60%",
+                    right: "10px",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => setIsShowPassword(!isShowPassword)}
+                >
+                  {isShowPassword ? <FaEyeSlash color="white" /> : <FaRegEye color="white" />}
+                </div>
+                {errors.password && <span className="error-message">Vui lòng nhập mật khẩu</span>}
               </div>
+
               <div className="auth--right--login--form--submit">
                 <Button type="submit">Đăng nhập</Button>
               </div>
             </form>
+            <p>Phương thức đăng nhập khác</p>
+            <div className="google ">
+              <Google />
+            </div>
             <p onClick={() => setForm(2)}>Bạn chưa có tài khoản?</p>
             <p onClick={() => navigate("/")}>Trang chủ</p>
           </div>
@@ -114,10 +121,7 @@ function Auth({ navigate }) {
         {form === 2 && (
           <div className="auth--right--login">
             <h1>Đăng ký</h1>
-            <form
-              className="auth--right--login--form"
-              onSubmit={handleSubmit(onSubmit)}
-            >
+            <form className="auth--right--login--form" onSubmit={handleSubmit(onSubmit)}>
               <div className="auth--right--login--form--item">
                 <label htmlFor="name">Họ và tên:</label>
                 <input
@@ -126,9 +130,7 @@ function Auth({ navigate }) {
                   placeholder="Hãy nhập email của bạn"
                   {...register("name", { required: true })}
                 />
-                {errors.name && (
-                  <span className="error-message">Vui lòng nhập name</span>
-                )}
+                {errors.name && <span className="error-message">Vui lòng nhập name</span>}
                 <label htmlFor="email">Email:</label>
                 <input
                   type="email"
@@ -136,21 +138,28 @@ function Auth({ navigate }) {
                   placeholder="Hãy nhập email của bạn"
                   {...register("email", { required: true })}
                 />
-                {errors.email && (
-                  <span className="error-message">Vui lòng nhập email</span>
-                )}
+                {errors.email && <span className="error-message">Vui lòng nhập email</span>}
               </div>
               <div className="auth--right--login--form--item">
                 <label htmlFor="password">Mật khẩu:</label>
                 <input
-                  type="password"
+                  type={!isShowPassword ? "password" : "text"}
                   id="password"
                   placeholder="Hãy nhập mật khẩu của bạn"
                   {...register("password", { required: true })}
                 />
-                {errors.password && (
-                  <span className="error-message">Vui lòng nhập mật khẩu</span>
-                )}
+                <div
+                  style={{
+                    position: "absolute ",
+                    top: "60%",
+                    right: "10px",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => setIsShowPassword(!isShowPassword)}
+                >
+                  {isShowPassword ? <FaEyeSlash color="white" /> : <FaRegEye color="white" />}
+                </div>
+                {errors.password && <span className="error-message">Vui lòng nhập mật khẩu</span>}
               </div>
               <div className="auth--right--login--form--submit">
                 <Button type="submit">Đăng ký</Button>

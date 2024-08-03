@@ -2,8 +2,8 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 const instance = axios.create({
-  // baseURL: "http://localhost:5000/api/v1",
-  baseURL: "https://fullstack-7y9f.onrender.com/api/v1",
+  baseURL: "http://localhost:5000/api/v1",
+  // baseURL: "https://fullstack-7y9f.onrender.com/api/v1",
 });
 
 // Add a request interceptor

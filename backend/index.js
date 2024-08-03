@@ -1,11 +1,14 @@
 const express = require("express");
 const cors = require("cors");
+const http = require("http");
 const initialRouter = require("./router");
 const DataBaseConnect = require("./config/mongoConnect");
 var cookieParser = require("cookie-parser");
 const CloudinaryConnect = require("./config/cloudinaryConnect");
 const connect = require("./config/redisConnect");
+const socketIo = require("./config/socket.config");
 const app = express();
+const server = http.createServer(app);
 require("dotenv").config();
 app.use(
   cors({
@@ -22,3 +25,4 @@ app.listen(PORT || 8000, () => {
 });
 CloudinaryConnect();
 DataBaseConnect();
+socketIo(server)

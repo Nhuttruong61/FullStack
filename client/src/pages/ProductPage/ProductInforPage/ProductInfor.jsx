@@ -35,7 +35,7 @@ function ProductInfor({ dispatch, navigate }) {
     comment: "",
   });
 
-  const ENDPOINT = "https://fullstack-1-ewj9.onrender.com";
+  const ENDPOINT = "https://fullstack-7y9f.onrender.com";
   const socketIo = socketIOClient(ENDPOINT, {
     transport: ["websocket"],
     withCredentials: true,

@@ -123,7 +123,7 @@ const getUserToken = async (req, res) => {
 const getUsers = async (req, res) => {
   try {
     const { name, page } = req.query;
-    let limit = process.env.LIMIT;
+    const limit = parseInt(req.query.limit) || parseInt(process.env.LIMIT) || 10;
     const options = {
       page,
       limit,

@@ -29,24 +29,42 @@ const createOrder = (props) => {
   });
 };
 
-const getOrders = () => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const res = await Order.find()
-        .populate("products.product")
-        .populate("user");
-      if (!res) {
+const getOrders = {
+  getOrders: async ({ page, limit }) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const skip = (page - 1) * limit;
+        const orders = await Order.find()
+          .populate("products.product")
+          .populate("user")
+          .skip(skip)
+          .limit(limit)
+          .exec();
+        if (!orders) {
+          reject({
+            success: false,
+            mes: "Có lỗi xảy ra",
+          });
+          return;
+        }
+
+        resolve(orders);
+      } catch (e) {
         reject({
           success: false,
-          mes: "Có lỗi xảy ra",
+          mes: e.message,
         });
-        return;
       }
-      resolve(res);
+    });
+  },
+  countOrders: async () => {
+    try {
+
+      return await Order.countDocuments();
     } catch (e) {
-      reject(e);
+      throw new Error("Có lỗi xảy ra khi đếm số lượng đơn hàng.");
     }
-  });
+  },
 };
 
 const getOrderUser = (id) => {

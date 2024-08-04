@@ -16,18 +16,31 @@ const createOrder = async (req, res) => {
 };
 const getOrders = async (req, res) => {
   try {
-    const response = await OrderSerevice.getOrders();
-    if (response)
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || parseInt(process.env.LIMIT) || 10;
+    const response = await OrderSerevice.getOrders.getOrders({ page, limit });
+    const totalOrders = await OrderSerevice.getOrders.countOrders();
+    if (response) {
       return res.status(200).json({
         success: true,
-        response,
+        totalPages: totalOrders,
+        currentPage: page,
+        orders: response,
       });
+    } else {
+      return res.status(404).json({
+        success: false,
+        mes: "Không tìm thấy đơn hàng nào.",
+      });
+    }
   } catch (e) {
     return res.status(500).json({
-      mes: e.mes,
+      success: false,
+      mes: e.message || "Có lỗi xảy ra.",
     });
   }
 };
+
 const getOrderUser = async (req, res) => {
   try {
     const response = await OrderSerevice.getOrderUser(req.params.id);

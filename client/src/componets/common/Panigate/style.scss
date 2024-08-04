@@ -1,0 +1,25 @@
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+
+  .pagination-item {
+    display: inline-block;
+    margin: 0 0.25rem;
+
+    a {
+      padding: 0.25rem 0.75rem;
+      border-radius: 0.25rem;
+      border: 1px solid #d1d5db;
+      background-color: #ffffff;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: #e5e7eb;
+      }
+    }
+  }
+}
+.activepn {
+  color: red !important;
+}

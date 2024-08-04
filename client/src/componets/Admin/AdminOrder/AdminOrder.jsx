@@ -9,8 +9,12 @@ import { formatNumber } from "../../../helper/format";
 import { fetchProduct } from "../../../redux/slice/productSlice";
 import withBase from "../../../hocs/withBase";
 import socketIOClient from "socket.io-client";
+import "./AdminOrder.scss";
+import PanigateCpn from "../../common/Panigate/PanigateCpn";
 function AdminOrder({ dispatch }) {
   const [data, setData] = useState([]);
+  const [page, setPage] = useState(1);
+  const [panigate, setPanigate] = useState(10);
   const [loading, setLoading] = useState(false);
   const ENDPOINT = "http://localhost:5000";
   const socketIo = socketIOClient(ENDPOINT, {
@@ -19,11 +23,11 @@ function AdminOrder({ dispatch }) {
   });
   const fetchData = async () => {
     try {
-      const res = await getOrders();
-
+      const res = await getOrders(page);
+      setPanigate(res?.totalPages);
       if (res?.success) {
         const processedData =
-          res?.response?.map((item) => ({
+          res?.orders?.map((item) => ({
             id: item._id,
             name: item.user?.name ?? "N/A",
             phone: item.user?.phone ?? "N/A",
@@ -40,8 +44,8 @@ function AdminOrder({ dispatch }) {
   };
   useEffect(() => {
     fetchData();
-  }, []);
-
+  }, [page]);
+  console.log(page);
   const columns = [
     {
       Header: "id",
@@ -176,13 +180,15 @@ function AdminOrder({ dispatch }) {
       });
     } catch (e) {}
   };
-  console.log(data);
   return (
     <div>
       <LoadingItem isLoading={loading}>
         <div className="product-admin">
-          <div style={{ height: "90vh", overflowY: "scroll" }}>
+          <div style={{ height: "85vh" }}>
             <Tabble title="Sản phẩm" data={data || []} columns={columns} />
+            <div className="panigate">
+              <PanigateCpn setPage={setPage} pageSize={panigate} itemsPerPage={10} />
+            </div>
           </div>
         </div>
       </LoadingItem>

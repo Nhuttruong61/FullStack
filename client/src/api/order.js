@@ -7,9 +7,9 @@ export const createOrder = async (data) => {
     console.log(e);
   }
 };
-export const getOrders = async () => {
+export const getOrders = async (page) => {
   try {
-    const res = await axios.get("/order/get-orders");
+    const res = await axios.get(`/order/get-orders?page=${page}`);
     return res.data;
   } catch (e) {
     console.log(e);

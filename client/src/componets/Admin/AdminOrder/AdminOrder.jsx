@@ -16,7 +16,7 @@ function AdminOrder({ dispatch }) {
   const [page, setPage] = useState(1);
   const [panigate, setPanigate] = useState(10);
   const [loading, setLoading] = useState(false);
-  const ENDPOINT = "https://fullstack-7y9f.onrender.com";
+  const ENDPOINT = process.env.SOCKET_URL;
   const socketIo = socketIOClient(ENDPOINT, {
     transport: ["websocket"],
     withCredentials: true,

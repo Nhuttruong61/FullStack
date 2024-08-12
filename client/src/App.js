@@ -1,4 +1,4 @@
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { Route, BrowserRouter as Router, Routes, } from "react-router-dom";
 import Hompage from "./pages/Hompage/Hompage.jsx";
 import { fetchCategory } from "./redux/slice/categorySlice.js";
 import { useEffect } from "react";
@@ -17,6 +17,8 @@ import Payment from "./pages/PaymentPage/Payment.jsx";
 import Order from "./pages/OrderPage/Order.jsx";
 import BlogInfor from "./pages/Blog/BlogInfor/BlogInfor.jsx";
 import BlogPage from "./pages/Blog/BlogPage/BlogPage.jsx";
+import Fchat from "./componets/fchat/Fchat.jsx";
+
 function App() {
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -40,6 +42,7 @@ function App() {
             element={
               <Layout>
                 <Hompage />
+
               </Layout>
             }
           />
@@ -101,8 +104,9 @@ function App() {
             }
           />
         </Routes>
+        <Fchat />
 
-        {user && user?.role == "Admin" && (
+        {user && user?.role === "Admin" && (
           <Routes>
             <Route
               path="/admin"
@@ -112,8 +116,11 @@ function App() {
                 </LayoutAdmin>
               }
             />
+
+
           </Routes>
         )}
+
       </Router>
       <ToastContainer
         position="top-right"

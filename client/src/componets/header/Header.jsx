@@ -33,11 +33,13 @@ function Header({ navigate, dispatch }) {
   const handleNavigate = (active, el) => {
     setActive(active);
     navigate(`/category/${el._id}`);
+    document.title = `${el?.name}`;
   };
   const handleNavigateBlog = () => {
     setActive(7);
     setListMenuRp(false);
     navigate("/blog");
+    document.title = "Tin tức";
   };
 
   const fetchUser = async () => {
@@ -198,6 +200,7 @@ function Header({ navigate, dispatch }) {
                       onClick={() => {
                         Cookies.remove("accesstoken");
                         dispatch(getUser(null));
+
                         navigate("/auth");
                       }}
                     >
@@ -207,7 +210,13 @@ function Header({ navigate, dispatch }) {
                 )}
               </div>
             ) : (
-              <div className="authen" onClick={() => navigate("/auth")}>
+              <div
+                className="authen"
+                onClick={() => {
+                  navigate("/auth");
+                  document.title = "Đăng nhập";
+                }}
+              >
                 Đăng nhập
               </div>
             )}

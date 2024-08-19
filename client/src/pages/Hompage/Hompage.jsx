@@ -25,6 +25,7 @@ function Hompage() {
 
   useEffect(() => {
     fetchbanner();
+    document.title = "Trang chủ";
   }, []);
   return (
     <div className="container">
@@ -41,21 +42,13 @@ function Hompage() {
         <div className="content">
           <div className="container--product--item">
             {category?.map((el) => {
-              const filteredData = data?.filter(
-                (item) => item?.category.name === el?.name
-              );
+              const filteredData = data?.filter((item) => item?.category.name === el?.name);
               if (filteredData?.length > 0 && filteredData?.length <= 4) {
-                return (
-                  <Product key={el.id} category={el} data={filteredData} />
-                );
+                return <Product key={el.id} category={el} data={filteredData} />;
               } else if (filteredData?.length >= 5)
                 return (
                   <div>
-                    <SlickProduct
-                      data={filteredData}
-                      category={el}
-                      slidesToShow={4}
-                    />
+                    <SlickProduct data={filteredData} category={el} slidesToShow={4} />
                   </div>
                 );
             })}
@@ -84,12 +77,10 @@ function Hompage() {
           </div>
           <p className="container--des--text">
             <p>
-              Tại TopPhone, khách hàng yêu mến hệ sinh thái Apple sẽ tìm thấy
-              đầy đủ và đa dạng nhất các sản phẩm như
+              Tại TopPhone, khách hàng yêu mến hệ sinh thái Apple sẽ tìm thấy đầy đủ và đa dạng nhất các sản phẩm như
             </p>
             <p>
-              iPhone, iPad, Apple Watch, MacBook và các phụ kiện Apple... với
-              không gian mua sắm đẳng cấp, hiện đại.
+              iPhone, iPad, Apple Watch, MacBook và các phụ kiện Apple... với không gian mua sắm đẳng cấp, hiện đại.
             </p>
           </p>
         </>

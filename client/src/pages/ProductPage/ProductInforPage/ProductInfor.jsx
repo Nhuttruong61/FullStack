@@ -55,7 +55,6 @@ function ProductInfor({ dispatch, navigate }) {
   const handleSeleteColor = (item) => {
     setActiveQuanity(item);
   };
-  console.log(activequanity);
   const handleAddCard = async () => {
     try {
       if (!user) {
@@ -126,6 +125,7 @@ function ProductInfor({ dispatch, navigate }) {
   }, []);
   useEffect(() => {
     fetchData();
+    document.title = `${data?.name}`;
     window.scrollTo({
       top: 0,
       behavior: "smooth",
@@ -154,9 +154,13 @@ function ProductInfor({ dispatch, navigate }) {
               </div>
             </div>
             <div className="productInfor--box--right">
+              {console.log(data)}
               <h1>{data?.name}</h1>
               <div className="productInfor--box--right--price">
-                <p className="productInfor--box--right--price--price">{formatNumber(data?.price)}</p>
+                {data?.discount > 0 && (
+                  <p className="productInfor--box--right--price--price">{formatNumber(data?.price)}</p>
+                )}
+
                 <p className="productInfor--box--right--price--sale">{formatNumber(price)}</p>
               </div>
               {<Rating star={Number(data?.ratings) || 5} size={20} />}

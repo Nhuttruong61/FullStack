@@ -32,6 +32,7 @@ function Auth({ navigate }) {
             sessionStorage.removeItem("url");
           } else {
             navigate("/");
+            document.title = "Trang chủ";
           }
           reset();
         }
@@ -51,6 +52,7 @@ function Auth({ navigate }) {
   useEffect(() => {
     if (user) {
       navigate("/");
+      document.title = "Trang chủ";
     }
   }, [user]);
   return (

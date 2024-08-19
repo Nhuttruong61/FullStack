@@ -19,6 +19,7 @@ function Google({ dispatch, navigate }) {
         const user = await loginGoogle(data);
         if (user?.success) {
           Cookies.set("accesstoken", user.token);
+          document.title = "Trang chủ";
           navigate("/");
         }
       } catch (e) {

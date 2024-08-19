@@ -41,6 +41,30 @@ const getOrders = async (req, res) => {
   }
 };
 
+const getOrderDasboard = async (req, res) => {
+  try {
+
+    const response = await OrderSerevice.getOrdersDasboard();
+    if (response) {
+      return res.status(200).json({
+        success: true,
+        orders: response,
+      });
+    } else {
+      return res.status(404).json({
+        success: false,
+        mes: "Không tìm thấy đơn hàng nào.",
+      });
+    }
+  } catch (e) {
+    return res.status(500).json({
+      success: false,
+      mes: e.message || "Có lỗi xảy ra.",
+    });
+  }
+};
+
+
 const getOrderUser = async (req, res) => {
   try {
     const response = await OrderSerevice.getOrderUser(req.params.id);
@@ -107,4 +131,5 @@ module.exports = {
   cancleOrder,
   deleteOrder,
   updateStatusOrder,
+  getOrderDasboard
 };

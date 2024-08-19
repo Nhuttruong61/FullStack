@@ -139,10 +139,11 @@ function ProductInfor({ dispatch, navigate }) {
             <div className="productInfor--box--left">
               <img src={activeImage || data?.image[0]?.url} alt="" />
               <div className="productInfor--box--left--listImg">
-                {data?.image?.slice(0, 3)?.map((item) => {
+                {data?.image?.slice(0, 3)?.map((item, index) => {
                   return (
                     <div
                       className="productInfor--box--left--listImg--card"
+                      key={index}
                       onClick={() => {
                         setActiveImage(item?.url);
                       }}

@@ -15,6 +15,14 @@ export const getOrders = async (page) => {
     console.log(e);
   }
 };
+export const getOrderDasboard = async () => {
+  try {
+    const res = await axios.get("/order/get-order-dasboard");
+    return res.data;
+  } catch (e) {
+    console.log(e);
+  }
+};
 
 export const getOrderUser = async (id) => {
   try {

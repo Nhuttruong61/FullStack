@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Dashbord.scss";
-import { getOrders } from "../../../api/order";
+import { getOrderDasboard } from "../../../api/order";
 import PeiChard from "./Chart/PeiChard";
 import BarChartNoPadding from "./Chart/BarChartNoPadding";
 import { formatNumber, totalPrice } from "../../../helper/format";
@@ -9,14 +9,12 @@ function Dashboard() {
   const [data, setData] = useState([]);
   const fetchData = async () => {
     try {
-      const res = await getOrders();
+      const res = await getOrderDasboard();
+      console.log(res);
       if (res?.success) {
         const processedData =
-          res?.response?.map((item) => ({
+          res?.orders?.map((item) => ({
             id: item._id,
-            name: item.user?.name ?? "N/A",
-            phone: item.user?.phone ?? "N/A",
-            address: item.user?.address ?? "N/A",
             price: item.totalPrice ?? 0,
             payments: item.payments ?? [],
             status: item.status ?? "Unknown",
@@ -44,10 +42,7 @@ function Dashboard() {
         <PeiChard name="Biểu đồ trạng thái đơn hàng" data={data} />
       </div>
       <div style={{ width: "400px", height: "400px" }}>
-        <BarChartNoPadding
-          name="Biểu đồ thống kê danh thu các tuần trong tháng"
-          data={data}
-        />
+        <BarChartNoPadding name="Biểu đồ thống kê danh thu các tuần trong tháng" data={data} />
       </div>
     </div>
   );

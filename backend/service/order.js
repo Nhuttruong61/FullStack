@@ -84,6 +84,26 @@ const getOrderUser = (id) => {
     }
   });
 };
+const getOrdersDasboard = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const res = await Order.find().select('-user');
+
+      if (!res) {
+        reject({
+          success: false,
+          mes: "Có lỗi xảy ra",
+        });
+        return;
+      }
+      resolve(res);
+    } catch (e) {
+      console.log(e)
+      reject(e);
+
+    }
+  });
+};
 const cancleOrder = (id) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -177,4 +197,5 @@ module.exports = {
   cancleOrder,
   deleteOrder,
   updateStatusOrder,
+  getOrdersDasboard
 };

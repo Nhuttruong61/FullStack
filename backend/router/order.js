@@ -43,5 +43,7 @@ router.patch(
   orderController.updateStatusOrder
 );
 router.get("/get-orders", verifyToken, isAdmin, orderController.getOrders);
+router.get("/get-order-dasboard", verifyToken, isAdmin, orderController.getOrderDasboard);
+
 
 module.exports = router;

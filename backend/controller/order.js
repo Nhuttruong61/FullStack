@@ -26,6 +26,8 @@ const getOrders = async (req, res) => {
         totalPages: totalOrders,
         currentPage: page,
         orders: response,
+
+
       });
     } else {
       return res.status(404).json({

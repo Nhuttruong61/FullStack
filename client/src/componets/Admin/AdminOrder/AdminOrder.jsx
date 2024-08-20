@@ -11,6 +11,7 @@ import withBase from "../../../hocs/withBase";
 import socketIOClient from "socket.io-client";
 import "./AdminOrder.scss";
 import PanigateCpn from "../../common/Panigate/PanigateCpn";
+import moment from "moment";
 function AdminOrder({ dispatch }) {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
@@ -24,6 +25,7 @@ function AdminOrder({ dispatch }) {
   const fetchData = async () => {
     try {
       const res = await getOrders(page);
+
       setPanigate(res?.totalPages);
       if (res?.success) {
         const processedData =
@@ -36,6 +38,7 @@ function AdminOrder({ dispatch }) {
             payments: item.payments ?? [],
             status: item.status ?? "Unknown",
             product: item.products ?? [],
+            createdAt: item.createdAt,
           })) ?? [];
 
         setData(processedData);
@@ -45,11 +48,11 @@ function AdminOrder({ dispatch }) {
   useEffect(() => {
     fetchData();
   }, [page]);
-  console.log(page);
   const columns = [
     {
       Header: "id",
       accessor: "id",
+      Cell: ({ value }) => <div>{value?.slice(0, 8)}</div>,
     },
     {
       Header: "Name",
@@ -114,6 +117,11 @@ function AdminOrder({ dispatch }) {
           )}
         </div>
       ),
+    },
+    {
+      Header: "Date",
+      accessor: "createdAt",
+      Cell: ({ value }) => <p>{moment(value).format("DD/MM/YYYY")}</p>,
     },
     {
       Header: "Actions",

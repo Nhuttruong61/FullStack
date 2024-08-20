@@ -1,62 +1,61 @@
-.blogPage{
-    width: 100%;
-    background-color: #3E3E3F;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-  
-    &--new {
-        text-align: left;
-        color: white;
-    }
-    &--box{
-        display: flex;
-        justify-content: space-between;
-        text-align: left;
-        margin-top: 4px;
-        color: white;
-        &:hover{
-            color: #2997FF !important;
-        }
-        &--left{
-            width: 20%;
-            img{
-                max-width: 100%;
-                object-fit: cover;
-                border-radius: 4px;
-            }
-        }
-        &--right{
-            width: 80%;
-            padding-left: 4px;
-          
-            &--title{
-                margin:  0;
-                font-size: 20px;
-                font-weight: 500;
-            }
-            &--time{
-                color: #ccc !important;
-            }
-        }
-    }
-}
-@media screen and (max-width: 480px) { 
-    .blogPage--box--left{
-        width: 50%;
-    }
-    &--right{
-        width: 50%;
-        padding-left: 4px;
-      
-        &--title{
-            font-size: 14px !important;
-            font-weight: 600;
+.blogPage {
+  width: 100%;
+  background-color: #3e3e3f;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
 
-        }
-        &--time{
-            color: #ccc !important;
-        }
+  &--new {
+    text-align: left;
+    color: white;
+  }
+  &--box {
+    display: flex;
+    justify-content: space-between;
+    text-align: left;
+    margin-top: 4px;
+    color: white;
+    &:hover {
+      color: #2997ff !important;
     }
+    &--left {
+      width: 20%;
+      img {
+        max-width: 100%;
+        object-fit: cover;
+        border-radius: 4px;
+      }
+    }
+    &--right {
+      width: 80%;
+      padding-left: 4px;
+
+      &--title {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 500;
+      }
+      &--time {
+        color: #ccc !important;
+      }
+    }
+  }
+}
+@media screen and (max-width: 480px) {
+  .blogPage--box--left {
+    width: 50%;
+  }
+  &--right {
+    width: 50%;
+    padding-left: 4px;
+
+    &--title {
+      font-size: 14px !important;
+      font-weight: 600;
+    }
+    &--time {
+      color: #ccc !important;
+    }
+  }
 }

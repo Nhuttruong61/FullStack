@@ -5,14 +5,14 @@ import withBase from "../../hocs/withBase";
 function Category({ navigate }) {
   const { data } = useSelector((state) => state.category);
   const handleNavigate = useCallback((el) => {
-    navigate(`/category/${el._id}`);
+    navigate(`/category/${el.slug}`);
   }, []);
   return (
     <div className="content">
       <div className="box-category">
         {data?.map((el) => {
           return (
-            <div key={el?.id} className="box-category--card" onClick={() => handleNavigate(el)}>
+            <div key={el?._id} className="box-category--card" onClick={() => handleNavigate(el)}>
               <img src={el?.image?.url} alt="" />
               <p>{el?.name}</p>
             </div>

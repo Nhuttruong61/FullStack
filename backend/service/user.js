@@ -53,14 +53,14 @@ const login = (data) => {
       }
       const token = jwt.sign(
         { id: check.id, role: check.role },
-        process.env.TOKEN_SECRET,
+        process.env.JWT_SECRET_KEY,
         {
           expiresIn: "10d",
         }
       );
       const refesToken = jwt.sign(
         { id: check.id, role: check.role },
-        process.env.TOKEN_SECRET,
+        process.env.JWT_SECRET_KEY,
         {
           expiresIn: "15d",
         }
@@ -261,6 +261,98 @@ const removeProductCart = (id, data) => {
     }
   });
 };
+
+const addProductWishlist = (id, data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const { productId } = data;
+      const user = await User.findById(id);
+      if (!user) {
+        resolve({
+          success: false,
+          message: "Không tìm thấy người dùng",
+        });
+        return;
+      }
+      if (!user.wishlist) {
+        user.wishlist = [];
+      }
+      const isProductInWishlist = user.wishlist.some(
+        (item) => item && item.toString() === productId
+      );
+
+      if (isProductInWishlist) {
+        reject({
+          mes: "Sản phẩm đã có trong wishlist",
+        });
+        return;
+      }
+      user.wishlist.push(productId);
+      await user.save();
+      const response = await User.findById(id).populate("wishlist");
+      resolve({
+        success: true,
+        response,
+      });
+    } catch (err) {
+      reject(err);
+    }
+  });
+};
+
+const removeProductWishlist = (id, data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const { productId } = data;
+      const user = await User.findById(id);
+      if (!user) {
+        resolve({
+          success: false,
+          message: "Không tìm thấy người dùng",
+        });
+        return;
+      }
+      if (!user.wishlist) {
+        user.wishlist = [];
+      }
+      const filter = user.wishlist.filter(
+        (item) => item && item.toString() !== productId
+      );
+
+      user.wishlist = filter;
+      await user.save();
+      const response = await User.findById(id).populate("wishlist");
+      resolve({
+        success: true,
+        response,
+      });
+    } catch (err) {
+      reject(err);
+    }
+  });
+};
+
+const getWishlist = (id) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const user = await User.findById(id).populate("wishlist");
+      if (!user) {
+        resolve({
+          success: false,
+          message: "Không tìm thấy người dùng",
+        });
+        return;
+      }
+      resolve({
+        success: true,
+        wishlist: user.wishlist,
+      });
+    } catch (err) {
+      reject(err);
+    }
+  });
+};
+
 module.exports = {
   register,
   login,
@@ -271,4 +363,7 @@ module.exports = {
   updateUser,
   addProductCart,
   removeProductCart,
+  addProductWishlist,
+  removeProductWishlist,
+  getWishlist,
 };

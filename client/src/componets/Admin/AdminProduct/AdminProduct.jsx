@@ -1,13 +1,13 @@
 import React, { memo, useState } from "react";
 import { useSelector } from "react-redux";
-import Tabble from "../../common/Tabble/Tabble";
+import OptimizedTable from "../../common/OptimizedTable/OptimizedTable";
 import { FaPencilAlt } from "react-icons/fa";
 import { AiOutlineDelete } from "react-icons/ai";
 import Swal from "sweetalert2";
 import * as productApi from "../../../api/product";
 import "./AdminProduct.scss";
 import { CiCirclePlus } from "react-icons/ci";
-import DrawerCpn from "../../common/Drawer/Drawer";
+import Modal from "../../common/Modal/Modal";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import withBase from "../../../hocs/withBase";
@@ -39,94 +39,86 @@ function AdminProduct({ dispatch }) {
   } = useForm();
   const columns = [
     {
-      Header: "id",
+      Header: "ID",
       accessor: "_id",
+      width: 7,
     },
     {
-      Header: "Name",
+      Header: "Tên",
       accessor: "name",
+      width: 12,
     },
     {
-      Header: "Category",
+      Header: "Slug",
+      accessor: "slug",
+      width: 12,
+      Cell: ({ value }) => (
+        <div className="slug-cell">
+          <code>{value || "—"}</code>
+        </div>
+      ),
+    },
+    {
+      Header: "Danh Mục",
       accessor: "category",
+      width: 10,
       Cell: ({ value }) => <p>{value?.name}</p>,
     },
     {
-      Header: "Discount",
-      accessor: "discount",
-    },
-    {
-      Header: "Image",
-      accessor: "image",
-      Cell: ({ value }) => <img src={value[0].url} alt="" style={{ width: "50px", height: "50px" }} />,
-    },
-    {
-      Header: "Price",
+      Header: "Giá",
       accessor: "price",
+      width: 10,
       Cell: ({ value }) => <p>{formatNumber(value)}</p>,
     },
     {
-      Header: "Description",
-      accessor: "des",
-      Cell: ({ value }) => {
-        const desc = value?.slice(0, 100);
-        return <div dangerouslySetInnerHTML={{ __html: desc }}></div>;
-      },
+      Header: "Giảm Giá",
+      accessor: "discount",
+      width: 8,
     },
     {
-      Header: "quantity",
-      accessor: "color",
+      Header: "Ảnh",
+      accessor: "image",
+      width: 8,
       Cell: ({ value }) => (
-        <div st>
+        <div className="table-avatar">
+          <img src={value?.[0]?.url} alt="Product" />
+        </div>
+      ),
+    },
+    {
+      Header: "Số Lượng",
+      accessor: "color",
+      width: 15,
+      Cell: ({ value }) => (
+        <div className="color-quantity-cell">
           {value?.map((item, index) => (
-            <div style={{ display: "flex" }} key={index}>
-              <span style={{ display: "flex" }}>
-                <p>Màu:</p>
-                <p>{item.color}</p>
-              </span>
-              <span style={{ display: "flex", paddingLeft: "4px" }}>
-                <p>{item?.quantity}</p>
-              </span>
+            <div key={index} className="color-item-compact">
+              <span className="color-label">{item.color}:</span>
+              <span className="quantity-label">{item.quantity}</span>
             </div>
           ))}
         </div>
       ),
     },
     {
-      Header: "Actions",
+      Header: "Hành động",
+      width: 10,
       Cell: ({ row }) => (
-        <div style={{ display: "flex" }}>
-          <span
+        <div className="table-actions">
+          <button
             onClick={() => handleDelete(row)}
-            style={{
-              padding: "8px",
-              border: "1px black solid",
-              borderRadius: "4px",
-              display: "flex",
-              justifyContent: "center",
-              alignContent: "center",
-              marginRight: "2px",
-              color: "red",
-              cursor: "pointer",
-            }}
+            className="btn-action btn-delete"
+            title="Xóa sản phẩm"
           >
-            <AiOutlineDelete />
-          </span>
-          <span
+            <AiOutlineDelete size={16} />
+          </button>
+          <button
             onClick={() => handleOpenEdit(row)}
-            style={{
-              padding: "8px",
-              border: "1px black solid",
-              borderRadius: "4px",
-              display: "flex",
-              justifyContent: "center",
-              alignContent: "center",
-              color: "green",
-              cursor: "pointer",
-            }}
+            className="btn-action btn-edit"
+            title="Chỉnh sửa sản phẩm"
           >
-            <FaPencilAlt />
-          </span>
+            <FaPencilAlt size={14} />
+          </button>
         </div>
       ),
     },
@@ -137,8 +129,21 @@ function AdminProduct({ dispatch }) {
       const { _id } = data?.values;
       Swal.fire({
         title: "Bạn có muốn xóa sản phẩm này?",
+        text: "Hành động này không thể hoàn tác",
+        icon: "warning",
         showCancelButton: true,
         confirmButtonText: "Xóa",
+        cancelButtonText: "Hủy",
+        confirmButtonColor: "#ff9921",
+        cancelButtonColor: "#888",
+        background: "#2A2A2B",
+        color: "#ffffff",
+        customClass: {
+          title: "swal-title",
+          htmlContainer: "swal-text",
+          confirmButton: "swal-btn-confirm",
+          cancelButton: "swal-btn-cancel",
+        },
       }).then(async (result) => {
         if (result.isConfirmed) {
           setLoading(true);
@@ -147,12 +152,27 @@ function AdminProduct({ dispatch }) {
           if (res?.success) {
             toast.success(res?.mes);
             dispatch(fetchProduct());
-            Swal.fire("Đã xóa!", "", "Thành công");
+            Swal.fire({
+              title: "Đã xóa!",
+              text: "Sản phẩm đã được xóa thành công",
+              icon: "success",
+              confirmButtonColor: "#ff9921",
+              background: "#2A2A2B",
+              color: "#ffffff",
+            });
           }
         }
       });
     } catch (err) {
       setLoading(false);
+      Swal.fire({
+        title: "Lỗi!",
+        text: "Có lỗi xảy ra khi xóa sản phẩm",
+        icon: "error",
+        confirmButtonColor: "#ff9921",
+        background: "#2A2A2B",
+        color: "#ffffff",
+      });
     }
   };
 
@@ -187,6 +207,7 @@ function AdminProduct({ dispatch }) {
       };
       setLoading(true);
       const response = await productApi.createProduct(data);
+
       setLoading(false);
       if (response?.success) {
         setImage(null);
@@ -201,8 +222,25 @@ function AdminProduct({ dispatch }) {
   };
   const handleOpenEdit = (data) => {
     setImage(null);
-    setValueUpdated(data?.values);
+    setValueUpdated(data);
+    setListColor(data?.color || []);
     setisOpenUpdate(true);
+  };
+
+  const handleCloseCreate = () => {
+    setisOpen(false);
+    setImage([]);
+    setListColor([]);
+    setDes("");
+    setColor({ color: "", quantity: "" });
+    reset();
+  };
+
+  const handleCloseUpdate = () => {
+    setisOpenUpdate(false);
+    setImage([]);
+    setListColor([]);
+    setColor({ color: "", quantity: "" });
   };
 
   const handOnchageColor = (e) => {
@@ -226,18 +264,20 @@ function AdminProduct({ dispatch }) {
     try {
       const data = {
         name: valueUpdated.name,
-        category: valueUpdated.category,
+        category: typeof valueUpdated.category === "string" ? valueUpdated.category : valueUpdated.category?._id,
         des: valueUpdated.des,
         discount: valueUpdated.discount,
         price: valueUpdated.price,
         image: image ? image : valueUpdated.image,
-        color: valueUpdated.color,
+        color: listColor.length > 0 ? listColor : valueUpdated.color,
       };
       setLoading(true);
       const res = await productApi.updateProduct(valueUpdated._id, data);
       setLoading(false);
       if (res.success) {
+        toast.success("Cập nhật sản phẩm thành công");
         setImage(null);
+        setListColor([]);
         setisOpenUpdate(false);
         dispatch(fetchProduct());
       }
@@ -256,10 +296,10 @@ function AdminProduct({ dispatch }) {
           </div>
         </div>
         <div style={{ height: "90vh", overflowY: "scroll" }}>
-          <Tabble title="Sản phẩm" data={data || []} columns={columns} />
+          <OptimizedTable title="Sản phẩm" data={data || []} columns={columns} />
         </div>
-        <DrawerCpn isOpen={isOpen} setisOpen={setisOpen}>
-          <div className="drawer-form-product">
+        <Modal isOpen={isOpen} setisOpen={handleCloseCreate} title="Tạo Sản Phẩm Mới">
+          <div className="modal-form-product">
             <form action="" onSubmit={handleSubmit(onCreate)}>
               <div>
                 <label htmlFor="">Tên sản phẩm</label>
@@ -276,7 +316,6 @@ function AdminProduct({ dispatch }) {
               <div>
                 <label htmlFor="category">Loại sản phẩm</label>
                 <select
-                  style={{ width: "100%", margin: "8px 0", outline: "none" }}
                   id="category"
                   {...register("category", { required: true })}
                 >
@@ -313,75 +352,41 @@ function AdminProduct({ dispatch }) {
                 </span>
                 {errors?.discount && <p className="error-message">Giảm giá sản phẩm không được bỏ trống</p>}
               </div>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <label>Màu</label>
-                <select
-                  style={{ width: "35%", margin: "8px 8px", outline: "none" }}
-                  id="category"
-                  onChange={handOnchageColor}
-                >
-                  <option value="">--Chọn màu--</option>
-                  {colors?.map((item, index) => (
-                    <option value={item.name} key={index}>
-                      {item.name}
-                    </option>
-                  ))}
-                </select>
-                <input
-                  type="number"
-                  style={{
-                    width: "35%",
-                    border: "1px solid black",
-                    padding: "0",
-                    color: "black",
-                  }}
-                  onChange={(e) => setColor({ ...color, quantity: e.target.value })}
-                  placeholder="Vui lòng nhập số lượng"
-                />
-                <p
-                  onClick={handleAddColor}
-                  style={{
-                    width: "30%",
-                    margin: "0px 8px",
-                    backgroundColor: "black",
-                    color: "white",
-                    borderRadius: "4px",
-                    padding: "4px 8px",
-                    display: "flex",
-                    cursor: "pointer",
-                  }}
-                >
-                  Thêm vào
-                </p>
-              </div>
-              {listColor?.map((item) => (
-                <div
-                  style={{
-                    display: "flex",
-                    justifyItems: "",
-                    alignItems: "center",
-                  }}
-                >
-                  <div style={{ display: "flex", paddingRight: "20px" }}>
-                    <p style={{ fontWeight: "bold" }}>Màu: </p>
-                    <p style={{ paddingLeft: "8px" }}>{item?.color}</p>
-                  </div>
-                  <div style={{ display: "flex" }}>
-                    <p style={{ fontWeight: "bold" }}>Số lượng: </p>
-                    <p style={{ paddingLeft: "8px" }}>{item?.quantity}</p>
-                  </div>
-                  <button style={{ marginLeft: "8px" }} className="btn" onClick={() => handleDeleteColor(item)}>
-                    Xóa
-                  </button>
+              <div className="color-section">
+                <div style={{display:"flex", alignItems:"center"}}>
+                  <label>Màu</label>
+                  <select
+                    id="category"
+                    onChange={handOnchageColor}
+                  >
+                    <option value="">--Chọn màu--</option>
+                    {colors?.map((item, index) => (
+                      <option value={item.name} key={index}>
+                        {item.name}
+                      </option>
+                    ))}
+                  </select>
+                  <input
+                    type="number"
+                    onChange={(e) => setColor({ ...color, quantity: e.target.value })}
+                    placeholder="Số lượng"
+                  />
+                  <p onClick={handleAddColor}>Thêm vào</p>
                 </div>
-              ))}
-              <div style={{ width: "100%", overflowX: "auto" }} className="">
+              </div>
+              <div className="color-list">
+                {listColor?.map((item) => (
+                  <div className="color-item" key={item?.color}>
+                    <p><strong>Màu:</strong> {item?.color}</p>
+                    <p><strong>Số lượng:</strong> {item?.quantity}</p>
+                    <button className="btn" onClick={() => handleDeleteColor(item)}>
+                      Xóa
+                    </button>
+                  </div>
+                ))}
+              </div>
+              <div>
+                <label>Mô tả</label>
                 <Edittor value={des} setValue={setDes} />
               </div>
 
@@ -391,29 +396,22 @@ function AdminProduct({ dispatch }) {
                 </label>
                 <input id="image" type="file" hidden multiple onChange={(e) => handleImg(e)} />
                 {image && (
-                  <div style={{ marginTop: "10px" }}>
+                  <div>
                     {image.map((el) => (
-                      <img
-                        style={{
-                          width: "100px",
-                          height: "100px",
-                          paddingLeft: "20px",
-                        }}
-                        src={el}
-                        alt=""
-                      />
+                      <img src={el} alt="" key={el} />
                     ))}
                   </div>
                 )}
               </div>
-              <div className="drawer-form-product--btn">
-                <button type="submit">Tạo mới</button>
+              <div className="form-actions">
+                <button type="button" className="btn-cancel" onClick={handleCloseCreate}>Hủy</button>
+                <button type="submit" className="btn-submit">Tạo mới</button>
               </div>
             </form>
           </div>
-        </DrawerCpn>
-        <DrawerCpn isOpen={isOpenUpdate} setisOpen={setisOpenUpdate}>
-          <div className="drawer-form-product">
+        </Modal>
+        <Modal isOpen={isOpenUpdate} setisOpen={handleCloseUpdate} title="Cập Nhật Sản Phẩm">
+          <div className="modal-form-product">
             <form action="" onSubmit={handleUpdate}>
               <div>
                 <label htmlFor="">Tên sản phẩm</label>
@@ -431,8 +429,8 @@ function AdminProduct({ dispatch }) {
               <div>
                 <label htmlFor="category">Loại sản phẩm</label>
                 <select
-                  style={{ width: "100%", margin: "8px 0", outline: "none" }}
                   id="category"
+                  defaultValue={typeof valueUpdated?.category === "string" ? valueUpdated?.category : valueUpdated?.category?._id}
                   onChange={(e) =>
                     setValueUpdated({
                       ...valueUpdated,
@@ -485,7 +483,41 @@ function AdminProduct({ dispatch }) {
                 </span>
                 {!valueUpdated?.discount && <p className="error-message">Giảm giá sản phẩm không được bỏ trống</p>}
               </div>
-              <div style={{ width: "100%", overflowX: "auto" }} className="">
+              <div className="color-section">
+                <div style={{display:"flex", alignItems:"center"}}>
+                  <label>Màu</label>
+                  <select
+                    id="category"
+                    onChange={handOnchageColor}
+                  >
+                    <option value="">--Chọn màu--</option>
+                    {colors?.map((item, index) => (
+                      <option value={item.name} key={index}>
+                        {item.name}
+                      </option>
+                    ))}
+                  </select>
+                  <input
+                    type="number"
+                    onChange={(e) => setColor({ ...color, quantity: e.target.value })}
+                    placeholder="Số lượng"
+                  />
+                  <p onClick={handleAddColor}>Thêm vào</p>
+                </div>
+              </div>
+              <div className="color-list">
+                {listColor?.map((item) => (
+                  <div className="color-item" key={item?.color}>
+                    <p><strong>Màu:</strong> {item?.color}</p>
+                    <p><strong>Số lượng:</strong> {item?.quantity}</p>
+                    <button className="btn" onClick={() => handleDeleteColor(item)}>
+                      Xóa
+                    </button>
+                  </div>
+                ))}
+              </div>
+              <div>
+                <label>Mô tả</label>
                 <Edittor
                   value={valueUpdated?.des}
                   setValue={(value) => setValueUpdated({ ...valueUpdated, des: value })}
@@ -498,41 +530,26 @@ function AdminProduct({ dispatch }) {
                 </label>
                 <input id="image" type="file" hidden multiple onChange={(e) => handleImg(e)} />
                 {image ? (
-                  <div style={{ marginTop: "10px" }}>
+                  <div>
                     {image.map((el) => (
-                      <img
-                        style={{
-                          width: "100px",
-                          height: "100px",
-                          paddingLeft: "20px",
-                        }}
-                        src={el}
-                        alt=""
-                      />
+                      <img src={el} alt="" key={el} />
                     ))}
                   </div>
                 ) : (
-                  <div style={{ marginTop: "10px" }}>
+                  <div>
                     {valueUpdated?.image?.map((el) => (
-                      <img
-                        style={{
-                          width: "100px",
-                          height: "100px",
-                          paddingLeft: "20px",
-                        }}
-                        src={el?.url}
-                        alt=""
-                      />
+                      <img src={el?.url} alt="" key={el?.url} />
                     ))}
                   </div>
                 )}
               </div>
-              <div className="drawer-form-product--btn">
-                <button type="submit">Cập nhật</button>
+              <div className="form-actions">
+                <button type="button" className="btn-cancel" onClick={handleCloseUpdate}>Hủy</button>
+                <button type="submit" className="btn-submit">Cập nhật</button>
               </div>
             </form>
           </div>
-        </DrawerCpn>
+        </Modal>
       </div>
     </LoadingItem>
   );

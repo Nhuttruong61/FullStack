@@ -18,6 +18,7 @@ import { formatNumber } from "../../helper/format";
 import { getCartUser } from "../../redux/slice/cartSlice";
 import { IoMenu } from "react-icons/io5";
 import Sidebar from "../sidebar/Sidebar";
+import WishlistIcon from "../wishlist/WishlistIcon";
 function Header({ navigate, dispatch }) {
   const { data } = useSelector((state) => state.category);
   const { user } = useSelector((state) => state.user);
@@ -32,7 +33,7 @@ function Header({ navigate, dispatch }) {
   const { data: cart } = useSelector((state) => state.car);
   const handleNavigate = (active, el) => {
     setActive(active);
-    navigate(`/category/${el._id}`);
+    navigate(`/category/${el.slug}`);
     document.title = `${el?.name}`;
   };
   const handleNavigateBlog = () => {
@@ -43,6 +44,12 @@ function Header({ navigate, dispatch }) {
   };
 
   const fetchUser = async () => {
+    const accessToken = Cookies.get("accesstoken");
+    if (!accessToken) {
+      dispatch(getUser(null));
+      dispatch(getCartUser(null));
+      return;
+    }
     try {
       const res = await userTK();
       if (res.success) {
@@ -94,7 +101,7 @@ function Header({ navigate, dispatch }) {
     }
   };
   const handleClickSearch = (item) => {
-    navigate(`/product/${item._id}`);
+    navigate(`/product/${item.slug || item._id}`);
     setValueSearch(" ");
     setListSearch([]);
     setShowSearch(false);
@@ -153,7 +160,7 @@ function Header({ navigate, dispatch }) {
               return (
                 <div
                   className={`box  ${index === active && "active"}`}
-                  key={el?.id}
+                  key={el?._id}
                   onClick={() => handleNavigate(index, el)}
                 >
                   <p className="item">{el?.name}</p>
@@ -161,7 +168,7 @@ function Header({ navigate, dispatch }) {
               );
             })}
             {data && (
-              <div className={`box  ${active === 7 && "active"}`} onClick={handleNavigateBlog}>
+              <div key="tin-tuc" className={`box  ${active === 7 && "active"}`} onClick={handleNavigateBlog}>
                 <p className="item">Tin Tức</p>
               </div>
             )}
@@ -171,6 +178,7 @@ function Header({ navigate, dispatch }) {
               <label onClick={handleStatusSearch}>
                 <RiSearchLine />
               </label>
+              <WishlistIcon navigate={navigate} />
               <div className="header--content--right--card" onClick={() => navigate("/payment")}>
                 <label>
                   <IoBagOutline />
@@ -184,8 +192,8 @@ function Header({ navigate, dispatch }) {
                   <FaRegUser />
                 </label>
                 {showInFor && (
-                  <div className="header--content--right--user--show">
-                    {user?.role == "Admin" && (
+                  <div className="header--content--right--user--show" onClick={(e) => e.stopPropagation()}>
+                    {user?.role === "admin" && (
                       <div onClick={() => navigate("/admin")}>
                         <p>Quản lý</p>
                       </div>
@@ -240,7 +248,7 @@ function Header({ navigate, dispatch }) {
               </label>
               <div className="header--search--list">
                 {listSearch?.map((item) => (
-                  <div className="header--search--list--box" onClick={() => handleClickSearch(item)}>
+                  <div className="header--search--list--box" key={item._id} onClick={() => handleClickSearch(item)}>
                     <div className="header--search--list--box--left">
                       <img src={item?.image[0]?.url} alt="" />
                     </div>
@@ -262,18 +270,19 @@ function Header({ navigate, dispatch }) {
                 return (
                   <div
                     className={`sidebarItem--box  ${index === active && "active"}`}
-                    key={el?.id}
+                    key={el?._id}
                     onClick={() => {
                       handleNavigate(index, el);
                       setListMenuRp(false);
                     }}
                   >
+                  
                     <p className="item">{el?.name}</p>
                   </div>
                 );
               })}
               {data && (
-                <div className={`sidebarItem--box  ${active === 7 && "active"}`} onClick={handleNavigateBlog}>
+                <div key="tin-tuc-sidebar" className={`sidebarItem--box  ${active === 7 && "active"}`} onClick={handleNavigateBlog}>
                   <p className="item">Tin Tức</p>
                 </div>
               )}

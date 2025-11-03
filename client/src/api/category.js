@@ -27,7 +27,7 @@ export const createCategory = async (data) => {
 };
 export const updateCategory = async (id, data) => {
   try {
-    const res = await axios.put(`category/update-category/${id}`, data);
+    const res = await axios.put(`/category/update-category/${id}`, data);
     return res.data;
   } catch (e) {
     console.log(e);

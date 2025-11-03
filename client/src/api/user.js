@@ -12,7 +12,7 @@ export const register = async (data) => {
   return res.data;
 };
 export const userTK = async (data) => {
-  const res = await axios.get("/user/get-user-token", data);
+  const res = await axios.get("/user/get-user-token", { params: data });
   return res.data;
 };
 export const resfesToken = async () => {
@@ -41,5 +41,21 @@ export const addCart = async (id, data) => {
 
 export const removeCart = async (id, data) => {
   const res = await axios.patch(`/user/remove-card/${id}`, data);
+  return res.data;
+};
+
+// Wishlist API calls
+export const addWishlist = async (id, data) => {
+  const res = await axios.patch(`/user/add-wishlist/${id}`, data);
+  return res.data;
+};
+
+export const removeWishlist = async (id, data) => {
+  const res = await axios.patch(`/user/remove-wishlist/${id}`, data);
+  return res.data;
+};
+
+export const getWishlist = async (id) => {
+  const res = await axios.get(`/user/get-wishlist/${id}`);
   return res.data;
 };

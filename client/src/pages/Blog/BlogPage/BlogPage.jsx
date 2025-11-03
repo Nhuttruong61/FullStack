@@ -38,7 +38,7 @@ function BlogPage({ navigate }) {
           </div>
           {listData?.map((item) => {
             return (
-              <div className="blogPage--box" onClick={() => navigate(`/blog/${item.id}`)}>
+              <div className="blogPage--box" onClick={() => navigate(`/blog/${item.slug || item._id}`)} key={item._id}>
                 <div className="blogPage--box--left">
                   <img src={item?.avatar?.url} alt="" />
                 </div>

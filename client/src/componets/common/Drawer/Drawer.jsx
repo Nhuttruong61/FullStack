@@ -1,12 +1,20 @@
 import React, { memo } from "react";
 import "./Drawer.scss";
 import { IoMdClose } from "react-icons/io";
+
 function DrawerCpn({ children, isOpen, setisOpen }) {
   return isOpen ? (
-    <div className="drawer">
-      <div className="drawer--content right-to-left-animation">
-        <div className="drawer--content--icon" onClick={() => setisOpen(false)}>
-          <IoMdClose size={26} />
+    <div className="drawer" onClick={() => setisOpen(false)}>
+      <div className="drawer--content" onClick={(e) => e.stopPropagation()}>
+        <div className="drawer--content--header">
+          <div></div>
+          <button 
+            className="drawer--content--close"
+            onClick={() => setisOpen(false)}
+            aria-label="Close drawer"
+          >
+            <IoMdClose size={24} />
+          </button>
         </div>
         <div className="drawer--content--children">{children}</div>
       </div>

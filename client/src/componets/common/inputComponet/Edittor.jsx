@@ -17,7 +17,7 @@ const Edittor = (props) => {
   };
 
   return (
-    <ReactQuill theme="snow" value={props?.value} onChange={props?.setValue} />
+    <ReactQuill theme="snow" modules={modules} value={props?.value} onChange={props?.setValue} />
   );
 };
 

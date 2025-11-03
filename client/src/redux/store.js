@@ -16,12 +16,16 @@ import userReducer from "./slice/userSlice";
 import categoryReducer from "./slice/categorySlice";
 import productReducer from "./slice/productSlice";
 import cardReducer from "./slice/cartSlice";
+import wishlistReducer from "./slice/wishlistSlice";
+import recommendationReducer from "./slice/recommendationSlice";
 
 const rootReducers = combineReducers({
   user: userReducer,
   category: categoryReducer,
   products: productReducer,
   car: cardReducer,
+  wishlist: wishlistReducer,
+  recommendation: recommendationReducer,
 });
 
 const persistConfig = {

@@ -5,23 +5,73 @@
     height: 100% !important;
     top: 0;
     z-index: 40;
+    animation: fadeIn 0.2s ease-out;
+    backdrop-filter: blur(4px);
+    will-change: opacity;
+    
     &--list{
         box-sizing: border-box;
         width: 70%;
-        background-color: white;
+        background-color: #3E3E3F;
         height: 100%;
-        color: black;
+        color: white;
         align-items: start;
         display: flex;
         flex-direction: column;
+        animation: slideInLeft 0.25s ease-out;
+        will-change: transform;
+        
         &--close{
             width: 100%;
+            box-sizing: border-box;
             display: flex;
             justify-content: end;
+            padding: 16px;
+            border-bottom: 1px solid #4a4a4b;
+            
+            span {
+              cursor: pointer;
+              color: #ff9921;
+              transition: all 0.2s ease;
+              will-change: color, transform;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              
+              &:hover {
+                color: #e68a1a;
+              }
+              
+              &:active {
+                transform: scale(0.9);
+              }
+            }
         }
+        
         &--children{
             width: 100% !important;
+            flex: 1;
+            overflow-y: auto;
         }
     }
+}
 
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
 }

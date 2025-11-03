@@ -1,13 +1,13 @@
 import React, { memo, useState } from "react";
 import { useSelector } from "react-redux";
-import Tabble from "../../common/Tabble/Tabble";
+import OptimizedTable from "../../common/OptimizedTable/OptimizedTable";
 import { FaPencilAlt } from "react-icons/fa";
 import { AiOutlineDelete } from "react-icons/ai";
 import Swal from "sweetalert2";
 import * as categoryApi from "../../../api/category";
 import "./AdminCategory.scss";
 import { CiCirclePlus } from "react-icons/ci";
-import DrawerCpn from "../../common/Drawer/Drawer";
+import Modal from "../../common/Modal/Modal";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import withBase from "../../../hocs/withBase";
@@ -31,51 +31,52 @@ function AdminCategory({ dispatch }) {
     {
       Header: "ID",
       accessor: "_id",
+      width: 15,
     },
     {
-      Header: "Name",
+      Header: "Tên",
       accessor: "name",
+      width: 25,
     },
     {
-      Header: "Image",
+      Header: "Slug",
+      accessor: "slug",
+      width: 25,
+      Cell: ({ value }) => (
+        <div className="slug-cell">
+          <code>{value || "—"}</code>
+        </div>
+      ),
+    },
+    {
+      Header: "Ảnh",
       accessor: "image",
-      Cell: ({ value }) => <img src={value.url} alt="" style={{ width: "50px", height: "50px" }} />,
+      width: 15,
+      Cell: ({ value }) => (
+        <div className="table-avatar">
+          <img src={value?.url} alt="Category" />
+        </div>
+      ),
     },
     {
-      Header: "Actions",
+      Header: "Hành động",
+      width: 20,
       Cell: ({ row }) => (
-        <div style={{ display: "flex" }}>
-          <span
+        <div className="table-actions">
+          <button
             onClick={() => handleDelete(row)}
-            style={{
-              padding: "8px",
-              border: "1px black solid",
-              borderRadius: "4px",
-              display: "flex",
-              justifyContent: "center",
-              alignContent: "center",
-              marginRight: "2px",
-              color: "red",
-              cursor: "pointer",
-            }}
+            className="btn-action btn-delete"
+            title="Xóa danh mục"
           >
-            <AiOutlineDelete />
-          </span>
-          <span
+            <AiOutlineDelete size={16} />
+          </button>
+          <button
             onClick={() => handleOpenEdit(row)}
-            style={{
-              padding: "8px",
-              border: "1px black solid",
-              borderRadius: "4px",
-              display: "flex",
-              justifyContent: "center",
-              alignContent: "center",
-              color: "green",
-              cursor: "pointer",
-            }}
+            className="btn-action btn-edit"
+            title="Chỉnh sửa danh mục"
           >
-            <FaPencilAlt />
-          </span>
+            <FaPencilAlt size={14} />
+          </button>
         </div>
       ),
     },
@@ -86,8 +87,21 @@ function AdminCategory({ dispatch }) {
       const { _id } = data?.values;
       Swal.fire({
         title: "Bạn có muốn xóa danh mục này?",
+        text: "Hành động này không thể hoàn tác",
+        icon: "warning",
         showCancelButton: true,
         confirmButtonText: "Xóa",
+        cancelButtonText: "Hủy",
+        confirmButtonColor: "#ff9921",
+        cancelButtonColor: "#888",
+        background: "#2A2A2B",
+        color: "#ffffff",
+        customClass: {
+          title: "swal-title",
+          htmlContainer: "swal-text",
+          confirmButton: "swal-btn-confirm",
+          cancelButton: "swal-btn-cancel",
+        },
       }).then(async (result) => {
         if (result.isConfirmed) {
           setLoading(true);
@@ -96,12 +110,27 @@ function AdminCategory({ dispatch }) {
           if (res?.success) {
             toast.success(res?.mes);
             dispatch(fetchCategory());
-            Swal.fire("Đã xóa!", "", "Thành công");
+            Swal.fire({
+              title: "Đã xóa!",
+              text: "Danh mục đã được xóa thành công",
+              icon: "success",
+              confirmButtonColor: "#ff9921",
+              background: "#2A2A2B",
+              color: "#ffffff",
+            });
           }
         }
       });
     } catch (err) {
       setLoading(false);
+      Swal.fire({
+        title: "Lỗi!",
+        text: "Có lỗi xảy ra khi xóa danh mục",
+        icon: "error",
+        confirmButtonColor: "#ff9921",
+        background: "#2A2A2B",
+        color: "#ffffff",
+      });
     }
   };
 
@@ -138,9 +167,21 @@ function AdminCategory({ dispatch }) {
   };
   const handleOpenEdit = (data) => {
     setImage(null);
-    setValueUpdated(data?.values);
-    setValue("name", data?.values?.name);
+    setValueUpdated(data);
+    setValue("name", data?.name);
     setisOpenUpdate(true);
+  };
+  
+  const handleCloseCreate = () => {
+    setisOpen(false);
+    setImage(null);
+    reset();
+  };
+
+  const handleCloseUpdate = () => {
+    setisOpenUpdate(false);
+    setImage(null);
+    reset();
   };
   const handleUpdate = async (res) => {
     try {
@@ -172,93 +213,81 @@ function AdminCategory({ dispatch }) {
             <p>Tạo mới</p>
           </div>
         </div>
-        <Tabble title="Danh mục sản phẩm" data={data || []} columns={columns} />
-        <DrawerCpn isOpen={isOpen} setisOpen={setisOpen}>
-          <div className="drawer-form">
-            <form action="" onSubmit={handleSubmit(onCreate)}>
-              <div>
+        <OptimizedTable title="Danh mục sản phẩm" data={data || []} columns={columns} />
+        <Modal isOpen={isOpen} setisOpen={handleCloseCreate} title="Tạo Danh Mục Mới">
+          <div className="modal-form">
+            <form onSubmit={handleSubmit(onCreate)}>
+              <div className="form-group">
                 <label htmlFor="">Tên danh mục</label>
-                <span>
-                  <input
-                    placeholder="Nhập tên danh mục"
-                    type="text"
-                    id="name"
-                    {...register("name", { required: true })}
-                  />
-                </span>
+                <input
+                  placeholder="Nhập tên danh mục"
+                  type="text"
+                  id="name"
+                  {...register("name", { required: true })}
+                />
                 {errors?.name && <p className="error-message">Tên danh mục không được bỏ trống</p>}
               </div>
-              <div className="drawer-form--image">
-                <label htmlFor="image" className="drawer-form--image--img">
-                  Ảnh
+              <div className="form-group form-group--image">
+                <label htmlFor="image">Ảnh</label>
+                <label htmlFor="image" className="image-upload">
+                  <span>Chọn ảnh</span>
                 </label>
                 <input id="image" type="file" hidden onChange={(e) => handleImg(e)} />
                 {image && (
                   <img
-                    style={{
-                      width: "100px",
-                      height: "100px",
-                      paddingLeft: "20px",
-                    }}
+                    className="image-preview"
                     src={image}
-                    alt=""
+                    alt="preview"
                   />
                 )}
               </div>
-              <div className="drawer-form--btn">
-                <button type="submit">Tạo mới</button>
+              <div className="form-actions">
+                <button type="button" className="btn-cancel" onClick={handleCloseCreate}>Hủy</button>
+                <button type="submit" className="btn-submit">Tạo mới</button>
               </div>
             </form>
           </div>
-        </DrawerCpn>
-        <DrawerCpn isOpen={isOpenUpdate} setisOpen={setisOpenUpdate}>
-          <div className="drawer-form">
-            <form action="" onSubmit={handleSubmit(handleUpdate)}>
-              <div>
+        </Modal>
+        <Modal isOpen={isOpenUpdate} setisOpen={handleCloseUpdate} title="Cập Nhật Danh Mục">
+          <div className="modal-form">
+            <form onSubmit={handleSubmit(handleUpdate)}>
+              <div className="form-group">
                 <label htmlFor="">Tên danh mục</label>
-                <span>
-                  <input
-                    placeholder="Nhập tên danh mục"
-                    type="text"
-                    id="name"
-                    {...register("name", { required: true })}
-                  />
-                </span>
+                <input
+                  placeholder="Nhập tên danh mục"
+                  type="text"
+                  id="name"
+                  {...register("name", { required: true })}
+                />
                 {errors?.name && <p className="error-message">Tên danh mục không được bỏ trống</p>}
               </div>
-              <div className="drawer-form--image">
-                <label htmlFor="image" className="drawer-form--image--img">
-                  Ảnh
+              <div className="form-group form-group--image">
+                <label htmlFor="image">Ảnh</label>
+                <label htmlFor="image" className="image-upload">
+                  <span>Chọn ảnh</span>
                 </label>
                 <input id="image" type="file" hidden onChange={(e) => handleImg(e)} />
                 {image ? (
                   <img
-                    style={{
-                      width: "100px",
-                      height: "100px",
-                      paddingLeft: "20px",
-                    }}
+                    className="image-preview"
                     src={image}
-                    alt=""
+                    alt="preview"
                   />
                 ) : (
                   <img
-                    style={{
-                      width: "100px",
-                      height: "100px",
-                      paddingLeft: "20px",
-                    }}
+                    className="image-preview"
                     src={valueUpdated?.image?.url}
-                    alt=""
+                    alt="current"
                   />
                 )}
               </div>
-              <div className="drawer-form--btn">
-                <button type="submit">Cập nhật</button>
+              <div className="form-actions">
+                <button type="button" className="btn-cancel" onClick={handleCloseUpdate}>Hủy</button>
+                <button type="submit" className="btn-submit">Cập nhật</button>
               </div>
             </form>
           </div>
-        </DrawerCpn>
+        </Modal>
       </div>
     </LoadingItem>
   );

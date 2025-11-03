@@ -4,7 +4,7 @@ import { formatNumber } from "../../../helper/format";
 import withBase from "../../../hocs/withBase.js";
 function CardEventCbn({ data, navigate }) {
   return (
-    <div className="box-card-event" onClick={() => navigate(`/product/${data._id}`)}>
+    <div className="box-card-event" onClick={() => navigate(`/product/${data.slug || data._id}`)}>
       <div className="box-card-event--image">
         <img src={data.image[0].url} alt="" />
       </div>

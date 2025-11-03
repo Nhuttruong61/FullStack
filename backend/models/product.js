@@ -1,8 +1,18 @@
 const mongoose = require("mongoose");
 
+const generateSlug = (name) => {
+  return name
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-");
+};
+
 const productSchema = new mongoose.Schema(
   {
-    name: { type: String, required: true },
+    name: { type: String, required: true, unique: true },
+    slug: { type: String, unique: true, lowercase: true },
     category: { type: mongoose.Schema.Types.ObjectId, ref: "Category" },
     image: [
       {
@@ -53,5 +63,12 @@ const productSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+productSchema.pre("save", function (next) {
+  if (!this.slug && this.name) {
+    this.slug = generateSlug(this.name);
+  }
+  next();
+});
 
 module.exports = mongoose.model("Product", productSchema);

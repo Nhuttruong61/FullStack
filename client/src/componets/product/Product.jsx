@@ -22,7 +22,7 @@ function Product({ data, category }) {
 
             <div className="box-product--product">
               {data?.map((item) => (
-                <CardProductCbn data={item} key={item.id} />
+                <CardProductCbn data={item} key={item._id} />
               ))}
             </div>
           </div>

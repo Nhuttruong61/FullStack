@@ -56,8 +56,8 @@ const SlickProduct = (props) => {
       </div>
       <Slider {...settings}>
         {data?.map((item) => (
-          <div className="slick--size" key={item.id}>
-            <CardProductCbn data={item} key={item.id} />
+          <div className="slick--size" key={item._id}>
+            <CardProductCbn data={item} key={item._id} />
           </div>
         ))}
       </Slider>

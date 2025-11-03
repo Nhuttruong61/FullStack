@@ -13,6 +13,28 @@ const userSchema = new mongoose.Schema(
         color: { type: String, required: true },
       },
     ],
+    wishlist: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+      },
+    ],
+    viewHistory: [
+      {
+        product: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Product",
+        },
+        viewedAt: {
+          type: Date,
+          default: Date.now,
+        },
+        duration: {
+          type: Number, // in seconds
+          default: 0,
+        },
+      },
+    ],
     address: { type: String },
   },
   {

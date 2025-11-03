@@ -7,7 +7,7 @@ const verifyToken = (req, res, next) => {
       mes: "Token không tìm thấy",
     });
   const rawToken = token.split(" ")[1];
-  jwt.verify(rawToken, process.env.TOKEN_SECRET, (err, decode) => {
+  jwt.verify(rawToken, process.env.JWT_SECRET_KEY, (err, decode) => {
     if (err) {
       return res.status(401).json({
         mes: "Token đã hết hạn",
@@ -20,7 +20,7 @@ const verifyToken = (req, res, next) => {
 
 const isAdmin = (req, res, next) => {
   const { role } = req.user;
-  if (role !== "Admin") {
+  if (role !== "admin") {
     return res.status(401).json({
       mes: "Bạn không phải admin",
     });

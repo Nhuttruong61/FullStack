@@ -5,6 +5,7 @@ const product = require("./product");
 const order = require("./order");
 const blog = require("./blog");
 const vnpay = require("./vnpay");
+const recommendation = require("./recommendation");
 
 const initialRouter = (app) => {
   app.use("/api/v1/user", user);
@@ -14,6 +15,7 @@ const initialRouter = (app) => {
   app.use("/api/v1/order", order);
   app.use("/api/v1/blog", blog);
   app.use("/api/v1/blog", blog);
+  app.use("/api/v1/recommendation", recommendation);
   app.use("/api/v1/checkout", vnpay);
   app.use("/", (req, res) => {
     return res.send("Server on");

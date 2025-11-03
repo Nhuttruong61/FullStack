@@ -2,7 +2,7 @@ import React, { memo, useEffect, useState } from "react";
 import "./ManageBlog.scss";
 import LoadingItem from "../../../Loading/LoadingItem";
 import { CiCirclePlus } from "react-icons/ci";
-import Tabble from "../../../common/Tabble/Tabble";
+import OptimizedTable from "../../../common/OptimizedTable/OptimizedTable";
 import { FaPencilAlt } from "react-icons/fa";
 import { AiOutlineDelete } from "react-icons/ai";
 import withBase from "../../../../hocs/withBase";
@@ -21,61 +21,63 @@ function ManageBlog({ setActive }) {
   const queryClient = useQueryClient();
   const columns = [
     {
-      Header: "id",
+      Header: "ID",
       accessor: "id",
+      width: 10,
     },
     {
-      Header: "Title",
+      Header: "Tiêu đề",
       accessor: "title",
+      width: 20,
     },
     {
-      Header: "Content",
+      Header: "Slug",
+      accessor: "slug",
+      width: 20,
+      Cell: ({ value }) => (
+        <div className="slug-cell">
+          <code>{value || "—"}</code>
+        </div>
+      ),
+    },
+    {
+      Header: "Nội dung",
       accessor: "content",
+      width: 28,
       Cell: ({ value }) => {
-        const text = value?.slice(0, 100);
-        return <div dangerouslySetInnerHTML={{ __html: text }}></div>;
+        const text = value?.slice(0, 80);
+        return <div className="table-content-preview" dangerouslySetInnerHTML={{ __html: text }} />;
       },
     },
     {
-      Header: "Avatar",
+      Header: "Ảnh",
       accessor: "avatar",
-      Cell: ({ value }) => <img src={value.url} alt="" style={{ width: "50px", height: "50px" }} />,
+      width: 12,
+      Cell: ({ value }) => (
+        <div className="table-avatar">
+          <img src={value?.url} alt="Avatar" />
+        </div>
+      ),
     },
     {
-      Header: "Actions",
+      Header: "Hành động",
+      width: 10,
       Cell: ({ row }) => (
-        <div style={{ display: "flex" }}>
-          <span
+        <div className="table-actions">
+          <button
+            className="btn-action btn-delete"
             onClick={() => handleDelete(row)}
-            style={{
-              padding: "8px",
-              border: "1px black solid",
-              borderRadius: "4px",
-              display: "flex",
-              justifyContent: "center",
-              alignContent: "center",
-              marginRight: "2px",
-              color: "red",
-              cursor: "pointer",
-            }}
+            title="Xóa"
           >
-            <AiOutlineDelete />
-          </span>
-          <span
+            <AiOutlineDelete size={16} />
+          </button>
+          <button
+            className="btn-action btn-edit"
             onClick={() => handleOpenEdit(row)}
-            style={{
-              padding: "8px",
-              border: "1px black solid",
-              borderRadius: "4px",
-              display: "flex",
-              justifyContent: "center",
-              alignContent: "center",
-              color: "green",
-              cursor: "pointer",
-            }}
+            title="Chỉnh sửa"
           >
-            <FaPencilAlt />
-          </span>
+            <FaPencilAlt size={14} />
+          </button>
         </div>
       ),
     },
@@ -177,67 +179,103 @@ function ManageBlog({ setActive }) {
   };
   return (
     <LoadingItem isLoading={loading}>
-      <div className="blog">
-        <div className="blog--create">
-          <div className="blog--create--btn" onClick={() => setActive(8)}>
-            <CiCirclePlus size={24} />
-            <p>Tạo mới</p>
-          </div>
+      <div className="blog-container">
+        <div className="blog-header">
+          <h2 className="blog-title">Quản lý bài viết</h2>
+          <button className="btn-create" onClick={() => setActive(8)}>
+            <CiCirclePlus size={20} />
+            <span>Tạo mới</span>
+          </button>
         </div>
-        <Tabble title="Danh mục sản phẩm" data={dataBlog || []} columns={columns} />
+        <div className="blog-table-wrapper">
+          <OptimizedTable title="Danh sách bài viết" data={dataBlog || []} columns={columns} />
+        </div>
       </div>
+
       <ModalCpn isOpen={isEdit}>
-        <div className="ModalEdit">
-          <div className="ModalEdit--close" onClick={() => setIsEdit(false)}>
-            <IoMdClose size={24} />;
+        <div className="modal-edit">
+          <div className="modal-header">
+            <h3 className="modal-title">Chỉnh sửa bài viết</h3>
+            <button 
+              className="modal-close" 
+              onClick={() => setIsEdit(false)}
+              aria-label="Đóng"
+            >
+              <IoMdClose size={24} />
+            </button>
           </div>
-          <form action="" onSubmit={handleSubmit}>
-            <div className="create--box--lable">
-              <label className="create--box--lable--name" htmlFor="">
-                Tiêu đề
-              </label>
+
+          <form className="modal-form" onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label className="form-label">Tiêu đề</label>
               <input
-                className="create--box--lable--input"
+                className="form-input"
                 placeholder="Nhập tiêu đề bài viết"
                 required
                 type="text"
                 id="title"
-                value={dataEdit?.title}
+                value={dataEdit?.title || ""}
                 onChange={(e) => setDataEdit({ ...dataEdit, title: e.target.value })}
               />
             </div>
 
-            <div className="">
-              <Edittor
-                value={dataEdit?.content}
-                setValue={(value) =>
-                  setDataEdit({
-                    ...dataEdit,
-                    content: value,
-                  })
-                }
-              />
-            </div>
-            <div className="create--image">
-              <label htmlFor="image" className="create--image--bt">
-                Ảnh
-              </label>
-              <input id="image" type="file" hidden onChange={(e) => handleImg(e)} />
-              {image && (
-                <img
-                  style={{
-                    width: "100px",
-                    height: "100px",
-                    paddingLeft: "20px",
-                  }}
-                  src={image}
-                  alt=""
+            <div className="form-group">
+              <label className="form-label">Nội dung</label>
+              <div className="editor-wrapper">
+                <Edittor
+                  value={dataEdit?.content || ""}
+                  setValue={(value) =>
+                    setDataEdit({
+                      ...dataEdit,
+                      content: value,
+                    })
+                  }
                 />
-              )}
+              </div>
             </div>
-            <div className="create--submit">
-              <button disabled={!dataEdit?.title || !image} type="submit" className="create--submit--btn">
-                Tạo mới
+
+            <div className="form-group">
+              <label className="form-label">Ảnh bìa</label>
+              <div className="image-upload">
+                <label htmlFor="image" className="image-upload-label">
+                  Chọn ảnh
+                </label>
+                <input 
+                  id="image" 
+                  type="file" 
+                  hidden 
+                  onChange={(e) => handleImg(e)}
+                  accept="image/*"
+                />
+                {image && (
+                  <div className="image-preview-wrapper">
+                    <img src={image} alt="Preview" className="image-preview" />
+                    <button
+                      type="button"
+                      className="btn-clear-image"
+                      onClick={() => setImage(null)}
+                    >
+                      Xóa ảnh
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="form-actions">
+              <button 
+                type="button"
+                className="btn-cancel"
+                onClick={() => setIsEdit(false)}
+              >
+                Hủy
+              </button>
+              <button 
+                type="submit"
+                className="btn-submit"
+                disabled={!dataEdit?.title || !image}
+              >
+                Cập nhật
               </button>
             </div>
           </form>

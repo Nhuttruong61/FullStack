@@ -1,4 +1,4 @@
-const cloudinary = require("cloudinary").v2;
+const { saveImage, deleteImage } = require("../config/uploadUtils");
 const Category = require("../models/category");
 const createCategory = (name, image) => {
   return new Promise(async (resolve, reject) => {
@@ -11,14 +11,12 @@ const createCategory = (name, image) => {
         });
         return;
       }
-      const myCloud = await cloudinary.uploader.upload(image, {
-        folder: "CloneTopZone/Category",
-      });
+      const imageData = saveImage(image, "category");
       const category = Category.create({
         name: name,
         image: {
-          public_id: myCloud.public_id,
-          url: myCloud.secure_url,
+          public_id: imageData.public_id,
+          url: imageData.url,
         },
       });
       resolve(category.then((res) => res));
@@ -47,19 +45,31 @@ const getCategory = () => {
     }
   });
 };
+const findByIdOrSlug = async (identifier) => {
+  if (identifier.match(/^[0-9a-fA-F]{24}$/)) {
+    return await Category.findById(identifier);
+  }
+  return await Category.findOne({ slug: identifier });
+};
+
 const updateCategory = (id, props) => {
   return new Promise(async (resolve, reject) => {
     const { image, name } = props;
     try {
-      const category = await Category.findById(id);
-      if (!image.includes("cloudinary")) {
-        await cloudinary.uploader.destroy(category.image.public_id);
-        const myCloud = await cloudinary.uploader.upload(image, {
-          folder: "CloneTopZone/Category",
+      const category = await findByIdOrSlug(id);
+      if (!category) {
+        reject({
+          success: false,
+          mes: "Không tìm thấy danh mục",
         });
+        return;
+      }
+      if (image && image.includes("data:")) {
+        deleteImage(category.image.public_id, "category");
+        const imageData = saveImage(image, "category");
         category.image = {
-          public_id: myCloud.public_id,
-          url: myCloud.secure_url,
+          public_id: imageData.public_id,
+          url: imageData.url,
         };
       }
       category.name = name;
@@ -71,23 +81,25 @@ const updateCategory = (id, props) => {
     } catch (e) {
       reject({
         success: false,
+        mes: e.message,
       });
     }
   });
 };
+
 const deleteCategory = (id) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const category = await Category.findById(id);
-      await cloudinary.uploader.destroy(category.image.public_id);
-      await Category.findByIdAndDelete(id);
+      const category = await findByIdOrSlug(id);
       if (!category) {
         reject({
           success: false,
-          mes: "Không tìm thấy",
+          mes: "Không tìm thấy danh mục",
         });
         return;
       }
+      deleteImage(category.image.public_id, "category");
+      await Category.findByIdAndDelete(category._id);
 
       resolve({
         success: true,

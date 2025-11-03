@@ -9,10 +9,8 @@ const instance = axios.create({
 // Add a request interceptor
 instance.interceptors.request.use(
   function (config) {
-    // Lấy token từ cookie
     let accessToken = Cookies.get("accesstoken");
-    // Nếu token tồn tại, thêm nó vào header Authorization
-    if (accessToken) {
+    if (accessToken && accessToken.trim()) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
 
@@ -20,7 +18,6 @@ instance.interceptors.request.use(
   },
 
   function (error) {
-    // Xử lý lỗi nếu cần
     return Promise.reject(error);
   }
 );

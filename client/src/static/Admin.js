@@ -7,27 +7,27 @@ import { IoNewspaperOutline } from "react-icons/io5";
 export const sidebar = [
   {
     id: 1,
-    name: "Dashboard",
+    name: "Bảng Điều Khiển",
     icon: BiCategory,
   },
   {
     id: 2,
-    name: "User",
+    name: "Người Dùng",
     icon: FaRegUser,
   },
   {
     id: 3,
-    name: "Category",
+    name: "Danh Mục",
     icon: CiCircleList,
   },
   {
     id: 4,
-    name: "Product",
+    name: "Sản Phẩm",
     icon: BsBox2,
   },
   {
     id: 5,
-    name: "Order",
+    name: "Đơn Hàng",
     icon: CiViewList,
   },
   {
@@ -37,7 +37,7 @@ export const sidebar = [
   },
   {
     id: 7,
-    name: "Blog",
+    name: "Bài Viết",
     icon: IoNewspaperOutline,
   },
 ];

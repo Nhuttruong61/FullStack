@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from "react";
+import React, { memo, useEffect, useState, useRef } from "react";
 import "./ProductInfor.scss";
 import { useLocation, useParams } from "react-router-dom";
 import { createReview, getProductId } from "../../../api/product";
@@ -10,6 +10,8 @@ import CardProductCbn from "../../../componets/card/cardProduct/CardProductCbn.j
 import { addCart } from "../../../api/user.js";
 import { toast } from "react-toastify";
 import Rating from "../../../componets/ratting/Rating.jsx";
+import WishlistButton from "../../../componets/wishlist/WishlistButton.jsx";
+import { trackProductView } from "../../../api/recommendation.js";
 import "moment/locale/vi";
 import ModalCpn from "../../../componets/common/Modal/ModalCpn.jsx";
 import { IoMdClose } from "react-icons/io";
@@ -18,11 +20,13 @@ import { IoStarOutline } from "react-icons/io5";
 import { colors } from "../../../static/Admin.js";
 import Swal from "sweetalert2";
 import socketIOClient from "socket.io-client";
+import ProductInforSkeleton from "../../../componets/skeleton/ProductInforSkeleton.jsx";
 const moment = require("moment");
 function ProductInfor({ dispatch, navigate }) {
-  const { id } = useParams();
+  const { slug } = useParams();
   const { pathname } = useLocation();
   const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [activeImage, setActiveImage] = useState(null);
   const [activequanity, setActiveQuanity] = useState(null);
   const { data: listData } = useSelector((state) => state.products);
@@ -34,6 +38,7 @@ function ProductInfor({ dispatch, navigate }) {
     rating: 0,
     comment: "",
   });
+  const viewStartTimeRef = useRef(Date.now());
 
   const ENDPOINT = process.env.SOCKET_URL;
   const socketIo = socketIOClient(ENDPOINT, {
@@ -42,12 +47,15 @@ function ProductInfor({ dispatch, navigate }) {
   });
   const fetchData = async () => {
     try {
-      const res = await getProductId(id);
+      setLoading(true);
+      const res = await getProductId(slug);
       if (res.success) {
         setData(res?.product);
       }
     } catch (err) {
       console.log(err.reponse);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -70,8 +78,9 @@ function ProductInfor({ dispatch, navigate }) {
           }
         });
       }
+      if (!data) return;
       const dataFm = {
-        idProduct: data._id,
+        idProduct: data?._id,
         color: activequanity?.color ? activequanity?.color : data?.color[0]?.color,
       };
       const res = await addCart(user._id, dataFm);
@@ -80,7 +89,7 @@ function ProductInfor({ dispatch, navigate }) {
       toast.warning(err?.response?.data?.mes);
     }
   };
-  const listSuggest = listData?.filter((el) => el?.category._id == data?.category._id).filter((el) => el._id !== id);
+  const listSuggest = listData?.filter((el) => el?.category?._id == data?.category?._id)?.filter((el) => el?.slug !== slug) || [];
 
   const handleSeeMore = () => {
     setLimitComment(data?.reviews?.length);
@@ -130,92 +139,112 @@ function ProductInfor({ dispatch, navigate }) {
       top: 0,
       behavior: "smooth",
     });
-  }, [id, idProduct]);
+    // Reset view start time when product changes
+    viewStartTimeRef.current = Date.now();
+
+    // Track view when leaving the page
+    return () => {
+      if (user && data?._id) {
+        const viewDuration = Math.round((Date.now() - viewStartTimeRef.current) / 1000); // in seconds
+        trackProductView(data._id, viewDuration).catch((err) => {
+          // Silently fail - don't break the user experience
+          console.log("View tracking skipped");
+        });
+      }
+    };
+  }, [slug, idProduct, user, data?._id]);
   return (
     <div className="">
-      <div className="productInfor">
-        <div className="content">
-          <div className="productInfor--box">
-            <div className="productInfor--box--left">
-              <img src={activeImage || data?.image[0]?.url} alt="" />
-              <div className="productInfor--box--left--listImg">
-                {data?.image?.slice(0, 3)?.map((item, index) => {
-                  return (
-                    <div
-                      className="productInfor--box--left--listImg--card"
-                      key={index}
-                      onClick={() => {
-                        setActiveImage(item?.url);
-                      }}
-                    >
-                      <img key={item?._id} src={item.url} alt="" />
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-            <div className="productInfor--box--right">
-              {console.log(data)}
-              <h1>{data?.name}</h1>
-              <div className="productInfor--box--right--price">
-                {data?.discount > 0 && (
-                  <p className="productInfor--box--right--price--price">{formatNumber(data?.price)}</p>
-                )}
-
-                <p className="productInfor--box--right--price--sale">{formatNumber(price)}</p>
-              </div>
-              {<Rating star={Number(data?.ratings) || 5} size={20} />}
-              <div className="productInfor--box--right--color">
-                <span>
-                  <p>Màu</p>
-                  <p>{activequanity?.color || data?.color[0]?.color}</p>
-                </span>
-                <div style={{ display: "flex" }}>
-                  {data?.color.map((item) => (
-                    <div key={item?._id} onClick={() => handleSeleteColor(item)}>
-                      <div
-                        style={{
-                          height: "50px",
-                          width: "50px",
-                          borderRadius: "100%",
-                          backgroundColor: colors.find((el) => el.name === item.color)?.hex || item?.color,
-                          cursor: "pointer",
-                          marginRight: "8px",
-                        }}
-                      ></div>
-                    </div>
-                  ))}
-                </div>
-                <span>
-                  <p>Số lượng: </p>
-                  <p>{activequanity?.quantity || data?.color[0]?.quantity}</p>
-                </span>
-              </div>
-              <div className="productInfor--box--right--des">
-                <div dangerouslySetInnerHTML={{ __html: data?.des }} />
-              </div>
-              <div style={{ backgroundColor: "transparent" }} className="btn">
-                <button disabled={activequanity?.quantity <= 0} onClick={handleAddCard}>
-                  Mua ngay
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      {listSuggest && listSuggest.length > 0 && (
-        <div className="suggest">
+      {loading ? (
+        <ProductInforSkeleton />
+      ) : (
+        <div className="productInfor">
           <div className="content">
-            <h2>Sản phẩm tương tự</h2>
-            <div className="suggest--list">
-              {listSuggest?.map((el) => {
-                return <CardProductCbn data={el} />;
-              })}
+            <div className="productInfor--box">
+              <div className="productInfor--box--left">
+                <img src={activeImage || data?.image[0]?.url} alt="" />
+                <div className="productInfor--box--left--listImg">
+                  {data?.image?.slice(0, 3)?.map((item, index) => {
+                    return (
+                      <div
+                        className="productInfor--box--left--listImg--card"
+                        key={index}
+                        onClick={() => {
+                          setActiveImage(item?.url);
+                        }}
+                      >
+                        <img key={item?._id} src={item.url} alt="" />
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+              <div className="productInfor--box--right">
+                <h1>{data?.name}</h1>
+                <div className="productInfor--box--right--price">
+                  {data?.discount > 0 && (
+                    <p className="productInfor--box--right--price--price">{formatNumber(data?.price)}</p>
+                  )}
+
+                  <p className="productInfor--box--right--price--sale">{formatNumber(price)}</p>
+                </div>
+                {<Rating star={Number(data?.ratings) || 5} size={20} />}
+                <div className="productInfor--box--right--color">
+                  <span>
+                    <p>Màu</p>
+                    <p>{activequanity?.color || data?.color[0]?.color}</p>
+                  </span>
+                  <div style={{ display: "flex" }}>
+                    {data?.color.map((item) => (
+                      <div key={item?._id} onClick={() => handleSeleteColor(item)}>
+                        <div
+                          style={{
+                            height: "50px",
+                            width: "50px",
+                            borderRadius: "100%",
+                            backgroundColor: colors.find((el) => el.name === item.color)?.hex || item?.color,
+                            cursor: "pointer",
+                            marginRight: "8px",
+                          }}
+                        ></div>
+                      </div>
+                    ))}
+                  </div>
+                  <span>
+                    <p>Số lượng: </p>
+                    <p>{activequanity?.quantity || data?.color[0]?.quantity}</p>
+                  </span>
+                </div>
+                <div className="productInfor--box--right--des">
+                  <div dangerouslySetInnerHTML={{ __html: data?.des }} />
+                </div>
+                <div style={{ backgroundColor: "transparent", display: "flex", gap: "10px", alignItems: "center" }} className="btn">
+                  <button disabled={activequanity?.quantity <= 0} onClick={handleAddCard}>
+                    Mua ngay
+                  </button>
+                 
+                <WishlistButton productId={data?._id} product={data} />
+                </div>
+              </div>
             </div>
           </div>
         </div>
       )}
-      <div className="comment">
+      {!loading && (
+        <>
+          {listSuggest && listSuggest.length > 0 && (
+            <div className="suggest">
+              <div className="content">
+                <h2>Sản phẩm tương tự</h2>
+                <div className="suggest--list">
+                  {listSuggest?.map((el) => {
+                    return <CardProductCbn key={el?._id} data={el} />;
+                  })}
+                </div>
+              </div>
+            </div>
+          )}
+          <div className="comment">
         <div className="content--product">
           <div className="comment--box">
             <div className="comment--box--title">
@@ -239,9 +268,9 @@ function ProductInfor({ dispatch, navigate }) {
               <div className="comment--box--list">
                 {data?.reviews?.slice(0, limitComment)?.map((item) => {
                   return (
-                    <div className="comment--box--list--box">
-                      <h3>{item?.user.name}</h3>
-                      <Rating star={item.rating} />
+                    <div key={item?._id} className="comment--box--list--box">
+                      <h3>{item?.user?.name}</h3>
+                      <Rating star={item?.rating} />
                       <p>{item?.comment}</p>
                       <p>{moment(item?.createAt).fromNow()}</p>
                     </div>
@@ -268,14 +297,14 @@ function ProductInfor({ dispatch, navigate }) {
             <div className="Modal--title">
               <h3>Đánh giá sản phẩm</h3>
               <div className="Modal--title--button" onClick={() => setIsCommet(false)}>
-                <IoMdClose size={24} />;
+                <IoMdClose size={24} />
               </div>
             </div>
             <div className="Modal--content">
               <div className="Modal--content--star">
                 {[1, 2, 3, 4, 5].map((starValue) => (
                   <span key={starValue} onClick={() => handleStarClick(starValue)} style={{ cursor: "pointer" }}>
-                    {starValue <= dataComent.rating ? (
+                    {starValue <= dataComent?.rating ? (
                       <IoStar style={{ paddingRight: "8px" }} color="#FF9921" size={30} />
                     ) : (
                       <IoStarOutline style={{ paddingRight: "8px" }} size={30} />
@@ -298,8 +327,10 @@ function ProductInfor({ dispatch, navigate }) {
               Gửi đánh giá
             </button>
           </div>
-        </ModalCpn>
-      </div>
+          </ModalCpn>
+          </div>
+        </>
+      )}
     </div>
   );
 }

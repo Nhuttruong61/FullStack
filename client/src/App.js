@@ -18,6 +18,7 @@ import Order from "./pages/OrderPage/Order.jsx";
 import BlogInfor from "./pages/Blog/BlogInfor/BlogInfor.jsx";
 import BlogPage from "./pages/Blog/BlogPage/BlogPage.jsx";
 import Fchat from "./componets/fchat/Fchat.jsx";
+import WishlistPage from "./componets/wishlist/WishlistPage.jsx";
 
 function App() {
   const { user } = useSelector((state) => state.user);
@@ -56,7 +57,7 @@ function App() {
           />
           <Route path="/auth" element={<Auth />} />
           <Route
-            path="/product/:id"
+            path="/product/:slug"
             element={
               <Layout>
                 <ProductInfor />
@@ -103,23 +104,24 @@ function App() {
               </Layout>
             }
           />
+          <Route
+            path="/wishlist"
+            element={
+              <Layout>
+                <WishlistPage />
+              </Layout>
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+              <LayoutAdmin>
+                <AdminPage />
+              </LayoutAdmin>
+            }
+          />
         </Routes>
         <Fchat />
-
-        {user && user?.role === "Admin" && (
-          <Routes>
-            <Route
-              path="/admin"
-              element={
-                <LayoutAdmin>
-                  <AdminPage />
-                </LayoutAdmin>
-              }
-            />
-
-
-          </Routes>
-        )}
 
       </Router>
       <ToastContainer

@@ -1,10 +1,10 @@
 const express = require("express");
 const cors = require("cors");
 const http = require("http");
+const path = require("path");
 const initialRouter = require("./router");
 const DataBaseConnect = require("./config/mongoConnect");
 var cookieParser = require("cookie-parser");
-const CloudinaryConnect = require("./config/cloudinaryConnect");
 const connect = require("./config/redisConnect");
 const socketIo = require("./config/socket.config");
 const app = express();
@@ -18,11 +18,12 @@ app.use(
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(cookieParser());
+
+app.use("/uploads", express.static(path.join(__dirname, "public/uploads")));
 initialRouter(app);
 const PORT = process.env.PORT;
-app.listen(PORT || 8000, () => {
+server.listen(PORT || 8000, () => {
   console.log("listening on port " + process.env.PORT);
 });
-CloudinaryConnect();
 DataBaseConnect();
-socketIo(server)
+socketIo(server);

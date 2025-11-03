@@ -12,6 +12,7 @@ import { IoShieldOutline } from "react-icons/io5";
 import { FiRefreshCw } from "react-icons/fi";
 import Loading from "../../componets/Loading/Loading";
 import SlickProduct from "../../componets/Slick/SlickProduct";
+import RecommendationSlider from "../../componets/recommendation/RecommendationSlider";
 const Blog = lazy(() => import("../../componets/blog/Blog"));
 const Slick = lazy(() => import("../../componets/Slick/SlickBaner"));
 function Hompage() {
@@ -44,16 +45,22 @@ function Hompage() {
             {category?.map((el) => {
               const filteredData = data?.filter((item) => item?.category.name === el?.name);
               if (filteredData?.length > 0 && filteredData?.length <= 4) {
-                return <Product key={el.id} category={el} data={filteredData} />;
+                return <Product key={el._id} category={el} data={filteredData} />;
               } else if (filteredData?.length >= 5)
                 return (
-                  <div>
+                  <div key={el._id}>
                     <SlickProduct data={filteredData} category={el} slidesToShow={4} />
                   </div>
                 );
             })}
           </div>
         </div>
+      </div>
+      <div className="container--recommendation-for-you">
+        <RecommendationSlider title="Dành cho bạn" type="forYou" limit={12} />
+      </div>
+      <div className="container--recommendation-trending">
+        <RecommendationSlider title="Sản phẩm nổi bật" type="trending" limit={12} />
       </div>
       <div className="container--blog">
         <Suspense fallback={<Loading />}>
@@ -75,14 +82,14 @@ function Hompage() {
             <p style={{ color: "pink" }}>n</p>
             <p style={{ color: "purple" }}>e</p>
           </div>
-          <p className="container--des--text">
+          <div className="container--des--text">
             <p>
               Tại TopPhone, khách hàng yêu mến hệ sinh thái Apple sẽ tìm thấy đầy đủ và đa dạng nhất các sản phẩm như
             </p>
             <p>
               iPhone, iPad, Apple Watch, MacBook và các phụ kiện Apple... với không gian mua sắm đẳng cấp, hiện đại.
             </p>
-          </p>
+          </div>
         </>
       </div>
       <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>

@@ -14,19 +14,19 @@ function Header({ navigate }) {
           navigate("/");
         }}
       >
-        <p style={{ margin: 0, fontSize: "28px" }}>Top</p>
-        <p style={{ margin: 0, fontSize: "28px", color: "red" }}>P</p>
-        <p style={{ margin: 0, fontSize: "28px", color: "green" }}>h</p>
-        <p style={{ margin: 0, fontSize: "28px", color: "blue" }}>o</p>
-        <p style={{ margin: 0, fontSize: "28px", color: "pink" }}>n</p>
-        <p style={{ margin: 0, fontSize: "28px", color: "purple" }}>e</p>
-        <img src={Logo} className="right--image" alt="" />
+        <img src={Logo} className="header-ad--logo" alt="Logo" />
+        <div className="header-ad--brand">
+          <p className="header-ad--brand-main">TopPhone</p>
+          <p className="header-ad--brand-sub">Quản Lý</p>
+        </div>
       </div>
       <div className="header-ad--right">
-        <div className="header-ad--right--image">
-          <FaRegUser size={20} />
+        <div className="header-ad--user-info">
+          <div className="header-ad--avatar">
+            <FaRegUser size={18} />
+          </div>
+          <span className="header-ad--username">{user?.name}</span>
         </div>
-        <p>{user?.name}</p>
       </div>
     </div>
   );

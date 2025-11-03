@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useState } from "react";
 import { AiOutlineDelete } from "react-icons/ai";
-import Tabble from "../../common/Tabble/Tabble";
+import OptimizedTable from "../../common/OptimizedTable/OptimizedTable";
 import LoadingItem from "../../Loading/LoadingItem";
 import { deleteOrder, getOrders, updateStatusOrder } from "../../../api/order";
 import Swal from "sweetalert2";
@@ -50,25 +50,30 @@ function AdminOrder({ dispatch }) {
   }, [page]);
   const columns = [
     {
-      Header: "id",
+      Header: "Mã đơn",
       accessor: "id",
+      width: 8,
       Cell: ({ value }) => <div>{value?.slice(0, 8)}</div>,
     },
     {
-      Header: "Name",
+      Header: "Tên khách",
       accessor: "name",
+      width: 10,
     },
     {
-      Header: "Phone",
+      Header: "Điện thoại",
       accessor: "phone",
+      width: 10,
     },
     {
-      Header: "Address",
+      Header: "Địa chỉ",
       accessor: "address",
+      width: 12,
     },
     {
-      Header: "Product",
+      Header: "Sản phẩm",
       accessor: "product",
+      width: 25,
       Cell: ({ value }) => (
         <div style={{ display: "flex", flexDirection: "column" }}>
           {value?.map((product, index) => (
@@ -93,50 +98,54 @@ function AdminOrder({ dispatch }) {
     },
 
     {
-      Header: "Price",
+      Header: "Giá",
       accessor: "price",
+      width: 10,
       Cell: ({ value }) => <p>{formatNumber(value)}</p>,
     },
     {
-      Header: "Payment",
+      Header: "Thanh toán",
       accessor: "payments",
+      width: 8,
     },
     {
-      Header: "Status",
+      Header: "Trạng thái",
       accessor: "status",
+      width: 10,
       Cell: ({ row }) => (
-        <div className="">
-          {row.values.status === "Đã hủy" || row.values.status === "Đã giao" ? (
-            <span>{row.values.status}</span>
+        <div className="status-cell">
+          {row.status === "Đã hủy" || row.status === "Đã giao" ? (
+            <span className={`status-badge status-${row.status}`}>{row.status}</span>
           ) : (
-            <select defaultValue={row.values?.status} onChange={(e) => handleStatusChange(e, row.values)}>
-              <option>{row.values.status}</option>
-              {row.values.status === "Chờ xử lý" && <option value="Đã chuyển hàng">Đã chuyển hàng</option>}
-              {row.values.status === "Đã chuyển hàng" && <option value="Đã giao">Đã giao</option>}
+            <select className="status-select" defaultValue={row?.status} onChange={(e) => handleStatusChange(e, row)}>
+              <option>{row.status}</option>
+              {row.status === "Chờ xử lý" && <option value="Đã chuyển hàng">Đã chuyển hàng</option>}
+              {row.status === "Đã chuyển hàng" && <option value="Đã giao">Đã giao</option>}
             </select>
           )}
         </div>
       ),
     },
     {
-      Header: "Date",
+      Header: "Ngày đặt",
       accessor: "createdAt",
+      width: 10,
       Cell: ({ value }) => <p>{moment(value).format("DD/MM/YYYY")}</p>,
     },
     {
-      Header: "Actions",
+      Header: "Thao tác",
+      width: 7,
       Cell: ({ row }) => (
         <div style={{ display: "flex" }}>
           <span
             onClick={() => handleDelete(row)}
             style={{
               padding: "8px",
-              border: "1px black solid",
+              border: "1px solid #ff6b6b",
               borderRadius: "4px",
               display: "flex",
               justifyContent: "center",
-              alignContent: "center",
-              marginRight: "2px",
+              alignItems: "center",
               color: "red",
               cursor: "pointer",
             }}
@@ -193,7 +202,7 @@ function AdminOrder({ dispatch }) {
       <LoadingItem isLoading={loading}>
         <div className="product-admin">
           <div style={{ height: "85vh" }}>
-            <Tabble title="Sản phẩm" data={data || []} columns={columns} />
+            <OptimizedTable title="Danh sách đơn hàng" data={data || []} columns={columns} />
             <div className="panigate">
               <PanigateCpn setPage={setPage} pageSize={panigate} itemsPerPage={10} />
             </div>

@@ -1,15 +1,13 @@
-const cloudinary = require("cloudinary").v2;
+const { saveImage, deleteImage } = require("../config/uploadUtils");
 const Slider = require("../models/slider");
 const createSlider = (image) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const myCloud = await cloudinary.uploader.upload(image, {
-        folder: "CloneTopZone/Slider",
-      });
+      const imageData = saveImage(image, "slider");
       const slider = Slider.create({
         image: {
-          public_id: myCloud.public_id,
-          url: myCloud.secure_url,
+          public_id: imageData.public_id,
+          url: imageData.url,
         },
       });
       resolve(slider.then((res) => res));
@@ -42,18 +40,14 @@ const updateSlider = (id, { image }) => {
   return new Promise(async (resolve, reject) => {
     try {
       const slider = await Slider.findById(id);
-      if (image.includes("cloudinary")) {
+      if (image.includes("/uploads/")) {
         return;
       }
-      await cloudinary.uploader.destroy(slider.image.public_id, {
-        resource_type: "image",
-      });
-      const myCloud = await cloudinary.uploader.upload(image, {
-        folder: "CloneTopZone/Slider",
-      });
+      deleteImage(slider.image.public_id, "slider");
+      const imageData = saveImage(image, "slider");
       slider.image = {
-        public_id: myCloud.public_id,
-        url: myCloud.url,
+        public_id: imageData.public_id,
+        url: imageData.url,
       };
       await slider.save();
       if (!slider) {
@@ -74,9 +68,7 @@ const deleteSlider = (id) => {
   return new Promise(async (resolve, reject) => {
     try {
       const slider = await Slider.findById(id);
-      await cloudinary.uploader.destroy(slider.image.public_id, {
-        resource_type: "image",
-      });
+      deleteImage(slider.image.public_id, "slider");
       const checkdelete = await Slider.findByIdAndDelete(id);
       if (!checkdelete) {
         reject({

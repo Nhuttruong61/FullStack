@@ -1,0 +1,35 @@
+.wishlist-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border: 2px solid #e0e0e0;
+  background-color: #fff;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #999;
+
+  &:hover:not(:disabled) {
+    border-color: #ff6b6b;
+    color: #ff6b6b;
+    background-color: #fff5f5;
+  }
+
+  &.active {
+    border-color: #ff6b6b;
+    color: #ff6b6b;
+    background-color: #fff5f5;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}

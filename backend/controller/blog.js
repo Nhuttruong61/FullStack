@@ -19,6 +19,7 @@ const getBlogs = async (req, res) => {
     if (response) {
       const formattedBlogs = response.blog.map((blog) => ({
         id: blog._id,
+        slug: blog.slug,
         title: blog.title,
         avatar: blog.avatar,
         content: blog.content.toString("utf-8"),
@@ -43,6 +44,7 @@ const getBlog = async (req, res) => {
     if (response) {
       const formatData = {
         id: response.blog._id,
+        slug: response.blog.slug,
         title: response.blog.title,
         avatar: response.blog.avatar,
         content: response.blog.content.toString("utf-8"),

@@ -1,10 +1,29 @@
 input {
     outline: none;
-    border-radius: 4px;
-    padding: 4px;
-    background-color: transparent;
+    border-radius: 6px;
+    padding: 10px 14px;
+    background-color: #2d2d2d;
     box-shadow: none;
     color: white;
-    border: none;
+    border: 1px solid #444;
     width: 100%;
+    font-size: 14px;
+    font-family: inherit;
+    transition: all 0.2s ease;
+    will-change: border-color, background-color;
+    
+    &::placeholder {
+      color: #999;
+    }
+    
+    &:focus {
+      outline: none;
+      border-color: #ff9921;
+      background-color: #333333;
+      box-shadow: 0 0 8px rgba(255, 153, 33, 0.2);
+    }
+    
+    &:hover {
+      border-color: #555;
+    }
 }

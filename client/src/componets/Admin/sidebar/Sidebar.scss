@@ -1,24 +1,155 @@
-.sidebar{
-    height: 92vh;
-    width: 100%;
-    background-color: #3E3E3F;
-    color: white;
-    &--list{
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-
-        &--icon{
-            width: 20px;
-
-        }
-        &--name{
-            padding-left: 4px;
-
-        }
-    }
+// Sidebar color scheme - Matched with Personal Page theme
+:root {
+  --sidebar-bg: linear-gradient(135deg, #3E3E3F 0%, #2A2A2B 100%);
+  --sidebar-hover: rgba(255, 153, 33, 0.1);
+  --sidebar-active: #ff9921;
+  --sidebar-text: #ffffff;
+  --sidebar-border: #ff9921;
 }
-// .active{
-//     background-color: #3E3E3F;
-//     width: 100%;
-// }
+
+.sidebar {
+  height: 92vh;
+  width: 100%;
+  background: var(--sidebar-bg);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 16px 0;
+  overflow-y: auto;
+  box-shadow: inset -2px 0 8px rgba(0, 0, 0, 0.3);
+  
+  // Scrollbar styling
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: var(--sidebar-active);
+    border-radius: 3px;
+    
+    &:hover {
+      background: #e68a1a;
+    }
+  }
+
+  &--list {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 14px 20px;
+    margin: 4px 12px;
+    border-radius: 8px;
+    border-left: 3px solid transparent;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    color: var(--sidebar-text);
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: var(--sidebar-active);
+      border-radius: 0 3px 3px 0;
+      transform: scaleY(0);
+      transition: transform 0.3s ease;
+    }
+
+    &:hover {
+      background: var(--sidebar-hover);
+      padding-left: 24px;
+      color: var(--sidebar-active);
+      
+      &::before {
+        transform: scaleY(1);
+      }
+
+      .sidebar--list--icon {
+        transform: translateX(4px) scale(1.1);
+        color: var(--sidebar-active);
+      }
+    }
+
+    &.active {
+      background: rgba(99, 102, 241, 0.15);
+      color: var(--sidebar-active);
+      font-weight: 600;
+      border-left-color: var(--sidebar-active);
+
+      &::before {
+        transform: scaleY(1);
+      }
+
+      .sidebar--list--icon {
+        color: var(--sidebar-active);
+        animation: iconPulse 0.6s ease;
+      }
+    }
+
+    &--icon {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.3s ease;
+      opacity: 0.8;
+    }
+
+    &--name {
+      padding-left: 16px;
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: all 0.3s ease;
+    }
+  }
+}
+
+@keyframes iconPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .sidebar {
+    padding: 12px 0;
+
+    &--list {
+      padding: 12px 16px;
+      margin: 2px 8px;
+
+      &--icon {
+        width: 20px;
+        height: 20px;
+      }
+
+      &--name {
+        padding-left: 12px;
+        font-size: 14px;
+      }
+
+      &:hover {
+        padding-left: 20px;
+      }
+    }
+  }
+}

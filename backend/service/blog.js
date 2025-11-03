@@ -1,4 +1,4 @@
-const cloudinary = require("cloudinary").v2;
+const { saveImage, deleteImage } = require("../config/uploadUtils");
 const Blog = require("../models/blog");
 const createBlog = ({ title, avatar, content }) => {
   return new Promise(async (resolve, reject) => {
@@ -11,14 +11,12 @@ const createBlog = ({ title, avatar, content }) => {
         });
         return;
       }
-      const myCloud = await cloudinary.uploader.upload(avatar, {
-        folder: "CloneTopZone/Blog",
-      });
+      const imageData = saveImage(avatar, "blog");
       const blog = Blog.create({
         title: title,
         avatar: {
-          public_id: myCloud.public_id,
-          url: myCloud.secure_url,
+          public_id: imageData.public_id,
+          url: imageData.url,
         },
         content: content,
       });
@@ -49,14 +47,21 @@ const getBlogs = () => {
   });
 };
 
+const findByIdOrSlug = async (identifier) => {
+  if (identifier.match(/^[0-9a-fA-F]{24}$/)) {
+    return await Blog.findById(identifier);
+  }
+  return await Blog.findOne({ slug: identifier });
+};
+
 const getBlog = (id) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const blog = await Blog.findById(id);
+      const blog = await findByIdOrSlug(id);
       if (!blog) {
         reject({
           success: false,
-          mes: "Không tìm thấy",
+          mes: "Không tìm thấy bài viết",
         });
         return;
       }
@@ -69,19 +74,20 @@ const getBlog = (id) => {
     }
   });
 };
+
 const deleteBlog = (id) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const blog = await Blog.findById(id);
-      await cloudinary.uploader.destroy(blog.avatar.public_id);
-      await Blog.findByIdAndDelete(id);
+      const blog = await findByIdOrSlug(id);
       if (!blog) {
         reject({
           success: false,
-          mes: "Không tìm thấy",
+          mes: "Không tìm thấy bài viết",
         });
         return;
       }
+      deleteImage(blog.avatar.public_id, "blog");
+      await Blog.findByIdAndDelete(blog._id);
 
       resolve({
         success: true,
@@ -92,19 +98,18 @@ const deleteBlog = (id) => {
     }
   });
 };
+
 const updateBlog = (id, props) => {
   return new Promise(async (resolve, reject) => {
     const { avatar, title, content } = props;
     try {
-      const blog = await Blog.findById(id);
-      if (!avatar.includes("cloudinary")) {
-        await cloudinary.uploader.destroy(blog.avatar.public_id);
-        const myCloud = await cloudinary.uploader.upload(blog, {
-          folder: "CloneTopZone/Blog",
-        });
+      const blog = await findByIdOrSlug(id);
+      if (!avatar.includes("/uploads/")) {
+        deleteImage(blog.avatar.public_id, "blog");
+        const imageData = saveImage(avatar, "blog");
         blog.avatar = {
-          public_id: myCloud.public_id,
-          url: myCloud.secure_url,
+          public_id: imageData.public_id,
+          url: imageData.url,
         };
       }
       blog.title = title;

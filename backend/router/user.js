@@ -60,4 +60,9 @@ router.delete(
 router.patch("/add-card/:id", verifyToken, userController.addProductCart);
 router.patch("/remove-card/:id", verifyToken, userController.removeProductCart);
 
+// Wishlist routes
+router.patch("/add-wishlist/:id", verifyToken, userController.addProductWishlist);
+router.patch("/remove-wishlist/:id", verifyToken, userController.removeProductWishlist);
+router.get("/get-wishlist/:id", verifyToken, userController.getWishlist);
+
 module.exports = router;

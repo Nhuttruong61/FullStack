@@ -4,12 +4,12 @@ import { formatNumber } from "../../../helper/format";
 import withBase from "../../../hocs/withBase";
 function CardProductCbn({ data, navigate }) {
   const handleNavigate = () => {
-    navigate(`/product/${data._id}`);
+    navigate(`/product/${data.slug || data._id}`);
   };
   return (
     <div key={data?.id} className="box-card-product" onClick={handleNavigate}>
       <div className="box-card-product--image">
-        <img className="box-card-product--image--img" src={data.image[0].url} alt="" />
+        <img className="box-card-product--image--img" src={data?.image[0].url} alt="" />
       </div>
       <div className="box-card-product--content">
         <p className="box-card-product--content--name">{data?.name}</p>

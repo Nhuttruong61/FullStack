@@ -114,85 +114,100 @@ function Payment({ dispatch, navigate }) {
 
   return (
     <div className="payment">
-      <div className="payment-box">
-        <div className="payment-box--top">
-          <span className="point" onClick={() => navigate("/")}>
-            <p>Về trang chủ</p>
-          </span>
-          <p>Giỏ hàng của bạn</p>
+      <div className="payment-container">
+        <div className="payment-header">
+          <button className="payment-header__back" onClick={() => navigate("/")}>
+            ← Quay lại
+          </button>
+          <h1 className="payment-header__title">Giỏ hàng của bạn</h1>
         </div>
-        <div className="payment-box--center">
-          {data?.length > 0 ? (
-            data?.map((el) => {
-              return (
-                <div className="payment-box--center--box">
-                  <div className="payment-box--center--box--left">
-                    <img src={el?.product?.image[0]?.url} alt="" />
-                  </div>
-                  <div className="payment-box--center--box--center">
-                    <h3>{el?.product?.name}</h3>
-                    <p>Màu: {el?.color}</p>
-                    <h4>{formatNumber(el?.product?.price)}</h4>
-                  </div>
-                  <div className="payment-box--center--box--right">
-                    <button disabled={el.quantity <= 1} onClick={() => handleDereate(el)}>
-                      -
-                    </button>
-                    <p>{el?.quantity}</p>
 
-                    <button disabled={el.quantity >= el.totalquantity} onClick={() => handleIncreate(el)}>
+        <div className="payment-content">
+          <div className="payment-items">
+            {data?.length > 0 ? (
+              data?.map((el) => (
+                <div key={el?._id} className="payment-item">
+                  <div className="payment-item__image">
+                    <img src={el?.product?.image[0]?.url} alt={el?.product?.name} />
+                  </div>
+                  <div className="payment-item__info">
+                    <h3 className="payment-item__name">{el?.product?.name}</h3>
+                    <p className="payment-item__color">Màu: {el?.color}</p>
+                    <p className="payment-item__price">{formatNumber(el?.product?.price)}</p>
+                  </div>
+                  <div className="payment-item__quantity">
+                    <button 
+                      className="payment-item__btn-qty" 
+                      disabled={el.quantity <= 1} 
+                      onClick={() => handleDereate(el)}
+                    >
+                      −
+                    </button>
+                    <input type="text" readOnly value={el?.quantity} />
+                    <button 
+                      className="payment-item__btn-qty" 
+                      disabled={el.quantity >= el.totalquantity} 
+                      onClick={() => handleIncreate(el)}
+                    >
                       +
                     </button>
                   </div>
-                  <div className="payment-box--center--box--delete">
-                    <button disabled={data?.length == 0} onClick={() => handleDeleteCard(el)} className="btn">
-                      Xóa
-                    </button>
-                  </div>
+                  <button 
+                    className="payment-item__delete" 
+                    onClick={() => handleDeleteCard(el)}
+                  >
+                    ✕
+                  </button>
                 </div>
-              );
-            })
-          ) : (
-            <div style={{ display: "flex", justifyContent: "center" }}>
-              <h2>Tạm thời chưa có sản phẩm nào!!!!</h2>
-            </div>
-          )}
-        </div>
-        <div className="payment-box--user">
-          <span>
-            <p>Tên khách hàng</p>
-            <input readOnly type="text" defaultValue={user?.name} />
-          </span>
-          <span>
-            <p>Số điện thoại</p>
-            <input readOnly type="text" defaultValue={user?.phone} />
-          </span>
-          <span>
-            <p>Địa chỉ</p>
-            <input readOnly type="text" defaultValue={user?.address} />
-          </span>
-          <span style={{ display: "flex", justifyContent: "end" }}>
-            <p className="point " style={{ color: "red", fontWeight: "500" }} onClick={handleEdit}>
-              Chỉnh sửa
-            </p>
-          </span>
-        </div>
-        <div className="payment-box--choose">
-          <select name="" id="" defaultValue="cod" onChange={handleChoosePayment}>
-            <option value="cod">Thanh toán khi nhận hàng</option>
-            <option value="online">Ví VNPay</option>
-          </select>
-        </div>
-        <div className="payment-box--order">
-          <div className="payment-box--order--box">
-            <p>Tổng tiền</p>
-            <p>{formatNumber(totalPrice || 0)}</p>
+              ))
+            ) : (
+              <div className="payment-empty">
+                <p>Giỏ hàng của bạn đang trống</p>
+              </div>
+            )}
           </div>
 
-          <div disabled className="payment-box--order--pay">
-            <button disabled={data?.length === 0} onClick={handleOrder}>
-              Đặt hàng
-            </button>
+          <div className="payment-sidebar">
+            <div className="payment-user">
+              <h2 className="payment-user__title">Thông tin giao hàng</h2>
+              <div className="payment-user__field">
+                <label>Tên khách hàng</label>
+                <input readOnly type="text" defaultValue={user?.name} />
+              </div>
+              <div className="payment-user__field">
+                <label>Số điện thoại</label>
+                <input readOnly type="text" defaultValue={user?.phone} />
+              </div>
+              <div className="payment-user__field">
+                <label>Địa chỉ</label>
+                <input readOnly type="text" defaultValue={user?.address} />
+              </div>
+              <button className="payment-user__edit" onClick={handleEdit}>
+                ✏️ Chỉnh sửa
+              </button>
+            </div>
+
+            <div className="payment-method">
+              <h2 className="payment-method__title">Phương thức thanh toán</h2>
+              <select className="payment-method__select" defaultValue="cod" onChange={handleChoosePayment}>
+                <option value="cod">Thanh toán khi nhận hàng</option>
+                <option value="online">Ví VNPay</option>
+              </select>
+            </div>
+
+            <div className="payment-summary">
+              <div className="payment-summary__item">
+                <span>Tổng tiền:</span>
+                <span className="payment-summary__amount">{formatNumber(totalPrice || 0)}</span>
+              </div>
+              <button 
+                className="payment-summary__btn" 
+                disabled={data?.length === 0} 
+                onClick={handleOrder}
+              >
+                Đặt hàng
+              </button>
+            </div>
           </div>
         </div>
       </div>

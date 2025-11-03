@@ -58,14 +58,14 @@ const googleLogin = async (req, res) => {
       if (user) {
         const token = jwt.sign(
           { id: user._id, role: user.role },
-          process.env.TOKEN_SECRET,
+          process.env.JWT_SECRET_KEY,
           {
             expiresIn: "10d",
           }
         );
         const refesToken = jwt.sign(
           { id: user._id, role: user.role },
-          process.env.TOKEN_SECRET,
+          process.env.JWT_SECRET_KEY,
           {
             expiresIn: "15d",
           }
@@ -219,6 +219,60 @@ const removeProductCart = async (req, res) => {
     });
   }
 };
+
+const addProductWishlist = async (req, res) => {
+  try {
+    const response = await UserSerevice.addProductWishlist(
+      req.params.id,
+      req.body
+    );
+    if (response)
+      return res.status(200).json({
+        success: true,
+        user: response.response,
+      });
+  } catch (e) {
+    console.log("Error in addProductWishlist:", e);
+    return res.status(500).json({
+      mes: e?.mes || e?.message || "Server error",
+      error: String(e),
+    });
+  }
+};
+
+const removeProductWishlist = async (req, res) => {
+  try {
+    const response = await UserSerevice.removeProductWishlist(
+      req.params.id,
+      req.body
+    );
+    if (response)
+      return res.status(200).json({
+        success: true,
+        user: response.response,
+      });
+  } catch (e) {
+    return res.status(500).json({
+      mes: e.mes,
+    });
+  }
+};
+
+const getWishlist = async (req, res) => {
+  try {
+    const response = await UserSerevice.getWishlist(req.params.id);
+    if (response)
+      return res.status(200).json({
+        success: true,
+        wishlist: response.wishlist,
+      });
+  } catch (e) {
+    return res.status(500).json({
+      mes: e.mes,
+    });
+  }
+};
+
 module.exports = {
   rerister,
   login,
@@ -229,5 +283,8 @@ module.exports = {
   deleteleteUser,
   updateUser,
   removeProductCart,
-  googleLogin
+  googleLogin,
+  addProductWishlist,
+  removeProductWishlist,
+  getWishlist,
 };

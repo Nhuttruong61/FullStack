@@ -1,8 +1,9 @@
 const Product = require("../models/product");
 const Order = require("../models/order");
 const User = require("../models/user");
+const Category = require("../models/category");
 
-const cloudinary = require("cloudinary").v2;
+const { saveImage, deleteImage } = require("../config/uploadUtils");
 const createProduct = (props) => {
   return new Promise(async (resolve, reject) => {
     const { name, image, category, des, price, discount, color } = props;
@@ -15,11 +16,8 @@ const createProduct = (props) => {
         });
         return;
       }
-      const uploadImagesPromises = image.map(async (image) => {
-        const myCloud = await cloudinary.uploader.upload(image, {
-          folder: "CloneTopZone/Product",
-        });
-        return myCloud;
+      const uploadImagesPromises = image.map((img) => {
+        return saveImage(img, "product");
       });
       const listImage = await Promise.all(uploadImagesPromises);
       const product = await Product.create({
@@ -31,7 +29,7 @@ const createProduct = (props) => {
         color: color,
         image: listImage.map((item) => ({
           public_id: item.public_id,
-          url: item.secure_url,
+          url: item.url,
         })),
       });
       resolve(product);
@@ -64,12 +62,29 @@ const getProducts = (options) => {
           });
         }
       } else if (category) {
-        const product = await Product.find({ category: category }).populate(
+        // Try to find category by ID or slug
+        let categoryId = category;
+        
+        // If it's not a valid MongoDB ObjectId, try to find by slug
+        if (!category.match(/^[0-9a-fA-F]{24}$/)) {
+          const foundCategory = await Category.findOne({ slug: category });
+          if (foundCategory) {
+            categoryId = foundCategory._id;
+          } else {
+            resolve({
+              success: false,
+              message: "Không tìm thấy danh mục",
+            });
+            return;
+          }
+        }
+        
+        const product = await Product.find({ category: categoryId }).populate(
           "category"
         );
         // .skip(skip);
         // .limit(limit);
-        if (product) {
+        if (product && product.length > 0) {
           resolve({
             success: true,
             product,
@@ -101,21 +116,29 @@ const getProducts = (options) => {
     }
   });
 };
+const findByIdOrSlug = async (identifier) => {
+  if (identifier.match(/^[0-9a-fA-F]{24}$/)) {
+    return await Product.findById(identifier);
+  }
+  return await Product.findOne({ slug: identifier });
+};
+
 const getProduct = (id) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const product = await Product.findById(id).populate("category");
-      if (product) {
-        resolve({
-          success: true,
-          product,
-        });
-      } else {
+      const product = await findByIdOrSlug(id);
+      if (!product) {
         resolve({
           success: false,
           message: "Không tìm thấy sản phẩm",
         });
+        return;
       }
+      await product.populate("category");
+      resolve({
+        success: true,
+        product,
+      });
     } catch (err) {
       reject(err);
     }
@@ -125,7 +148,7 @@ const getProduct = (id) => {
 const deleteProduct = (id) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const product = await Product.findById(id);
+      const product = await findByIdOrSlug(id);
       if (!product) {
         resolve({
           success: false,
@@ -134,9 +157,9 @@ const deleteProduct = (id) => {
         return;
       }
       for (const el of product.image) {
-        await cloudinary.uploader.destroy(el.public_id);
+        deleteImage(el.public_id, "product");
       }
-      await Product.findByIdAndDelete(id);
+      await Product.findByIdAndDelete(product._id);
       resolve({
         success: true,
         message: "Sản phẩm đã được xóa thành công",
@@ -146,10 +169,11 @@ const deleteProduct = (id) => {
     }
   });
 };
+
 const updateProduct = (id, data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const product = await Product.findById(id);
+      const product = await findByIdOrSlug(id);
       if (!product) {
         resolve({
           success: false,
@@ -159,18 +183,15 @@ const updateProduct = (id, data) => {
       }
       if (!data?.image[0]) {
         for (const el of product.image) {
-          await cloudinary.uploader.destroy(el.public_id);
+          deleteImage(el.public_id, "product");
         }
-        const uploadImagesPromises = data.image.map(async (image) => {
-          const myCloud = await cloudinary.uploader.upload(image, {
-            folder: "CloneTopZone/Product",
-          });
-          return myCloud;
+        const uploadImagesPromises = data.image.map((img) => {
+          return saveImage(img, "product");
         });
         const listImage = await Promise.all(uploadImagesPromises);
         product.image = listImage.map((item) => ({
           public_id: item.public_id,
-          url: item.secure_url,
+          url: item.url,
         }));
       }
       product.name = data.name;

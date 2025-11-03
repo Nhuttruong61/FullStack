@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import Tabble from "../../common/Tabble/Tabble";
+import OptimizedTable from "../../common/OptimizedTable/OptimizedTable";
 import * as UserApi from "../../../api/user.js";
 import { AiOutlineDelete } from "react-icons/ai";
 import { FaPencilAlt } from "react-icons/fa";
 import Swal from "sweetalert2";
+import "./User.scss";
 
 function User() {
   const [dataTable, setDataTable] = useState([]);
@@ -14,11 +15,11 @@ function User() {
         const data = res?.users?.map((el, index) => {
           return {
             id: el?._id,
-            Stt: index + 1,
-            name: el?.name,
-            email: el?.email,
-            phone: el?.phone,
-            role: el?.role,
+            "STT": index + 1,
+            "Tên": el?.name,
+            "Email": el?.email,
+            "Điện thoại": el?.phone,
+            "Vai trò": el?.role,
           };
         });
 
@@ -32,49 +33,47 @@ function User() {
   const columns = [
     {
       Header: "STT",
-      accessor: "Stt",
+      accessor: "STT",
+      width: 8,
     },
     {
       Header: "ID",
       accessor: "id",
+      width: 20,
     },
     {
-      Header: "Name",
-      accessor: "name",
+      Header: "Tên",
+      accessor: "Tên",
+      width: 15,
     },
     {
       Header: "Email",
-      accessor: "email",
+      accessor: "Email",
+      width: 25,
     },
     {
-      Header: "Phone",
-      accessor: "phone",
+      Header: "Điện thoại",
+      accessor: "Điện thoại",
+      width: 15,
     },
     {
-      Header: "Role",
-      accessor: "role",
+      Header: "Vai trò",
+      accessor: "Vai trò",
+      width: 12,
     },
     {
-      Header: "Actions",
+      Header: "Hành động",
+      width: 5,
       Cell: ({ row }) => (
-        <div style={{ display: "flex" }}>
-          {row?.values?.role !== "Admin" && (
-            <span
+        <div className="user-actions">
+          {row?.values?.["Vai trò"] !== "Admin" && (
+            <button
               onClick={() => handleDelete(row)}
-              style={{
-                padding: "8px",
-                border: "1px black solid",
-                borderRadius: "4px",
-                display: "flex",
-                justifyContent: "center",
-                alignContent: "center",
-                marginRight: "2px",
-                color: "red",
-                cursor: "pointer",
-              }}
+              className="user-actions__btn user-actions__btn--delete"
+              title="Xóa người dùng"
             >
-              <AiOutlineDelete />
-            </span>
+              <AiOutlineDelete size={18} />
+            </button>
           )}
         </div>
       ),
@@ -86,28 +85,54 @@ function User() {
       const { id } = data?.values;
       Swal.fire({
         title: "Bạn có muốn xóa người dùng này?",
+        text: "Hành động này không thể hoàn tác",
+        icon: "warning",
         showCancelButton: true,
         confirmButtonText: "Xóa",
+        cancelButtonText: "Hủy",
+        confirmButtonColor: "#ff9921",
+        cancelButtonColor: "#888",
+        background: "#2A2A2B",
+        color: "#ffffff",
+        customClass: {
+          title: "swal-title",
+          htmlContainer: "swal-text",
+          confirmButton: "swal-btn-confirm",
+          cancelButton: "swal-btn-cancel",
+        },
       }).then(async (result) => {
         if (result.isConfirmed) {
           const res = await UserApi.deleteUser(id);
           if (res.success) {
-            Swal.fire("Đã xóa!", "", "Thành công");
+            Swal.fire({
+              title: "Đã xóa!",
+              text: "Người dùng đã được xóa thành công",
+              icon: "success",
+              confirmButtonColor: "#ff9921",
+              background: "#2A2A2B",
+              color: "#ffffff",
+            });
             getUsers();
           }
         }
       });
-    } catch (err) {}
-  };
-  const handleUpdate = async (data) => {
-    console.log(data);
+    } catch (err) {
+      Swal.fire({
+        title: "Lỗi!",
+        text: "Có lỗi xảy ra khi xóa người dùng",
+        icon: "error",
+        confirmButtonColor: "#ff9921",
+        background: "#2A2A2B",
+        color: "#ffffff",
+      });
+    }
   };
   useEffect(() => {
     getUsers();
   }, []);
   return (
     <div className="user">
-      <Tabble title="Tất cả người dùng" data={dataTable} columns={columns} />
+      <OptimizedTable title="Tất cả người dùng" data={dataTable} columns={columns} />
     </div>
   );
 }

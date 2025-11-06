@@ -16,6 +16,16 @@ const createProduct = (props) => {
         });
         return;
       }
+
+      const categoryExists = await Category.findById(category);
+      if (!categoryExists) {
+        reject({
+          success: false,
+          mes: "Danh mục không tồn tại",
+        });
+        return;
+      }
+
       const uploadImagesPromises = image.map((img) => {
         return saveImage(img, "product");
       });
@@ -24,9 +34,12 @@ const createProduct = (props) => {
         name: name,
         category: category,
         des: des,
-        price: price,
-        discount: discount,
-        color: color,
+        price: parseFloat(price),
+        discount: parseFloat(discount),
+        color: color.map((c) => ({
+          color: c.color,
+          quantity: parseInt(c.quantity),
+        })),
         image: listImage.map((item) => ({
           public_id: item.public_id,
           url: item.url,
@@ -173,7 +186,17 @@ const updateProduct = (id, data) => {
         });
         return;
       }
-      if (!data?.image[0]) {
+
+      const categoryExists = await Category.findById(data.category);
+      if (!categoryExists) {
+        resolve({
+          success: false,
+          message: "Danh mục không tồn tại",
+        });
+        return;
+      }
+
+      if (data?.image && data.image.length > 0 && typeof data.image[0] === "string" && data.image[0].startsWith("data:")) {
         for (const el of product.image) {
           deleteImage(el.public_id, "product");
         }
@@ -189,9 +212,12 @@ const updateProduct = (id, data) => {
       product.name = data.name;
       product.category = data.category;
       product.des = data.des;
-      product.price = data.price;
-      product.discount = data.discount;
-      product.color = data.color;
+      product.price = parseFloat(data.price);
+      product.discount = parseFloat(data.discount);
+      product.color = data.color.map((c) => ({
+        color: c.color,
+        quantity: parseInt(c.quantity),
+      }));
       await product.save();
       resolve({
         product,

@@ -25,8 +25,7 @@ function AdminOrder({ dispatch }) {
   const fetchData = async () => {
     try {
       const res = await getOrders(page);
-console.log("res",res)
-      setPanigate(res?.totalPages);
+      setPanigate(res?.totalPages || 1);
       if (res?.success) {
         const processedData =
           res?.orders?.map((item) => ({
@@ -34,11 +33,11 @@ console.log("res",res)
             name: item.user?.name ?? "",
             phone: item.user?.phone ?? "",
             address: item.user?.address ?? "",
-            price: (item.finalPrice || item.totalPrice) ?? 0,
-            totalPrice: item.totalPrice ?? 0,
-            discountAmount: item.discountAmount ?? 0,
+            price: parseFloat(item.finalPrice || item.totalPrice) ?? 0,
+            totalPrice: parseFloat(item.totalPrice) ?? 0,
+            discountAmount: parseFloat(item.discountAmount) ?? 0,
             promoCode: item.promoCode ?? null,
-            payments: item.payments ?? [],
+            payments: item.payments ?? "",
             status: item.status ?? "Unknown",
             product: item.products ?? [],
             createdAt: item.createdAt,
@@ -46,7 +45,9 @@ console.log("res",res)
 
         setData(processedData);
       }
-    } catch (e) {}
+    } catch (e) {
+      console.error("Error fetching orders:", e);
+    }
   };
   useEffect(() => {
     fetchData();
@@ -141,7 +142,8 @@ console.log("res",res)
           ) : (
             <select className="status-select" defaultValue={row?.status} onChange={(e) => handleStatusChange(e, row)}>
               <option>{row.status}</option>
-              {row.status === "Chờ xử lý" && <option value="Đã chuyển hàng">Đã chuyển hàng</option>}
+              {row.status === "Chờ xử lý" && <option value="Đã xác nhận">Đã xác nhận</option>}
+              {row.status === "Đã xác nhận" && <option value="Đã chuyển hàng">Đã chuyển hàng</option>}
               {row.status === "Đã chuyển hàng" && <option value="Đã giao">Đã giao</option>}
             </select>
           )}

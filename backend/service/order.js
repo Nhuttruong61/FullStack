@@ -6,15 +6,36 @@ const createOrder = (props) => {
   return new Promise(async (resolve, reject) => {
     const { user, products, totalPrice, finalPrice, discountAmount, promoCode, payments } = props;
     try {
+      for (const item of products) {
+        const product = await Product.findById(item.product);
+        if (!product) {
+          reject({
+            success: false,
+            mes: `Sản phẩm ${item.product} không tồn tại`,
+          });
+          return;
+        }
+
+        const selectedColor = product.color.find((c) => c.color === item.color);
+        if (!selectedColor || selectedColor.quantity < item.quantity) {
+          reject({
+            success: false,
+            mes: `Sản phẩm ${product.name} màu ${item.color} không đủ số lượng`,
+          });
+          return;
+        }
+      }
+
       const res = await Order.create({
         user: user._id,
         products: products,
-        totalPrice: totalPrice,
-        finalPrice: finalPrice || totalPrice,
-        discountAmount: discountAmount || 0,
+        totalPrice: parseFloat(totalPrice),
+        finalPrice: parseFloat(finalPrice || totalPrice),
+        discountAmount: parseFloat(discountAmount || 0),
         promoCode: promoCode || null,
         payments: payments,
       });
+
       const response = await User.findById(user._id);
       if (!res) {
         reject({
@@ -141,14 +162,35 @@ const getOrdersDasboard = () => {
 const cancleOrder = (id) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const res = await Order.findById(id);
+      const res = await Order.findById(id).populate("products.product");
       if (!res) {
         reject({
           success: false,
-          mes: "Có lỗi xảy ra",
+          mes: "Không tìm thấy đơn hàng",
         });
         return;
       }
+
+      if (res.status !== "Chờ xử lý") {
+        reject({
+          success: false,
+          mes: "Chỉ có thể hủy đơn hàng chờ xử lý",
+        });
+        return;
+      }
+
+      for (const el of res.products) {
+        const product = await Product.findById(el.product._id);
+        if (product) {
+          const selectedColor = product.color.find((c) => c.color === el.color);
+          if (selectedColor) {
+            selectedColor.quantity += el.quantity;
+          }
+          product.sold_out -= el.quantity;
+          await product.save();
+        }
+      }
+
       res.status = "Đã hủy";
       await res.save();
       resolve(res);
@@ -190,15 +232,17 @@ const updateStatusOrder = (id, data) => {
         });
         return;
       }
-      if (order.status == "Chờ xử lý") {
+
+      if (order.status === "Chờ xử lý" && data.status === "Đã xác nhận") {
         let checkquantity = true;
-        order.products.forEach(async (el) => {
-          const product = await Product.findById(el.product);
+        for (const el of order.products) {
+          const product = await Product.findById(el.product._id);
           const selectedColor = product.color.find((c) => c.color === el.color);
-          if (selectedColor.quantity < el.quantity) {
+          if (!selectedColor || selectedColor.quantity < el.quantity) {
             checkquantity = false;
+            break;
           }
-        });
+        }
         if (!checkquantity) {
           reject({
             success: false,
@@ -206,15 +250,18 @@ const updateStatusOrder = (id, data) => {
           });
           return;
         }
-        order.products.forEach(async (el) => {
-          const product = await Product.findById(el.product);
 
+        for (const el of order.products) {
+          const product = await Product.findById(el.product._id);
           const selectedColor = product.color.find((c) => c.color === el.color);
-          selectedColor.quantity -= el.quantity;
+          if (selectedColor) {
+            selectedColor.quantity -= el.quantity;
+          }
           product.sold_out += el.quantity;
           await product.save();
-        });
+        }
       }
+
       order.status = data.status;
       await order.save();
       resolve(order);

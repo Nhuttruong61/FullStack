@@ -25,13 +25,15 @@ const productSchema = new mongoose.Schema(
       },
     ],
     des: { type: String, required: true },
-    price: { type: String, required: true },
-    discount: { type: String },
-    quantity: { type: String },
+    price: { type: Number, required: true, min: 0 },
+    discount: { type: Number, required: true, min: 0, max: 100 },
+    quantity: { type: Number, min: 0 },
+    minStockLevel: { type: Number, default: 10 },
+    maxStockLevel: { type: Number, default: 1000 },
     color: [
       {
         color: { type: String, required: true },
-        quantity: { type: Number, required: true },
+        quantity: { type: Number, required: true, min: 0 },
       },
     ],
     reviews: [
@@ -57,6 +59,10 @@ const productSchema = new mongoose.Schema(
     },
     ratings: {
       type: Number,
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false,
     },
   },
   {

@@ -55,7 +55,7 @@ function ProductInfor({ dispatch, navigate }) {
     }
   };
 
-  let price = data?.price - (data?.price * data?.discount) / 100;
+  let price = data?.price ? data.price - (data.price * (data?.discount || 0)) / 100 : 0;
   const handleSeleteColor = (item) => {
     setActiveQuanity(item);
   };
@@ -69,20 +69,30 @@ function ProductInfor({ dispatch, navigate }) {
         }).then(async (result) => {
           if (result.isConfirmed) {
             sessionStorage.setItem("url", pathname);
-
             navigate("/auth");
           }
         });
+        return;
       }
       if (!data) return;
+
+      const selectedColor = activequanity || data?.color[0];
+      if (!selectedColor || selectedColor.quantity <= 0) {
+        toast.warning("Sản phẩm không có sẵn");
+        return;
+      }
+
       const dataFm = {
         idProduct: data?._id,
-        color: activequanity?.color ? activequanity?.color : data?.color[0]?.color,
+        color: selectedColor?.color,
       };
       const res = await addCart(user._id, dataFm);
-      dispatch(getCartUser(res?.user.cart));
+      if (res?.user?.cart) {
+        dispatch(getCartUser(res.user.cart));
+        toast.success("Thêm vào giỏ hàng thành công");
+      }
     } catch (err) {
-      toast.warning(err?.response?.data?.mes);
+      toast.warning(err?.response?.data?.mes || "Có lỗi xảy ra");
     }
   };
   const listSuggest = listData?.filter((el) => el?.category?._id == data?.category?._id)?.filter((el) => el?.slug !== slug) || [];
@@ -190,8 +200,8 @@ function ProductInfor({ dispatch, navigate }) {
               <div className="productInfor--box--right">
                 <h1>{data?.name}</h1>
                 <div className="productInfor--box--right--price">
-                  {data?.discount > 0 && (
-                    <p className="productInfor--box--right--price--price">{formatNumber(data?.price)}</p>
+                  {data?.discount && data.discount > 0 && (
+                    <p className="productInfor--box--right--price--price">{formatNumber(parseFloat(data?.price))}</p>
                   )}
 
                   <p className="productInfor--box--right--price--sale">{formatNumber(price)}</p>

@@ -2,19 +2,19 @@ const router = require("express").Router();
 const Joi = require("joi");
 const productController = require("../controller/product");
 const validateDto = require("../middleware/validate");
-const { stringReq, arrayReq, numberReq } = require("../middleware/JoiSheme");
+const { stringReq, arrayReq, priceReq, discountReq, numberReq } = require("../middleware/JoiSheme");
 const { verifyToken, isAdmin } = require("../middleware/auth");
 
 router.post(
-  "/creare-product",
+  "/create-product",
   validateDto(
     Joi.object({
       name: stringReq,
       category: stringReq,
       image: arrayReq,
       des: stringReq,
-      price: numberReq,
-      discount: numberReq,
+      price: priceReq,
+      discount: discountReq,
       color: arrayReq,
     })
   ),
@@ -33,8 +33,8 @@ router.put(
       category: stringReq,
       image: arrayReq,
       des: stringReq,
-      price: numberReq,
-      discount: numberReq,
+      price: priceReq,
+      discount: discountReq,
       color: arrayReq,
     })
   ),

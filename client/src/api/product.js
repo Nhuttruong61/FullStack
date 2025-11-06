@@ -43,7 +43,7 @@ export const getProductSearch = async (name) => {
 
 export const createProduct = async (data) => {
   try {
-    const res = await axios.post("/product/creare-product", data);
+    const res = await axios.post("/product/create-product", data);
     return res.data;
   } catch (e) {
     console.log(e);

@@ -233,15 +233,18 @@ function AdminProduct({ dispatch: outerDispatch }) {
   };
   const onCreate = async (res) => {
     try {
-      if (image.length == 0) return toast.warning("Ảnh không được để trống");
-      if (listColor.length == 0) return toast.warning("Bạn phải nhập số lượng và màu sắc");
+      if (image.length === 0) return toast.warning("Ảnh không được để trống");
+      if (listColor.length === 0) return toast.warning("Bạn phải nhập số lượng và màu sắc");
       const data = {
         name: res?.name,
         category: res.category,
-        discount: res.discount,
+        discount: parseFloat(res.discount) || 0,
         image: image,
-        color: listColor,
-        price: res.price,
+        color: listColor.map(c => ({
+          color: c.color,
+          quantity: parseInt(c.quantity) || 0
+        })),
+        price: parseFloat(res.price) || 0,
         des: des,
       };
       setLoading(true);
@@ -251,13 +254,15 @@ function AdminProduct({ dispatch: outerDispatch }) {
       if (response?.success) {
         setImage(null);
         reset();
+        setDes("");
+        setListColor([]);
         reduxDispatch(fetchProduct(filters));
         setisOpen(false);
         toast.success("Tạo sản phẩm thành công");
       }
     } catch (e) {
       setLoading(false);
-      console.log(e);
+      toast.error(e?.response?.data?.mes || "Có lỗi xảy ra");
     }
   };
   const handleOpenEdit = (data) => {
@@ -290,7 +295,11 @@ function AdminProduct({ dispatch: outerDispatch }) {
     if (!color.color || !color.quantity) {
       toast.warning("Bạn không được bỏ trống");
     } else if (!listColor?.some((item) => item.color === color.color)) {
-      setListColor((prevListColor) => [...prevListColor, color]);
+      setListColor((prevListColor) => [...prevListColor, {
+        color: color.color,
+        quantity: parseInt(color.quantity) || 0
+      }]);
+      setColor({ color: "", quantity: "" });
     } else {
       toast.warning("Màu này đã tồn tại");
     }
@@ -302,14 +311,18 @@ function AdminProduct({ dispatch: outerDispatch }) {
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
+      const colorData = listColor.length > 0 ? listColor : valueUpdated.color;
       const data = {
         name: valueUpdated.name,
         category: typeof valueUpdated.category === "string" ? valueUpdated.category : valueUpdated.category?._id,
         des: valueUpdated.des,
-        discount: valueUpdated.discount,
-        price: valueUpdated.price,
+        discount: parseFloat(valueUpdated.discount) || 0,
+        price: parseFloat(valueUpdated.price) || 0,
         image: image ? image : valueUpdated.image,
-        color: listColor.length > 0 ? listColor : valueUpdated.color,
+        color: colorData.map(c => ({
+          color: c.color,
+          quantity: parseInt(c.quantity) || 0
+        })),
       };
       setLoading(true);
       const res = await productApi.updateProduct(valueUpdated._id, data);
@@ -323,7 +336,7 @@ function AdminProduct({ dispatch: outerDispatch }) {
       }
     } catch (e) {
       setLoading(false);
-      toast.error(e?.response?.statusText);
+      toast.error(e?.response?.data?.mes || e?.response?.statusText || "Có lỗi xảy ra");
     }
   };
   return (

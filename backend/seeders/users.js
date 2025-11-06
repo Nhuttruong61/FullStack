@@ -6,7 +6,6 @@ const usersSeed = async () => {
   try {
     // Clear existing data
     await User.deleteMany({});
-    console.log("✓ Cleared users collection");
 
     // Hash password for users
     const hashedPassword = await bcrypt.hash("password123", 10);
@@ -69,11 +68,6 @@ const usersSeed = async () => {
     ];
 
     const result = await User.insertMany(users);
-    console.log(`✓ Created ${result.length} users with wishlists`);
-    console.log("\n📝 Default Login Credentials:");
-    console.log("   Admin: admin@example.com / admin123");
-    console.log("   User: user1@example.com / password123");
-
     return result;
   } catch (error) {
     console.error("✗ Error seeding users:", error.message);

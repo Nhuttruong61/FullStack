@@ -36,6 +36,20 @@ const userSchema = new mongoose.Schema(
       },
     ],
     address: { type: String },
+    loyaltyPoints: { type: Number, default: 0 },
+    gameStats: { type: mongoose.Schema.Types.Mixed, default: {} },
+    userPromoCodes: [
+      {
+        promoCode: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "PromoCode",
+        },
+        redeemedAt: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
   },
   {
     timestamps: true,

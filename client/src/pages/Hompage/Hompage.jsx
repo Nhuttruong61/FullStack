@@ -13,9 +13,10 @@ import { FiRefreshCw } from "react-icons/fi";
 import Loading from "../../componets/Loading/Loading";
 import SlickProduct from "../../componets/Slick/SlickProduct";
 import RecommendationSlider from "../../componets/recommendation/RecommendationSlider";
+import withBase from "../../hocs/withBase";
 const Blog = lazy(() => import("../../componets/blog/Blog"));
 const Slick = lazy(() => import("../../componets/Slick/SlickBaner"));
-function Hompage() {
+function Hompage({ navigate }) {
   const [dataBanner, setDataBanner] = useState([]);
   const { data } = useSelector((state) => state.products);
   const { data: category } = useSelector((state) => state.category);
@@ -37,6 +38,18 @@ function Hompage() {
       </div>
       <div className="container--event">
         <Event />
+      </div>
+      <div className="container--minigames-banner">
+        <div className="minigames-promo" onClick={() => navigate("/minigames")}>
+          <div className="minigames-promo-content">
+            <div className="minigames-promo-icon"></div>
+            <div className="minigames-promo-text">
+              <h2>Mini Games</h2>
+              <p>Chơi game - Nhận điểm thưởng mỗi ngày!</p>
+            </div>
+          </div>
+          <button className="minigames-promo-btn">Chơi ngay →</button>
+        </div>
       </div>
       <div className="container--category">{category && <Category />}</div>
       <div className="container--product">
@@ -118,4 +131,4 @@ function Hompage() {
   );
 }
 
-export default memo(Hompage);
+export default withBase(memo(Hompage));

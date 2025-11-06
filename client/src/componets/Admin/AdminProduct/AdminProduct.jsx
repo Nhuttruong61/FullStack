@@ -1,5 +1,5 @@
-import React, { memo, useState } from "react";
-import { useSelector } from "react-redux";
+import React, { memo, useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import OptimizedTable from "../../common/OptimizedTable/OptimizedTable";
 import { FaPencilAlt } from "react-icons/fa";
 import { AiOutlineDelete } from "react-icons/ai";
@@ -14,11 +14,12 @@ import withBase from "../../../hocs/withBase";
 import LoadingItem from "../../Loading/LoadingItem";
 import { colors } from "../../../static/Admin";
 import Edittor from "../../common/inputComponet/Edittor";
-import { fetchProduct } from "../../../redux/slice/productSlice";
+import { fetchProduct, setFilters, resetFilters } from "../../../redux/slice/productSlice";
 import { formatNumber } from "../../../helper/format";
 
-function AdminProduct({ dispatch }) {
-  const { data } = useSelector((state) => state.products);
+function AdminProduct({ dispatch: outerDispatch }) {
+  const reduxDispatch = useDispatch();
+  const { data, totalPages, currentPage, filters } = useSelector((state) => state.products);
   const { data: category } = useSelector((state) => state.category);
   const [isOpen, setisOpen] = useState(false);
   const [isOpenUpdate, setisOpenUpdate] = useState(false);
@@ -31,12 +32,50 @@ function AdminProduct({ dispatch }) {
   });
   const [listColor, setListColor] = useState([]);
   const [des, setDes] = useState("");
+  const [searchName, setSearchName] = useState("");
+  const [filterCategory, setFilterCategory] = useState("");
+  const [filterMinPrice, setFilterMinPrice] = useState("");
+  const [filterMaxPrice, setFilterMaxPrice] = useState("");
   const {
     register,
     formState: { errors },
     handleSubmit,
     reset,
   } = useForm();
+
+  useEffect(() => {
+    reduxDispatch(fetchProduct(filters));
+  }, [filters, reduxDispatch]);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    reduxDispatch(
+      setFilters({
+        page: 1,
+        name: searchName,
+        category: filterCategory,
+        minPrice: filterMinPrice ? parseFloat(filterMinPrice) : undefined,
+        maxPrice: filterMaxPrice ? parseFloat(filterMaxPrice) : undefined,
+      })
+    );
+  };
+
+  const handleResetFilters = () => {
+    setSearchName("");
+    setFilterCategory("");
+    setFilterMinPrice("");
+    setFilterMaxPrice("");
+    reduxDispatch(resetFilters());
+  };
+
+  const handlePageChange = (newPage) => {
+    reduxDispatch(
+      setFilters({
+        ...filters,
+        page: newPage,
+      })
+    );
+  };
   const columns = [
     {
       Header: "ID",
@@ -151,7 +190,7 @@ function AdminProduct({ dispatch }) {
           setLoading(false);
           if (res?.success) {
             toast.success(res?.mes);
-            dispatch(fetchProduct());
+            reduxDispatch(fetchProduct(filters));
             Swal.fire({
               title: "Đã xóa!",
               text: "Sản phẩm đã được xóa thành công",
@@ -212,8 +251,9 @@ function AdminProduct({ dispatch }) {
       if (response?.success) {
         setImage(null);
         reset();
-        dispatch(fetchProduct());
+        reduxDispatch(fetchProduct(filters));
         setisOpen(false);
+        toast.success("Tạo sản phẩm thành công");
       }
     } catch (e) {
       setLoading(false);
@@ -279,7 +319,7 @@ function AdminProduct({ dispatch }) {
         setImage(null);
         setListColor([]);
         setisOpenUpdate(false);
-        dispatch(fetchProduct());
+        reduxDispatch(fetchProduct(filters));
       }
     } catch (e) {
       setLoading(false);
@@ -295,8 +335,92 @@ function AdminProduct({ dispatch }) {
             <p>Tạo mới</p>
           </div>
         </div>
-        <div style={{ height: "90vh", overflowY: "scroll" }}>
+        
+        <div className="product-admin--filters">
+          <form onSubmit={handleSearch} className="filter-form">
+            <input
+              type="text"
+              placeholder="Tìm kiếm theo tên sản phẩm..."
+              value={searchName}
+              onChange={(e) => setSearchName(e.target.value)}
+              className="filter-input filter-search"
+            />
+            
+            <select
+              value={filterCategory}
+              onChange={(e) => setFilterCategory(e.target.value)}
+              className="filter-select filter-category"
+            >
+              <option value="">Tất cả danh mục</option>
+              {category?.map((cat) => (
+                <option value={cat._id} key={cat._id}>
+                  {cat.name}
+                </option>
+              ))}
+            </select>
+            
+            <input
+              type="number"
+              placeholder="Giá tối thiểu"
+              value={filterMinPrice}
+              onChange={(e) => setFilterMinPrice(e.target.value)}
+              className="filter-input filter-min-price"
+            />
+            
+            <input
+              type="number"
+              placeholder="Giá tối đa"
+              value={filterMaxPrice}
+              onChange={(e) => setFilterMaxPrice(e.target.value)}
+              className="filter-input filter-max-price"
+            />
+            
+            <button type="submit" className="btn-search">
+              Tìm kiếm
+            </button>
+            <button
+              type="button"
+              className="btn-reset"
+              onClick={handleResetFilters}
+            >
+              Xóa bộ lọc
+            </button>
+          </form>
+        </div>
+
+        <div style={{ height: "calc(90vh - 120px)", overflowY: "scroll" }}>
           <OptimizedTable title="Sản phẩm" data={data || []} columns={columns} />
+        </div>
+
+        <div className="product-admin--pagination">
+          <div className="pagination-info">
+            Trang {currentPage} / {totalPages} | Tổng: {data?.length || 0} sản phẩm
+          </div>
+          <div className="pagination-buttons">
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="btn-pagination"
+            >
+              Trước
+            </button>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <button
+                key={page}
+                onClick={() => handlePageChange(page)}
+                className={`btn-page ${currentPage === page ? "active" : ""}`}
+              >
+                {page}
+              </button>
+            ))}
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="btn-pagination"
+            >
+              Sau
+            </button>
+          </div>
         </div>
         <Modal isOpen={isOpen} setisOpen={handleCloseCreate} title="Tạo Sản Phẩm Mới">
           <div className="modal-form-product">

@@ -1,8 +1,16 @@
 import axios from "./axios";
 
-export const getProduct = async () => {
+export const getProduct = async (filters = {}) => {
   try {
-    const res = await axios.get("/product/get-products");
+    const { page = 1, limit = 10, name, category, minPrice, maxPrice } = filters;
+    let url = `/product/get-products?page=${page}&limit=${limit}`;
+    
+    if (name) url += `&name=${name}`;
+    if (category) url += `&category=${category}`;
+    if (minPrice !== undefined) url += `&minPrice=${minPrice}`;
+    if (maxPrice !== undefined) url += `&maxPrice=${maxPrice}`;
+    
+    const res = await axios.get(url);
     return res.data;
   } catch (e) {
     console.log(e);

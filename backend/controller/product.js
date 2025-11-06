@@ -16,27 +16,26 @@ const createProduct = async (req, res) => {
 
 const getProducts = async (req, res) => {
   try {
-    const { name, page, category } = req.query;
-    let limit = process.env.LIMIT;
+    const { name, page, category, minPrice, maxPrice } = req.query;
+    let limit = process.env.LIMIT || 10;
     const options = {
-      page,
-      limit,
+      page: page || 1,
+      limit: limit,
       category,
+      minPrice,
+      maxPrice,
     };
     if (name) {
       options.name = name;
-    }
-    if (page) {
-      options.page = page;
-    }
-    if (category) {
-      options.category = category;
     }
     const response = await ProductSerevice.getProducts({ ...options });
     if (response)
       return res.status(200).json({
         success: true,
         products: response.product,
+        totalProducts: response.totalProducts,
+        currentPage: response.currentPage,
+        totalPages: response.totalPages,
       });
   } catch (e) {
     return res.status(500).json({

@@ -29,7 +29,7 @@ const isAdmin = (req, res, next) => {
 };
 const checkToken = (req, res, next) => {
   const { refesToken } = req.cookies;
-  jwt.verify(refesToken, process.env.TOKEN_SECRET, (err, decode) => {
+  jwt.verify(refesToken, process.env.JWT_SECRET_KEY, (err, decode) => {
     if (err) {
       res.clearCookie("refesToken");
       return res.status(401).json({

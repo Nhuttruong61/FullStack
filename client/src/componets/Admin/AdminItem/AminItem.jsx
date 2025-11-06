@@ -7,6 +7,8 @@ import Order from "../AdminOrder/AdminOrder";
 import Banner from "../AdminBanner/Banner";
 import ManageBlog from "../AdminBlog/manageBlog/ManageBlog";
 import CreateBlog from "../AdminBlog/createBlog/CreateBlog";
+import Settings from "../AdminSettings/Settings";
+import AdminPromoCode from "../AdminPromoCode/AdminPromoCode";
 
 function AminItem({ active, setActive }) {
   let content = null;
@@ -34,6 +36,12 @@ function AminItem({ active, setActive }) {
       content = <ManageBlog setActive={setActive} />;
       break;
     case 8:
+      content = <AdminPromoCode />;
+      break;
+    case 9:
+      content = <Settings />;
+      break;
+    case 10:
       content = <CreateBlog setActive={setActive} />;
       break;
     default:

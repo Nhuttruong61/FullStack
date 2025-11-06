@@ -9,15 +9,14 @@ const socketIo = (server) => {
     });
 
     io.on("connection", (socket) => {
-        console.log("New client connected");
 
         socket.on("addproduct", (data) => {
-            console.log("Broadcasting update:", data);
+
             io.emit("getproduct", data);
         });
 
         socket.on("disconnect", () => {
-            console.log("Client disconnected");
+
         });
     });
 }

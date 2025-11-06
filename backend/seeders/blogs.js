@@ -79,11 +79,9 @@ const seedBlogs = async () => {
   try {
     // Clear existing data
     await Blog.deleteMany({});
-    console.log("✓ Cleared blogs collection");
 
     // Insert new data
     const result = await Blog.insertMany(blogsSeed);
-    console.log(`✓ Created ${result.length} blogs`);
 
     return result;
   } catch (error) {

@@ -55,7 +55,19 @@ function Order() {
               </div>
               <div className="order--list--center">
                 <div className="order--list--center--box">
-                  <h4>{formatNumber(el?.totalPrice)}</h4>
+                  <div>
+                    {el?.discountAmount > 0 && (
+                      <p style={{ marginBottom: "4px", fontSize: "12px", color: "#bbb" }}>
+                        <strike>{formatNumber(el?.totalPrice)}</strike>
+                      </p>
+                    )}
+                    <h4>{formatNumber(el?.finalPrice || el?.totalPrice)}</h4>
+                    {el?.promoCode && (
+                      <p style={{ marginTop: "4px", fontSize: "12px", color: "#28a745" }}>
+                        Mã: {el?.promoCode}
+                      </p>
+                    )}
+                  </div>
                   <p>{el?.status}</p>
                 </div>
                 {el?.status === "Chờ xử lý" && el?.payments !== "online" && (

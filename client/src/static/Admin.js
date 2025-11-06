@@ -4,6 +4,8 @@ import { CiCircleList } from "react-icons/ci";
 import { BsBox2 } from "react-icons/bs";
 import { CiViewList, CiImageOn } from "react-icons/ci";
 import { IoNewspaperOutline } from "react-icons/io5";
+import { IoSettingsOutline } from "react-icons/io5";
+import { RiCoupon3Line } from "react-icons/ri";
 export const sidebar = [
   {
     id: 1,
@@ -39,6 +41,16 @@ export const sidebar = [
     id: 7,
     name: "Bài Viết",
     icon: IoNewspaperOutline,
+  },
+  {
+    id: 8,
+    name: "Mã Giảm Giá",
+    icon: RiCoupon3Line,
+  },
+  {
+    id: 9,
+    name: "Cài Đặt",
+    icon: IoSettingsOutline,
   },
 ];
 

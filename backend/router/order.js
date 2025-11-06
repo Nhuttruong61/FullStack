@@ -19,6 +19,9 @@ router.post(
       payments: stringReq,
       products: arrayReq,
       totalPrice: numberReq,
+      finalPrice: Joi.number().optional(),
+      discountAmount: Joi.number().optional(),
+      promoCode: Joi.string().allow(null).optional(),
     })
   ),
   orderController.createOrder

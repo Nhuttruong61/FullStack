@@ -10,12 +10,19 @@ import { toast } from "react-toastify";
 import { removeCart } from "../../api/user";
 import { useLocation } from "react-router-dom";
 import { createOrderVNpay, returnPayment } from "../../api/vnpay";
+import { validatePromoCode, getUserPromoCodes } from "../../api/reward";
+import { useSettings } from "../../contexts/SettingsContext";
 
 function Payment({ dispatch, navigate }) {
+  const { settings } = useSettings();
   const { pathname, search } = useLocation();
   const { data } = useSelector((state) => state.car);
   const { user } = useSelector((state) => state.user);
   const [choosePayment, setChoosePayment] = useState("cod");
+  const [promoCode, setPromoCode] = useState("");
+  const [appliedPromo, setAppliedPromo] = useState(null);
+  const [promoLoading, setPromoLoading] = useState(false);
+  const [userPromoCodes, setUserPromoCodes] = useState([]);
   const handleDereate = (data) => {
     dispatch(decreate(data));
   };
@@ -29,6 +36,52 @@ function Payment({ dispatch, navigate }) {
     } catch (e) {}
   };
   const totalPrice = data?.reduce((acc, cur) => acc + cur?.product?.price * cur?.quantity, 0);
+  const discountAmount = appliedPromo?.discountAmount || 0;
+  const finalPrice = appliedPromo ? appliedPromo.finalPrice : totalPrice;
+
+  const handleApplyPromo = async () => {
+    if (!promoCode.trim()) {
+      toast.error("Vui lòng nhập mã giảm giá");
+      return;
+    }
+
+    setPromoLoading(true);
+    try {
+      const res = await validatePromoCode(promoCode, totalPrice);
+      if (res.success) {
+        setAppliedPromo(res.data);
+        toast.success("Áp dụng mã thành công!");
+      } else {
+        toast.error(res.message || "Mã không hợp lệ");
+      }
+    } catch (err) {
+      toast.error("Có lỗi xảy ra");
+    } finally {
+      setPromoLoading(false);
+    }
+  };
+
+  const handleRemovePromo = () => {
+    setAppliedPromo(null);
+    setPromoCode("");
+    toast.info("Đã gỡ mã giảm giá");
+  };
+
+  const fetchUserPromoCodes = async () => {
+    try {
+      const result = await getUserPromoCodes();
+      if (result.success) {
+        setUserPromoCodes(result.data || []);
+      }
+    } catch (err) {
+      console.error("Lỗi tải mã giảm giá:", err);
+    }
+  };
+
+  const handleSelectPromoCode = (code) => {
+    setPromoCode(code);
+  };
+
   const handleOrder = async () => {
     if (!user) {
       Swal.fire({
@@ -61,13 +114,16 @@ function Payment({ dispatch, navigate }) {
           color: el?.color,
         })),
         totalPrice: totalPrice,
+        finalPrice: finalPrice,
+        discountAmount: discountAmount,
+        promoCode: appliedPromo?.code || null,
         payments: valuePayment || choosePayment,
       };
 
       try {
         if (choosePayment === "online") {
           const data = {
-            amount: totalPrice,
+            amount: finalPrice,
           };
           const res = await createOrderVNpay(data);
           if (res.success) {
@@ -111,6 +167,12 @@ function Payment({ dispatch, navigate }) {
       fetchReturn();
     }
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      fetchUserPromoCodes();
+    }
+  }, [user]);
 
   return (
     <div className="payment">
@@ -195,10 +257,82 @@ function Payment({ dispatch, navigate }) {
               </select>
             </div>
 
+            {settings?.features?.promoCode?.enabled !== false && (
+              <div className="payment-promo">
+                <h2 className="payment-promo__title">Mã giảm giá</h2>
+                {!appliedPromo ? (
+                  <>
+                    {userPromoCodes?.length > 0 && (
+                      <div className="payment-promo__list">
+                        <p className="payment-promo__list-label">Mã của bạn:</p>
+                        <div className="payment-promo__list-items">
+                          {userPromoCodes.map((promo) => (
+                            <button
+                              key={promo.code}
+                              className="payment-promo__list-item"
+                              onClick={() => handleSelectPromoCode(promo.code)}
+                            >
+                              <span className="payment-promo__list-code">{promo.code}</span>
+                              <span className="payment-promo__list-value">
+                                {promo.discountType === "percentage"
+                                  ? `Giảm ${promo.discountValue}%`
+                                  : `Giảm ${formatNumber(promo.discountValue)}`}
+                              </span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    <div className="payment-promo__input-group">
+                      <input
+                        type="text"
+                        className="payment-promo__input"
+                        placeholder="Nhập mã giảm giá"
+                        value={promoCode}
+                        onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
+                      />
+                      <button
+                        className="payment-promo__btn"
+                        onClick={handleApplyPromo}
+                        disabled={promoLoading || !promoCode.trim()}
+                      >
+                        {promoLoading ? "Đang kiểm tra..." : "Áp dụng"}
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <div className="payment-promo__applied">
+                    <div className="payment-promo__info">
+                      <span className="payment-promo__code">{appliedPromo.code}</span>
+                      <span className="payment-promo__discount">
+                        -{formatNumber(appliedPromo.discountAmount)}
+                      </span>
+                    </div>
+                    <button
+                      className="payment-promo__remove"
+                      onClick={handleRemovePromo}
+                    >
+                      ✕
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+
             <div className="payment-summary">
               <div className="payment-summary__item">
+                <span>Tạm tính:</span>
+                <span>{formatNumber(totalPrice || 0)}</span>
+              </div>
+              {appliedPromo && (
+                <div className="payment-summary__item payment-summary__discount">
+                  <span>Giảm giá:</span>
+                  <span>-{formatNumber(discountAmount)}</span>
+                </div>
+              )}
+              <div className="payment-summary__item payment-summary__total">
                 <span>Tổng tiền:</span>
-                <span className="payment-summary__amount">{formatNumber(totalPrice || 0)}</span>
+                <span className="payment-summary__amount">{formatNumber(finalPrice || 0)}</span>
               </div>
               <button 
                 className="payment-summary__btn" 

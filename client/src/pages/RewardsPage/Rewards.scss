@@ -1,0 +1,339 @@
+.rewards-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 60px 20px;
+  min-height: 80vh;
+  background: #f8f9fa;
+
+  .rewards-header {
+    text-align: center;
+    margin-bottom: 50px;
+
+    h1 {
+      font-size: 42px;
+      margin-bottom: 12px;
+      color: #2c3e50;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    p {
+      font-size: 18px;
+      color: #6c757d;
+      margin-bottom: 20px;
+      font-weight: 400;
+    }
+
+    .points-badge {
+      display: inline-block;
+      padding: 12px 32px;
+      background: #fff;
+      color: #495057;
+      border-radius: 8px;
+      font-size: 16px;
+      border: 1px solid #dee2e6;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+      strong {
+        font-weight: 600;
+        color: #007bff;
+        font-size: 20px;
+      }
+    }
+  }
+
+  .rewards-section,
+  .promo-section {
+    margin-bottom: 50px;
+
+    h2 {
+      font-size: 28px;
+      color: #2c3e50;
+      margin-bottom: 24px;
+      font-weight: 600;
+    }
+  }
+
+  .rewards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+
+    .reward-card {
+      background: white;
+      border-radius: 12px;
+      padding: 32px 24px;
+      text-align: center;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+      transition: all 0.2s ease;
+      border: 1px solid #e9ecef;
+
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        border-color: #007bff;
+      }
+
+      .reward-icon {
+        font-size: 48px;
+        margin-bottom: 16px;
+      }
+
+      h3 {
+        font-size: 20px;
+        color: #2c3e50;
+        margin-bottom: 12px;
+        font-weight: 600;
+      }
+
+      .reward-description {
+        font-size: 14px;
+        color: #6c757d;
+        margin-bottom: 16px;
+        min-height: 40px;
+      }
+
+      .reward-cost {
+        margin-bottom: 20px;
+
+        .points-required {
+          display: inline-block;
+          padding: 6px 16px;
+          background: #e7f3ff;
+          color: #007bff;
+          border-radius: 6px;
+          font-weight: 600;
+          font-size: 15px;
+        }
+      }
+
+      .reward-cooldown-notice,
+      .reward-redeemed-notice {
+        font-size: 13px;
+        margin-bottom: 12px;
+        font-weight: 500;
+      }
+
+      .reward-cooldown-notice {
+        color: #ff9800;
+      }
+
+      .reward-redeemed-notice {
+        color: #28a745;
+      }
+
+      .btn-redeem {
+        width: 100%;
+        padding: 12px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 15px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+
+        &:hover:not(:disabled) {
+          background: #0056b3;
+        }
+
+        &:disabled {
+          background: #adb5bd;
+          cursor: not-allowed;
+          opacity: 0.7;
+        }
+      }
+    }
+  }
+
+  .promo-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    .promo-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+      border: 1px solid #e9ecef;
+      transition: all 0.2s ease;
+
+      &:hover {
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+      }
+
+      .promo-info {
+        flex: 1;
+
+        .promo-code-wrapper {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          margin-bottom: 12px;
+
+          .promo-code {
+            font-size: 20px;
+            font-weight: 700;
+            color: #007bff;
+            font-family: monospace;
+            letter-spacing: 1px;
+          }
+
+          .btn-copy {
+            padding: 6px 16px;
+            background: #e7f3ff;
+            color: #007bff;
+            border: 1px solid #007bff;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+
+            &:hover {
+              background: #007bff;
+              color: white;
+            }
+          }
+        }
+
+        .promo-details {
+          font-size: 15px;
+          color: #495057;
+          margin-bottom: 6px;
+          font-weight: 500;
+        }
+
+        .promo-expiry {
+          font-size: 14px;
+          color: #6c757d;
+        }
+
+        .promo-source {
+          font-size: 13px;
+          color: #8c92a1;
+          margin-top: 4px;
+          margin-bottom: 0;
+        }
+      }
+
+      .promo-status {
+        .status-active {
+          display: inline-block;
+          padding: 6px 16px;
+          background: #d4edda;
+          color: #155724;
+          border-radius: 6px;
+          font-weight: 500;
+          font-size: 13px;
+        }
+
+        .status-used {
+          display: inline-block;
+          padding: 6px 16px;
+          background: #f8d7da;
+          color: #721c24;
+          border-radius: 6px;
+          font-weight: 500;
+          font-size: 13px;
+        }
+      }
+    }
+  }
+
+  .no-rewards,
+  .no-promos {
+    text-align: center;
+    padding: 60px 30px;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #e9ecef;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+
+    p {
+      font-size: 16px;
+      color: #6c757d;
+      margin-bottom: 8px;
+
+      &.hint {
+        font-size: 14px;
+        color: #adb5bd;
+      }
+    }
+  }
+
+  .rewards-loading {
+    text-align: center;
+    padding: 80px 30px;
+    font-size: 16px;
+    color: #6c757d;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #e9ecef;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  @media (max-width: 768px) {
+    padding: 40px 16px;
+
+    .rewards-header {
+      margin-bottom: 40px;
+
+      h1 {
+        font-size: 32px;
+      }
+
+      p {
+        font-size: 16px;
+      }
+
+      .points-badge {
+        font-size: 14px;
+        padding: 10px 24px;
+
+        strong {
+          font-size: 18px;
+        }
+      }
+    }
+
+    .rewards-section,
+    .promo-section {
+      h2 {
+        font-size: 24px;
+      }
+    }
+
+    .rewards-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .promo-list {
+      .promo-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+
+        .promo-info {
+          .promo-code-wrapper {
+            flex-direction: column;
+            align-items: flex-start;
+
+            .promo-code {
+              font-size: 18px;
+            }
+          }
+        }
+
+        .promo-status {
+          align-self: flex-end;
+        }
+      }
+    }
+  }
+}

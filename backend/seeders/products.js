@@ -6,13 +6,11 @@ const productsSeed = async () => {
     // Get categories
     const categories = await Category.find();
     if (categories.length === 0) {
-      console.log("⚠ No categories found. Run category seeder first!");
       return;
     }
 
     // Clear existing data
-    await Product.deleteMany({});
-    console.log("✓ Cleared products collection");
+    await Product.deleteMany({})
 
     const iphoneCategory = categories.find((c) => c.name === "Iphone");
     const macCategory = categories.find((c) => c.name === "Mac");
@@ -540,7 +538,6 @@ const productsSeed = async () => {
     ];
 
     const result = await Product.insertMany(products);
-    console.log(`✓ Created ${result.length} products`);
 
     return result;
   } catch (error) {

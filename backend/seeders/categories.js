@@ -55,11 +55,8 @@ const seedCategories = async () => {
   try {
     // Clear existing data
     await Category.deleteMany({});
-    console.log("✓ Cleared categories collection");
-
     // Insert new data
     const result = await Category.insertMany(categoriesSeed);
-    console.log(`✓ Created ${result.length} categories`);
 
     return result;
   } catch (error) {

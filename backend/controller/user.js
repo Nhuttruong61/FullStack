@@ -41,6 +41,7 @@ const login = async (req, res) => {
       return res.status(200).json({
         success: true,
         token: response.token,
+        user: response.user,
       });
     }
   } catch (e) {
@@ -74,19 +75,25 @@ const googleLogin = async (req, res) => {
           success: true,
           token,
           refesToken,
+          user: {
+            id: user._id,
+            email: user.email,
+            name: user.name,
+            role: user.role,
+          },
         });
       }
     } else {
       const token = jwt.sign(
         { id: existingUser._id, role: existingUser.role },
-        process.env.TOKEN_SECRET,
+        process.env.JWT_SECRET_KEY,
         {
           expiresIn: "10d",
         }
       );
       const refesToken = jwt.sign(
         { id: existingUser._id, role: existingUser.role },
-        process.env.TOKEN_SECRET,
+        process.env.JWT_SECRET_KEY,
         {
           expiresIn: "15d",
         }
@@ -95,6 +102,12 @@ const googleLogin = async (req, res) => {
         success: true,
         token,
         refesToken,
+        user: {
+          id: existingUser._id,
+          email: existingUser.email,
+          name: existingUser.name,
+          role: existingUser.role,
+        },
       });
     }
   } catch (e) {

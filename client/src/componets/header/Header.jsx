@@ -19,7 +19,9 @@ import { getCartUser } from "../../redux/slice/cartSlice";
 import { IoMenu } from "react-icons/io5";
 import Sidebar from "../sidebar/Sidebar";
 import WishlistIcon from "../wishlist/WishlistIcon";
+import { useSettings } from "../../contexts/SettingsContext";
 function Header({ navigate, dispatch }) {
+  const { settings } = useSettings();
   const { data } = useSelector((state) => state.category);
   const { user } = useSelector((state) => state.user);
   const [active, setActive] = useState(-1);
@@ -29,7 +31,10 @@ function Header({ navigate, dispatch }) {
   const [listSearch, setListSearch] = useState([]);
   const [activeHeader, setActiveHeader] = useState(false);
   const [listMenuRpt, setListMenuRp] = useState(false);
+  const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
   const refSearch = useRef(null);
+  const userMenuRef = useRef(null);
+  const categoryDropdownRef = useRef(null);
   const { data: cart } = useSelector((state) => state.car);
   const handleNavigate = (active, el) => {
     setActive(active);
@@ -120,6 +125,25 @@ function Header({ navigate, dispatch }) {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
+        setShowInFor(false);
+      }
+      if (categoryDropdownRef.current && !categoryDropdownRef.current.contains(event.target)) {
+        setShowCategoryDropdown(false);
+      }
+    };
+
+    if (showInFor || showCategoryDropdown) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showInFor, showCategoryDropdown]);
   return (
     <div className={`header ${activeHeader && "activeHeader"}`}>
       <div className="content">
@@ -131,15 +155,14 @@ function Header({ navigate, dispatch }) {
             }}
           >
             <div className="left">
-              <p>Top</p>
-              <p style={{ color: "red" }}>P</p>
-              <p style={{ color: "green" }}>h</p>
-              <p style={{ color: "blue" }}>o</p>
-              <p style={{ color: "pink" }}>n</p>
-              <p style={{ color: "purple" }}>e</p>
+              {(settings?.websiteName || "TopPhone").split("").map((char, idx) => (
+                <p key={idx} style={{ color: ["red", "green", "blue", "pink", "purple"][idx % 5] }}>
+                  {char}
+                </p>
+              ))}
             </div>
             <div className="right">
-              <img src={Logo} className="right--image" alt="" />
+              <img src={settings?.websiteLogo || Logo} className="right--image" alt="Logo" />
             </div>
           </div>
           <div className="header--content--reponsive">
@@ -148,30 +171,79 @@ function Header({ navigate, dispatch }) {
             </span>
           </div>
           <div className="header--content--logo" onClick={() => navigate("/")}>
-            <p>Top</p>
-            <p style={{ color: "red" }}>P</p>
-            <p style={{ color: "green" }}>h</p>
-            <p style={{ color: "blue" }}>o</p>
-            <p style={{ color: "pink" }}>n</p>
-            <p style={{ color: "purple" }}>e</p>
+            {(settings?.websiteName || "TopPhone").split("").map((char, idx) => (
+              <p key={idx} style={{ color: ["red", "green", "blue", "pink", "purple"][idx % 5] }}>
+                {char}
+              </p>
+            ))}
           </div>
           <div className="header--content--center">
-            {data?.map((el, index) => {
-              return (
-                <div
-                  className={`box  ${index === active && "active"}`}
-                  key={el?._id}
-                  onClick={() => handleNavigate(index, el)}
-                >
-                  <p className="item">{el?.name}</p>
+            <div 
+              className={`box ${active === -1 && "active"}`}
+              onClick={() => {
+                setActive(-1);
+                navigate("/");
+                document.title = "Trang chủ";
+              }}
+            >
+              <p className="item">Trang chủ</p>
+            </div>
+
+            <div 
+              ref={categoryDropdownRef}
+              className={`box category-dropdown ${[0,1,2,3,4,5,6].includes(active) && "active"}`}
+              onMouseEnter={() => setShowCategoryDropdown(true)}
+              onMouseLeave={() => setShowCategoryDropdown(false)}
+            >
+              <p className="item">Sản phẩm ▾</p>
+              {showCategoryDropdown && (
+                <div className="dropdown-menu">
+                  {data?.map((el, index) => (
+                    <div
+                      key={el?._id}
+                      className="dropdown-item"
+                      onClick={() => {
+                        handleNavigate(index, el);
+                        setShowCategoryDropdown(false);
+                      }}
+                    >
+                      {el?.name}
+                    </div>
+                  ))}
                 </div>
-              );
-            })}
-            {data && (
-              <div key="tin-tuc" className={`box  ${active === 7 && "active"}`} onClick={handleNavigateBlog}>
-                <p className="item">Tin Tức</p>
-              </div>
-            )}
+              )}
+            </div>
+
+            <div 
+              className={`box ${active === 7 && "active"}`} 
+              onClick={handleNavigateBlog}
+            >
+              <p className="item">Tin Tức</p>
+            </div>
+            
+            <div 
+              className={`box ${active === 8 && "active"}`} 
+              onClick={() => {
+                setActive(8);
+                setListMenuRp(false);
+                navigate("/minigames");
+                document.title = "Mini Games";
+              }}
+            >
+              <p className="item">Mini Games</p>
+            </div>
+            
+            <div 
+              className={`box ${active === 9 && "active"}`} 
+              onClick={() => {
+                setActive(9);
+                setListMenuRp(false);
+                navigate("/rewards");
+                document.title = "Đổi Thưởng";
+              }}
+            >
+              <p className="item">Đổi Thưởng</p>
+            </div>
           </div>
           <div className="header--content--right">
             <div className="header--content--right--search">
@@ -187,22 +259,30 @@ function Header({ navigate, dispatch }) {
               </div>
             </div>
             {user ? (
-              <div className="header--content--right--user" onClick={() => setShowInFor(!showInFor)}>
+              <div ref={userMenuRef} className="header--content--right--user" onClick={() => setShowInFor(!showInFor)}>
                 <label>
                   <FaRegUser />
                 </label>
                 {showInFor && (
                   <div className="header--content--right--user--show" onClick={(e) => e.stopPropagation()}>
                     {user?.role === "admin" && (
-                      <div onClick={() => navigate("/admin")}>
-                        <p>Quản lý</p>
-                      </div>
+                      <>
+                        <div onClick={() => navigate("/admin")}>
+                          <p>Quản lý</p>
+                        </div>
+                        <div onClick={() => navigate("/minigames")}>
+                          <p>Mini Games</p>
+                        </div>
+                      </>
                     )}
                     <div onClick={() => navigate("/user")}>
                       <p>Tài khoản</p>
                     </div>
                     <div onClick={() => navigate("/order")}>
                       <p>Đơn hàng</p>
+                    </div>
+                    <div onClick={() => navigate("/rewards")}>
+                      <p>Đổi Thưởng</p>
                     </div>
                     <div
                       onClick={() => {
@@ -282,9 +362,35 @@ function Header({ navigate, dispatch }) {
                 );
               })}
               {data && (
-                <div key="tin-tuc-sidebar" className={`sidebarItem--box  ${active === 7 && "active"}`} onClick={handleNavigateBlog}>
-                  <p className="item">Tin Tức</p>
-                </div>
+                <>
+                  <div key="tin-tuc-sidebar" className={`sidebarItem--box  ${active === 7 && "active"}`} onClick={handleNavigateBlog}>
+                    <p className="item">Tin Tức</p>
+                  </div>
+                  <div 
+                    key="minigames-sidebar" 
+                    className={`sidebarItem--box  ${active === 8 && "active"}`} 
+                    onClick={() => {
+                      setActive(8);
+                      setListMenuRp(false);
+                      navigate("/minigames");
+                      document.title = "Mini Games";
+                    }}
+                  >
+                    <p className="item">Mini Games</p>
+                  </div>
+                  <div 
+                    key="rewards-sidebar" 
+                    className={`sidebarItem--box  ${active === 9 && "active"}`} 
+                    onClick={() => {
+                      setActive(9);
+                      setListMenuRp(false);
+                      navigate("/rewards");
+                      document.title = "Đổi Thưởng";
+                    }}
+                  >
+                    <p className="item">Đổi Thưởng</p>
+                  </div>
+                </>
               )}
             </div>
           </Sidebar>

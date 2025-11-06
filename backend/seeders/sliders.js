@@ -31,11 +31,9 @@ const seedSliders = async () => {
   try {
     // Clear existing data
     await Slider.deleteMany({});
-    console.log("✓ Cleared sliders collection");
-
+  
     // Insert new data
     const result = await Slider.insertMany(slidersSeed);
-    console.log(`✓ Created ${result.length} sliders`);
 
     return result;
   } catch (error) {

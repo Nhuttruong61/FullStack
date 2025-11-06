@@ -17,7 +17,7 @@ function AdminOrder({ dispatch }) {
   const [page, setPage] = useState(1);
   const [panigate, setPanigate] = useState(10);
   const [loading, setLoading] = useState(false);
-  const ENDPOINT = process.env.SOCKET_URL;
+  const ENDPOINT = process.env.REACT_APP_SOCKET_URL;
   const socketIo = socketIOClient(ENDPOINT, {
     transport: ["websocket"],
     withCredentials: true,
@@ -25,16 +25,19 @@ function AdminOrder({ dispatch }) {
   const fetchData = async () => {
     try {
       const res = await getOrders(page);
-
+console.log("res",res)
       setPanigate(res?.totalPages);
       if (res?.success) {
         const processedData =
           res?.orders?.map((item) => ({
             id: item._id,
-            name: item.user?.name ?? "N/A",
-            phone: item.user?.phone ?? "N/A",
-            address: item.user?.address ?? "N/A",
-            price: item.totalPrice ?? 0,
+            name: item.user?.name ?? "",
+            phone: item.user?.phone ?? "",
+            address: item.user?.address ?? "",
+            price: (item.finalPrice || item.totalPrice) ?? 0,
+            totalPrice: item.totalPrice ?? 0,
+            discountAmount: item.discountAmount ?? 0,
+            promoCode: item.promoCode ?? null,
             payments: item.payments ?? [],
             status: item.status ?? "Unknown",
             product: item.products ?? [],
@@ -79,11 +82,7 @@ function AdminOrder({ dispatch }) {
           {value?.map((product, index) => (
             <div key={index} style={{ marginBottom: "10px" }}>
               <div style={{ display: "flex", alignItems: "center" }}>
-                <img
-                  src={product?.product?.image[0]?.url}
-                  alt=""
-                  style={{ width: "50px", height: "50px", marginRight: "8px" }}
-                />
+              
                 <div>
                   <p style={{ padding: "0", margin: "0" }}>{product?.product?.name}</p>
                   <p style={{ padding: "0", margin: "0" }}>Quantity: {product?.quantity}</p>
@@ -100,8 +99,31 @@ function AdminOrder({ dispatch }) {
     {
       Header: "Giá",
       accessor: "price",
-      width: 10,
-      Cell: ({ value }) => <p>{formatNumber(value)}</p>,
+      width: 12,
+      Cell: ({ row }) => (
+        <div style={{ fontSize: "13px" }}>
+          {row.discountAmount > 0 && (
+            <p style={{ margin: "0 0 4px 0", color: "#bbb" }}>
+              <strike>{formatNumber(row.totalPrice)}</strike>
+            </p>
+          )}
+          <p style={{ margin: "0 0 4px 0", fontWeight: "700", color: "#ff9921" }}>
+            {formatNumber(row.price)}
+          </p>
+          {row.discountAmount > 0 && (
+            <>
+              <p style={{ margin: "0 0 2px 0", color: "#28a745", fontSize: "12px" }}>
+                Giảm: -{formatNumber(row.discountAmount)}
+              </p>
+              {row.promoCode && (
+                <p style={{ margin: "0", color: "#28a745", fontSize: "11px" }}>
+                  Mã: {row.promoCode}
+                </p>
+              )}
+            </>
+          )}
+        </div>
+      ),
     },
     {
       Header: "Thanh toán",
@@ -111,7 +133,7 @@ function AdminOrder({ dispatch }) {
     {
       Header: "Trạng thái",
       accessor: "status",
-      width: 10,
+      width: 15,
       Cell: ({ row }) => (
         <div className="status-cell">
           {row.status === "Đã hủy" || row.status === "Đã giao" ? (
@@ -176,8 +198,8 @@ function AdminOrder({ dispatch }) {
   };
   const handleDelete = async (data) => {
     try {
-      const { id } = data.values;
-      if (data?.values?.payments === "online" && data?.values?.status === "Chờ xử lý")
+      const { id } = data;
+      if (data?.payments === "online" && data?.status === "Chờ xử lý")
         return toast.warning("Bạn không thể xóa đơn hàng này");
       Swal.fire({
         title: "Bạn có muốn xóa đơn hàng này?",

@@ -11,7 +11,9 @@ const orderSchema = new mongoose.Schema(
       },
     ],
     totalPrice: { type: String, required: true },
-
+    finalPrice: { type: Number },
+    discountAmount: { type: Number, default: 0 },
+    promoCode: { type: String },
     payments: { type: String, required: true },
     status: { type: String, default: "Chờ xử lý" },
   },

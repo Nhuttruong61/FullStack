@@ -4,12 +4,15 @@ const User = require("../models/user");
 
 const createOrder = (props) => {
   return new Promise(async (resolve, reject) => {
-    const { user, products, totalPrice, payments } = props;
+    const { user, products, totalPrice, finalPrice, discountAmount, promoCode, payments } = props;
     try {
       const res = await Order.create({
         user: user._id,
         products: products,
         totalPrice: totalPrice,
+        finalPrice: finalPrice || totalPrice,
+        discountAmount: discountAmount || 0,
+        promoCode: promoCode || null,
         payments: payments,
       });
       const response = await User.findById(user._id);
@@ -20,6 +23,29 @@ const createOrder = (props) => {
         });
         return;
       }
+
+      if (promoCode) {
+        const PromoCode = require("../models/promoCode");
+        const promo = await PromoCode.findOne({ code: promoCode });
+        if (promo) {
+          const userUsageIndex = promo.usedBy.findIndex(
+            (u) => u.user.toString() === user._id.toString()
+          );
+          if (userUsageIndex >= 0) {
+            promo.usedBy[userUsageIndex].usedCount += 1;
+            promo.usedBy[userUsageIndex].usedAt = new Date();
+          } else {
+            promo.usedBy.push({
+              user: user._id,
+              usedCount: 1,
+              usedAt: new Date(),
+            });
+          }
+          promo.usageCount += 1;
+          await promo.save();
+        }
+      }
+
       response.cart = [];
       await response.save();
       resolve(res);
@@ -35,10 +61,18 @@ const getOrders = {
       try {
         const skip = (page - 1) * limit;
         const orders = await Order.find()
-          .populate("products.product")
-          .populate("user")
+          .populate({
+            path: "user",
+            select: "name phone address email"
+          })
+          .populate({
+            path: "products.product",
+            select: "name price image color"
+          })
           .skip(skip)
           .limit(limit)
+          .sort({ createdAt: -1 })
+          .lean()
           .exec();
         if (!orders) {
           reject({

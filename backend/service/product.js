@@ -42,30 +42,21 @@ const createProduct = (props) => {
 const getProducts = (options) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const { name, limit, category } = options;
+      const { name, limit, category, page = 1, minPrice, maxPrice } = options;
+      const pageNumber = parseInt(page) || 1;
+      const limitNumber = parseInt(limit) || 10;
+      const skip = (pageNumber - 1) * limitNumber;
+      
+      let query = {};
+      
       if (name) {
         const regex = new RegExp(name, "i");
-        const product = await Product.find({ name: regex }).populate(
-          "category"
-        );
-        // .skip(skip);
-        // .limit(limit);
-        if (product) {
-          resolve({
-            success: true,
-            product,
-          });
-        } else {
-          resolve({
-            success: false,
-            message: "Không tìm thấy sản phẩm",
-          });
-        }
-      } else if (category) {
-        // Try to find category by ID or slug
+        query.name = regex;
+      }
+      
+      if (category) {
         let categoryId = category;
         
-        // If it's not a valid MongoDB ObjectId, try to find by slug
         if (!category.match(/^[0-9a-fA-F]{24}$/)) {
           const foundCategory = await Category.findOne({ slug: category });
           if (foundCategory) {
@@ -78,38 +69,39 @@ const getProducts = (options) => {
             return;
           }
         }
-        
-        const product = await Product.find({ category: categoryId }).populate(
-          "category"
-        );
-        // .skip(skip);
-        // .limit(limit);
-        if (product && product.length > 0) {
-          resolve({
-            success: true,
-            product,
-          });
-        } else {
-          resolve({
-            success: false,
-            message: "Không tìm thấy sản phẩm",
-          });
+        query.category = categoryId;
+      }
+      
+      if (minPrice !== undefined || maxPrice !== undefined) {
+        query.price = {};
+        if (minPrice !== undefined) {
+          query.price.$gte = parseFloat(minPrice);
         }
+        if (maxPrice !== undefined) {
+          query.price.$lte = parseFloat(maxPrice);
+        }
+      }
+      
+      const totalProducts = await Product.countDocuments(query);
+      const product = await Product.find(query)
+        .populate("category")
+        .skip(skip)
+        .limit(limitNumber)
+        .sort({ createdAt: -1 });
+      
+      if (product) {
+        resolve({
+          success: true,
+          product,
+          totalProducts,
+          currentPage: pageNumber,
+          totalPages: Math.ceil(totalProducts / limitNumber),
+        });
       } else {
-        const product = await Product.find().populate("category");
-        // .limit(limit);
-
-        if (product) {
-          resolve({
-            success: true,
-            product,
-          });
-        } else {
-          resolve({
-            success: false,
-            message: "Không tìm thấy sản phẩm",
-          });
-        }
+        resolve({
+          success: false,
+          message: "Không tìm thấy sản phẩm",
+        });
       }
     } catch (err) {
       reject(err);

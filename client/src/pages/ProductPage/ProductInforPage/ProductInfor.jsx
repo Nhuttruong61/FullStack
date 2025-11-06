@@ -39,12 +39,8 @@ function ProductInfor({ dispatch, navigate }) {
     comment: "",
   });
   const viewStartTimeRef = useRef(Date.now());
+  const socketRef = useRef(null);
 
-  const ENDPOINT = process.env.SOCKET_URL;
-  const socketIo = socketIOClient(ENDPOINT, {
-    transport: ["websocket"],
-    withCredentials: true,
-  });
   const fetchData = async () => {
     try {
       setLoading(true);
@@ -124,12 +120,26 @@ function ProductInfor({ dispatch, navigate }) {
   };
 
   useEffect(() => {
-    socketIo.on("getproduct", (data) => {
+    const ENDPOINT = process.env.REACT_APP_SOCKET_URL;
+    if (!socketRef.current) {
+      socketRef.current = socketIOClient(ENDPOINT, {
+        transports: ["websocket"],
+        withCredentials: true,
+      });
+    }
+
+    const socket = socketRef.current;
+
+    socket.on("getproduct", (data) => {
       setIdProduct(data);
     });
 
     return () => {
-      socketIo.off("getproduct");
+      socket.off("getproduct");
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+        socketRef.current = null;
+      }
     };
   }, []);
   useEffect(() => {
@@ -147,8 +157,6 @@ function ProductInfor({ dispatch, navigate }) {
       if (user && data?._id) {
         const viewDuration = Math.round((Date.now() - viewStartTimeRef.current) / 1000); // in seconds
         trackProductView(data._id, viewDuration).catch((err) => {
-          // Silently fail - don't break the user experience
-          console.log("View tracking skipped");
         });
       }
     };

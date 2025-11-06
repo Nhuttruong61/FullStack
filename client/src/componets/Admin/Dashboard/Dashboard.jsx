@@ -13,7 +13,6 @@ function Dashboard() {
   const fetchData = async () => {
     try {
       const res = await getOrderDasboard();
-      console.log("res", res);
       if (res?.success) {
         const processedData =
           res?.orders?.map((item) => ({

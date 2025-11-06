@@ -70,6 +70,12 @@ const login = (data) => {
           success: true,
           token,
           refesToken,
+          user: {
+            id: check.id,
+            email: check.email,
+            name: check.name,
+            role: check.role,
+          },
         });
       }
     } catch (err) {
@@ -137,7 +143,7 @@ const getUsers = (options) => {
 const refesToken = (id, role) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const token = jwt.sign({ id: id, role: role }, process.env.TOKEN_SECRET, {
+      const token = jwt.sign({ id: id, role: role }, process.env.JWT_SECRET_KEY, {
         expiresIn: "10d",
       });
       if (token) {

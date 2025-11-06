@@ -10,6 +10,8 @@ const { productsSeed } = require("./seeders/products");
 const { seedBlogs } = require("./seeders/blogs");
 const { seedSliders } = require("./seeders/sliders");
 const { usersSeed } = require("./seeders/users");
+const { seedSettings } = require("./seeders/settings");
+const { seedPromoCodes } = require("./seeders/promoCodes");
 
 const connectDB = async () => {
   try {
@@ -27,20 +29,26 @@ const runSeeders = async () => {
     console.log("═".repeat(50));
 
     // Run seeders in order
-    console.log("\n📌 Step 1: Seeding Categories...");
+    console.log("\n📌 Step 1: Seeding Settings...");
+    await seedSettings();
+
+    console.log("\n📌 Step 2: Seeding Categories...");
     await seedCategories();
 
-    console.log("\n📌 Step 2: Seeding Products...");
+    console.log("\n📌 Step 3: Seeding Products...");
     await productsSeed();
 
-    console.log("\n📌 Step 3: Seeding Blogs...");
+    console.log("\n📌 Step 4: Seeding Blogs...");
     await seedBlogs();
 
-    console.log("\n📌 Step 4: Seeding Sliders...");
+    console.log("\n📌 Step 5: Seeding Sliders...");
     await seedSliders();
 
-    console.log("\n📌 Step 5: Seeding Users...");
+    console.log("\n📌 Step 6: Seeding Users...");
     await usersSeed();
+
+    console.log("\n📌 Step 7: Seeding Promo Codes...");
+    await seedPromoCodes();
 
     console.log("\n" + "═".repeat(50));
     console.log("\n✅ All seeders completed successfully!\n");

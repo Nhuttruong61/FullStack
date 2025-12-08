@@ -23,7 +23,6 @@ function ScratchCard() {
 
   useEffect(() => {
     initCanvas();
-    setPrize(prizes[Math.floor(Math.random() * prizes.length)]);
     fetchRemainingPlays();
   }, []);
 
@@ -112,12 +111,22 @@ function ScratchCard() {
       return;
     }
 
+    const freePlayStats = gameStats?.gamePlayStats?.scratchcard || {};
+    const canPlayFree = freePlayStats.free < freePlayStats.freeLimit;
+    
+    if (!canPlayFree && !isPaidPlay) {
+      alert("Bạn đã hết lượt miễn phí. Vui lòng mua thêm lượt chơi.");
+      return;
+    }
+
     try {
-      const data = await playMiniGame("scratchcard", { value: prize.value }, isPaidPlay);
+      const data = await playMiniGame("scratchcard", {}, isPaidPlay);
       
       if (data.success) {
         setMessage(data.message);
         setRemainingPlays(data.remainingPlays);
+        const serverPrize = prizes.find(p => p.value === data.reward) || prizes[prizes.length - 1];
+        setPrize(serverPrize);
         await fetchRemainingPlays();
       } else {
         console.error("Play game failed:", data.message);
@@ -133,8 +142,8 @@ function ScratchCard() {
     setScratchedPercentage(0);
     setIsScratching(false);
     setMessage("");
+    setPrize(null);
     initCanvas();
-    setPrize(prizes[Math.floor(Math.random() * prizes.length)]);
   };
 
   const freePlayStats = gameStats?.gamePlayStats?.scratchcard || {};
@@ -155,10 +164,15 @@ function ScratchCard() {
 
       <div className="card-wrapper">
         <div className="prize-background">
-          {prize && (
+          {prize ? (
             <>
               <div className="prize-icon">🎁</div>
               <div className="prize-text">{prize.label}</div>
+            </>
+          ) : (
+            <>
+              <div className="prize-icon">❓</div>
+              <div className="prize-text">Cào để khám phá</div>
             </>
           )}
         </div>
@@ -180,13 +194,13 @@ function ScratchCard() {
       </div>
       <p className="progress-text">Đã cào: {scratchedPercentage.toFixed(0)}%</p>
 
-      {revealed && (
+      {revealed && prize && (
         <div className="result-panel">
           <h3>🎉 Chúc mừng!</h3>
           <p>{prize.label}</p>
           {!canPlayFree && remainingPlays > 0 && (
             <button onClick={() => handlePlayGame(true)} className="btn-buy">
-              Mua thêm lượt ({gameStats?.pointsPerFreePlay} điểm)
+              Mua thêm lượt ({gameStats?.pointsPerFreePlay || 10} điểm)
             </button>
           )}
           <button onClick={handleReset}>Chơi lại</button>

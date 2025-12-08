@@ -1,12 +1,12 @@
 .box-card-product{
-    background-color: #323232;
-    border-radius: 10px;
+    background-color: var(--card-background-color, #323232);
+    border-radius: var(--border-radius, 10px);
     width: 99%;
     cursor: pointer;
     height: 390px;
     box-sizing: border-box;
   
-    &:hover {box-shadow: white 1px 1px 1px }
+    &:hover {box-shadow: var(--text-color, white) 1px 1px 1px }
     &--image{
         width: 100%;
         display: flex;
@@ -27,7 +27,7 @@
         &--name{
             text-shadow: 1px ;
             margin: 0;
-            color: white;
+            color: var(--text-color, white);
             font-size: 16px;
             width: 100%;
         }
@@ -35,14 +35,14 @@
             display: flex;
             justify-content: center;
             &--price{
-                color: #ccc;
+                color: var(--text-secondary-color, #ccc);
                 text-decoration: line-through;
                 font-weight: 400;
                 margin: 4px 0;
                 padding-right:6px ;
             }
             &--sale{
-                color: #ff9921;
+                color: var(--accent-color, #ff9921);
                 font-weight: 600;
                 margin: 4px 0;
             }

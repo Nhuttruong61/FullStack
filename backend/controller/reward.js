@@ -1,18 +1,24 @@
 const User = require("../models/user");
 const PromoCode = require("../models/promoCode");
+const LoyaltyPoint = require("../models/loyaltyPoint");
 
 const getRewardOptions = async (req, res) => {
   try {
+    const userId = req.user.id;
+    const loyaltyPoints = await LoyaltyPoint.findOne({ user: userId });
+
     const rewardOptions = await PromoCode.find({
       pointsCost: { $exists: true, $ne: null, $gt: 0 },
       isActive: true,
-    }).select('_id code description pointsCost discountType discountValue minOrderValue maxDiscount source');
+      isPublic: { $ne: true },
+    }).select('_id code description pointsCost pointType discountType discountValue minOrderValue maxDiscount source');
 
     const formattedOptions = rewardOptions.map(reward => ({
       _id: reward._id,
       name: reward.code,
       description: reward.description || `Mã giảm giá ${reward.discountValue}${reward.discountType === 'percentage' ? '%' : 'đ'}`,
       pointsCost: reward.pointsCost,
+      pointType: reward.pointType || 'shop',
       discountType: reward.discountType,
       discountValue: reward.discountValue,
       minOrderValue: reward.minOrderValue,
@@ -23,6 +29,10 @@ const getRewardOptions = async (req, res) => {
     res.status(200).json({
       success: true,
       data: formattedOptions,
+      userPoints: {
+        shopPoints: loyaltyPoints?.balance || 0,
+        gamePoints: loyaltyPoints?.gamePoints || 0,
+      },
     });
   } catch (error) {
     res.status(500).json({
@@ -45,10 +55,22 @@ const redeemReward = async (req, res) => {
       });
     }
 
+    let loyaltyPoints = await LoyaltyPoint.findOne({ user: userId });
+    if (!loyaltyPoints) {
+      loyaltyPoints = new LoyaltyPoint({
+        user: userId,
+        balance: 0,
+        gamePoints: 0,
+        tier: "bronze",
+      });
+      await loyaltyPoints.save();
+    }
+
     const reward = await PromoCode.findOne({
       _id: rewardId,
       pointsCost: { $exists: true, $ne: null, $gt: 0 },
       isActive: true,
+      isPublic: { $ne: true },
     });
 
     if (!reward) {
@@ -58,10 +80,13 @@ const redeemReward = async (req, res) => {
       });
     }
 
-    if (user.loyaltyPoints < reward.pointsCost) {
+    const pointType = reward.pointType || "shop";
+    const userPoints = pointType === "game" ? loyaltyPoints.gamePoints : loyaltyPoints.balance;
+
+    if (userPoints < reward.pointsCost) {
       return res.status(400).json({
         success: false,
-        message: "Không đủ điểm để đổi phần thưởng này",
+        message: `Không đủ điểm ${pointType === "game" ? "game" : "shop"} để đổi phần thưởng này`,
       });
     }
 
@@ -109,7 +134,22 @@ const redeemReward = async (req, res) => {
       ],
     });
 
-    user.loyaltyPoints -= reward.pointsCost;
+    if (pointType === "game") {
+      loyaltyPoints.gamePoints -= reward.pointsCost;
+    } else {
+      loyaltyPoints.balance -= reward.pointsCost;
+    }
+
+    loyaltyPoints.transactions.push({
+      type: "redeem",
+      amount: reward.pointsCost,
+      reason: `Đổi mã ${code}`,
+      reference: promoCode._id,
+      referenceModel: "PromoCode",
+    });
+
+    await loyaltyPoints.save();
+
     if (!user.userPromoCodes) {
       user.userPromoCodes = [];
     }
@@ -126,7 +166,10 @@ const redeemReward = async (req, res) => {
       data: {
         code,
         promoCode,
-        remainingPoints: user.loyaltyPoints,
+        remainingPoints: {
+          shopPoints: loyaltyPoints.balance,
+          gamePoints: loyaltyPoints.gamePoints,
+        },
       },
     });
   } catch (error) {
@@ -152,7 +195,7 @@ const getUserPromoCodes = async (req, res) => {
       });
     }
 
-    const validPromoCodes = user.userPromoCodes
+    const userRedeemed = user.userPromoCodes
       ?.filter((item) => {
         const promo = item.promoCode;
         if (!promo || !promo.isActive) return false;
@@ -181,15 +224,59 @@ const getUserPromoCodes = async (req, res) => {
           expiryDate: promo.expiryDate,
           description: promo.description,
           source: promo.source,
+          isPublic: false,
           redeemedAt: item.redeemedAt,
           usedCount: userUsage?.usedCount || 0,
           usedAt: userUsage?.usedAt || null,
         };
       }) || [];
 
+    const publicPromoCodes = await PromoCode.find({
+      isPublic: true,
+      isActive: true,
+      $or: [
+        { expiryDate: { $gt: new Date() } },
+        { expiryDate: null }
+      ]
+    });
+
+    const publicPromoCodesFiltered = publicPromoCodes
+      .filter((promo) => {
+        if (promo.usageLimit && promo.usedBy?.length >= promo.usageLimit) return false;
+        
+        const userUsage = promo.usedBy?.find(
+          (u) => u.user.toString() === userId.toString()
+        );
+        if (userUsage && userUsage.usedCount >= promo.perUserLimit) return false;
+        
+        return true;
+      })
+      .map((promo) => {
+        const userUsage = promo.usedBy?.find(
+          (u) => u.user.toString() === userId.toString()
+        );
+
+        return {
+          _id: promo._id,
+          code: promo.code,
+          discountType: promo.discountType,
+          discountValue: promo.discountValue,
+          minOrderValue: promo.minOrderValue,
+          maxDiscount: promo.maxDiscount,
+          expiryDate: promo.expiryDate,
+          description: promo.description,
+          source: promo.source,
+          isPublic: true,
+          usedCount: userUsage?.usedCount || 0,
+          usedAt: userUsage?.usedAt || null,
+        };
+      });
+
+    const allPromoCodes = [...publicPromoCodesFiltered, ...userRedeemed];
+
     res.status(200).json({
       success: true,
-      data: validPromoCodes,
+      data: allPromoCodes,
     });
   } catch (error) {
     res.status(500).json({

@@ -1,11 +1,16 @@
 .cardBlog{
     width: 100%;
-    background-color: #323232;
-    background-color: #323232;
-    border-radius: 10px;
+    background-color: var(--card-background-color, #323232);
+    border-radius: var(--border-radius, 10px);
     height: 280px;
     cursor: pointer;
-    &:hover {box-shadow: white 1px 1px 1px }
+    border: 1px solid var(--border-color, transparent);
+    transition: all 0.3s ease;
+    &:hover {
+        box-shadow: 0 4px 12px var(--shadow-color, rgba(255, 255, 255, 0.2));
+        border-color: var(--accent-color, #ff9921);
+        transform: translateY(-2px);
+    }
     &--image{
         width: 100%;
         max-height: 190px;
@@ -13,13 +18,13 @@
         img{
             width: 100%;
             object-fit: cover;
-            border-top-left-radius:10px ;
-            border-top-right-radius:10px ;
+            border-top-left-radius: var(--border-radius, 10px);
+            border-top-right-radius: var(--border-radius, 10px);
 
         }
     }
     &--content{
-        color: white;
+        color: var(--text-color, white);
         box-sizing: border-box;
         padding: 2px 8px;
         p{

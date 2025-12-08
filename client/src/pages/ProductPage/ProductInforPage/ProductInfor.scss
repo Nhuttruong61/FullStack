@@ -1,10 +1,10 @@
 .productInfor{
     width: 100%;
-    background-color: #3e3e3f;
+    background-color: var(--background-color, #3e3e3f);
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #fff;
+    color: var(--text-color, #fff);
     &--box{
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(600px, 1fr));
@@ -71,7 +71,7 @@
            &--des{
             width: 97%;
             border-radius: 8px;
-            background-color: #2F3033;
+            background-color: var(--card-background-color, #2F3033);
             padding: 8px 12px;
            }
         }
@@ -83,14 +83,16 @@
             button{
                 width: 100%;
                 padding: 12px 0;
-                color: white;
-                background-color: #0071E3;
+                color: var(--button-primary-text, white);
+                background-color: var(--button-primary-bg, #0071E3);
                 outline: none;
-                border-radius: 8px;
+                border-radius: var(--border-radius, 8px);
                 font-size: 16px;
                 border: none;
+                cursor: pointer;
+                transition: all 0.2s ease;
                 &:hover{
-                    opacity: 0.8;
+                    background-color: var(--hover-color, #0056b3);
                 }
             }
         }
@@ -99,10 +101,10 @@
 .suggest{
     display: flex;
     justify-content: center;
-    background-color: #3E3E3F;
+    background-color: var(--background-secondary-color, #3E3E3F);
     padding:  1% 0;
     h2{
-        color: white;
+        color: var(--text-color, white);
     }
     &--list{
         display: grid;
@@ -114,20 +116,20 @@
 
 .comment{
     width: 100%;
-    background-color: white;
+    background-color: var(--surface-color, white);
     display: flex;
     justify-content: center;
     padding: 2% 0;
     &--box{
         width: 100%;
-        border: 1px solid #ccc;
-        border-radius: 4px;
+        border: 1px solid var(--border-color, #ccc);
+        border-radius: var(--border-radius, 4px);
         &--title{
            margin-left: 20px;
             width: 100%;
             display: flex;
             justify-content: start;
-           
+            color: var(--text-color, #333);
         }
         &--star{
             margin: 0 20px;
@@ -138,11 +140,11 @@
                 display: flex;
                 padding-right: 4px;
                 h2{
-                    color: #ff9921;
+                    color: var(--warning-color, #ff9921);
                 }
                 p{
                     padding-left: 4px ;
-                    color: blue;
+                    color: var(--link-color, #007bff);
                 }
             }
            
@@ -154,9 +156,11 @@
                margin: 0 20px;
            h3{
             margin: 0;
+            color: var(--text-color, #333);
            }
            p{
             margin-top: 4px;
+            color: var(--text-secondary-color, #666);
            }
            } 
         }
@@ -172,18 +176,23 @@
                 border: none;
                 height: 42px;
                 width: 48%;
-                border-radius: 8px;
+                border-radius: var(--border-radius, 8px);
                 font-size: 16px;
                 outline: none;
+                background-color: var(--card-background-color, white);
+                color: var(--text-color, #333);
+                cursor: pointer;
+                transition: all 0.2s ease;
                 &:hover{
-                    border: 1px solid white;
-                    color: white;
-                    background-color: #3E3E3F;
+                    border: 1px solid var(--border-color, #ccc);
+                    color: var(--text-color, white);
+                    background-color: var(--background-secondary-color, #3E3E3F);
                   }
                 &:disabled{
-                    background-color: white;
+                    background-color: var(--card-background-color, white);
                     cursor: default;
-                    color: #ccc;
+                    color: var(--text-light-color, #ccc);
+                    opacity: 0.6;
                 }
                
                
@@ -196,15 +205,17 @@
                 width: 320px ;
                 height: 42px;
                 width: 48%;
-                border-radius: 8px;
+                border-radius: var(--border-radius, 8px);
                 font-size: 16px;
-                background-color: #0071E3;
+                background-color: var(--button-primary-bg, #0071E3);
                 outline: none;
-                color: white;
+                color: var(--button-primary-text, white);
+                cursor: pointer;
+                transition: all 0.2s ease;
                 &:hover{
-                border: 1px solid #0071E3;
-                color: black;
-                background-color: white;
+                border: 1px solid var(--button-primary-bg, #0071E3);
+                color: var(--text-color, black);
+                background-color: var(--card-background-color, white);
               }
             }
         }
@@ -223,11 +234,15 @@
         h3{
             margin: 0;
             font-weight: 600;
+            color: var(--text-color, #333);
         }
         &--button{
             cursor: pointer;
+            color: var(--text-color, #333);
+            transition: all 0.2s ease;
             &:hover{
                 opacity: 0.8;
+                color: var(--hover-color, #666);
             }
         }
     }
@@ -240,10 +255,17 @@
         }
         &--input{
             width: 90%;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            border: 1px solid var(--input-border-color, #ccc);
+            border-radius: var(--border-radius, 4px);
             padding:  8px 12px;
             outline: none;
+            background-color: var(--input-background-color, white);
+            color: var(--input-text-color, #333);
+            transition: border-color 0.2s ease;
+            
+            &:focus{
+                border-color: var(--primary-color, #0071E3);
+            }
         }
     }
     &--submit{
@@ -251,21 +273,25 @@
         width: 320px ;
         height: 42px;
         width: 93%;
-        border-radius: 8px;
+        border-radius: var(--border-radius, 8px);
         font-size: 16px;
-        background-color: #0071E3;
+        background-color: var(--button-primary-bg, #0071E3);
         outline: none;
-        color: white;
+        color: var(--button-primary-text, white);
+        cursor: pointer;
+        transition: all 0.2s ease;
         &:hover{
-        border: 1px solid #0071E3;
-        color: black;
-        background-color: white;
+        border: 1px solid var(--button-primary-bg, #0071E3);
+        color: var(--text-color, black);
+        background-color: var(--card-background-color, white);
+        }
         &:disabled{
             cursor: default;
-            background-color: #0071E3;
-            color: white;
+            background-color: var(--text-light-color, #adb5bd);
+            color: var(--button-primary-text, white);
+            opacity: 0.6;
         }
-    }}
+    }
 }
 
 @media screen and (max-width: 480px) {

@@ -24,8 +24,10 @@ function AdminPromoCode() {
     expiryDate: "",
     description: "",
     pointsCost: "",
+    pointType: "shop",
     redemptionCooldown: 24,
     isActive: true,
+    isPublic: false,
   });
 
   useEffect(() => {
@@ -93,8 +95,10 @@ function AdminPromoCode() {
       expiryDate: code.expiryDate ? code.expiryDate.split("T")[0] : "",
       description: code.description || "",
       pointsCost: code.pointsCost || "",
+      pointType: code.pointType || "shop",
       redemptionCooldown: code.redemptionCooldown || 24,
       isActive: code.isActive,
+      isPublic: code.isPublic || false,
     });
     setShowModal(true);
   };
@@ -128,8 +132,10 @@ function AdminPromoCode() {
       expiryDate: "",
       description: "",
       pointsCost: "",
+      pointType: "shop",
       redemptionCooldown: 24,
       isActive: true,
+      isPublic: false,
     });
     setEditingCode(null);
   };
@@ -161,7 +167,7 @@ function AdminPromoCode() {
                 <th>Giá trị</th>
                 <th>Đơn tối thiểu</th>
                 <th>Hết hạn</th>
-                <th>Cooldown (h)</th>
+                <th>Công khai</th>
                 <th>Trạng thái</th>
                 <th>Đã dùng</th>
                 <th>Thao tác</th>
@@ -188,7 +194,15 @@ function AdminPromoCode() {
                         ? new Date(code.expiryDate).toLocaleDateString("vi-VN")
                         : "Vô thời hạn"}
                     </td>
-                    <td>{code.redemptionCooldown || 24}</td>
+                    <td>
+                      <span
+                        className={`status-badge ${
+                          code.isPublic ? "active" : "inactive"
+                        }`}
+                      >
+                        {code.isPublic ? "Công khai" : "Riêng tư"}
+                      </span>
+                    </td>
                     <td>
                       <span
                         className={`status-badge ${
@@ -357,6 +371,20 @@ function AdminPromoCode() {
                 </div>
 
                 <div className="form-group">
+                  <label>Loại điểm</label>
+                  <select
+                    name="pointType"
+                    value={formData.pointType}
+                    onChange={handleInputChange}
+                  >
+                    <option value="shop">Điểm mua hàng (Shop Points)</option>
+                    <option value="game">Điểm chơi game (Game Points)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="form-row">
+                <div className="form-group">
                   <label>Thời gian chờ giữa các lần đổi (giờ)</label>
                   <input
                     type="number"
@@ -378,6 +406,18 @@ function AdminPromoCode() {
                     onChange={handleInputChange}
                   />
                   Kích hoạt mã
+                </label>
+              </div>
+
+              <div className="form-group checkbox-group">
+                <label>
+                  <input
+                    type="checkbox"
+                    name="isPublic"
+                    checked={formData.isPublic}
+                    onChange={handleInputChange}
+                  />
+                  Mã công khai (hiển thị cho tất cả user)
                 </label>
               </div>
 

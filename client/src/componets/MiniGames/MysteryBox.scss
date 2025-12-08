@@ -1,40 +1,40 @@
 .mysterybox-container {
   text-align: center;
   padding: 40px 30px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  background: var(--card-background-color, white);
+  border-radius: var(--border-radius, 12px);
+  box-shadow: 0 2px 12px var(--shadow-color, rgba(0, 0, 0, 0.08));
   max-width: 800px;
   margin: 0 auto;
-  border: 1px solid #e9ecef;
+  border: 1px solid var(--border-color, #e9ecef);
 
   h2 {
     font-size: 28px;
     margin-bottom: 8px;
-    color: #2c3e50;
+    color: var(--text-color, #2c3e50);
     font-weight: 600;
   }
 
   .description {
     font-size: 16px;
-    color: #6c757d;
+    color: var(--text-secondary-color, #6c757d);
     margin-bottom: 20px;
     font-weight: 400;
   }
 
   .remaining-plays {
     font-size: 15px;
-    color: #495057;
+    color: var(--text-color, #495057);
     margin-bottom: 32px;
 
     strong {
-      color: #007bff;
+      color: var(--primary-color, #007bff);
       font-weight: 600;
     }
   }
 
   .message {
-    color: #28a745;
+    color: var(--success-color, #28a745);
     font-size: 14px;
     font-weight: 500;
     margin-bottom: 16px;
@@ -49,20 +49,20 @@
 
     .mystery-box {
       aspect-ratio: 1;
-      background: #007bff;
-      border-radius: 12px;
+      background: var(--primary-color, #007bff);
+      border-radius: var(--border-radius, 12px);
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       transition: all 0.2s;
-      box-shadow: 0 2px 8px rgba(0, 123, 255, 0.25);
-      border: 2px solid #e9ecef;
+      box-shadow: 0 2px 8px var(--shadow-color, rgba(0, 123, 255, 0.25));
+      border: 2px solid var(--border-color, #e9ecef);
 
       &:hover:not(.selected):not(.opened) {
         transform: translateY(-4px);
-        box-shadow: 0 4px 16px rgba(0, 123, 255, 0.3);
-        border-color: #007bff;
+        box-shadow: 0 4px 16px var(--shadow-color, rgba(0, 123, 255, 0.3));
+        border-color: var(--primary-color, #007bff);
       }
 
       &.selected:not(.opened) {
@@ -70,8 +70,8 @@
       }
 
       &.opened {
-        background: #28a745;
-        border-color: #28a745;
+        background: var(--success-color, #28a745);
+        border-color: var(--success-color, #28a745);
       }
 
       .box-icon {
@@ -83,7 +83,7 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        color: white;
+        color: var(--button-primary-text, white);
 
         .prize-icon {
           font-size: 48px;
@@ -101,30 +101,30 @@
   .result-panel {
     margin-top: 24px;
     padding: 24px;
-    background: #f8f9fa;
+    background: var(--background-secondary-color, #f8f9fa);
     border-radius: 8px;
-    border: 1px solid #e9ecef;
+    border: 1px solid var(--border-color, #e9ecef);
     max-width: 400px;
     margin: 24px auto 0;
 
     h3 {
       font-size: 24px;
-      color: #2c3e50;
+      color: var(--text-color, #2c3e50);
       margin-bottom: 12px;
       font-weight: 600;
     }
 
     p {
       font-size: 18px;
-      color: #495057;
+      color: var(--text-color, #495057);
       margin-bottom: 16px;
       font-weight: 600;
     }
 
     button {
       padding: 10px 32px;
-      background: #007bff;
-      color: white;
+      background: var(--button-primary-bg, #007bff);
+      color: var(--button-primary-text, white);
       border: none;
       border-radius: 6px;
       font-size: 15px;
@@ -134,14 +134,14 @@
       margin: 0 8px;
 
       &:hover {
-        background: #0056b3;
+        background: var(--hover-color, #0056b3);
       }
 
       &.btn-buy {
-        background: #20c997;
+        background: var(--success-color, #20c997);
 
         &:hover {
-          background: #1aa179;
+          background: var(--hover-color, #1aa179);
         }
       }
     }

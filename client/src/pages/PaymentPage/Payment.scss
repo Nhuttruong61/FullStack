@@ -1,7 +1,7 @@
 .payment {
   width: 100%;
   min-height: 100vh;
-  background-color: #3E3E3F;
+  background-color: var(--background-secondary-color, #3E3E3F);
   padding: 20px 0;
   box-sizing: border-box;
 }
@@ -30,7 +30,7 @@
   &__back {
     background: none;
     border: none;
-    color: #ff9921;
+    color: var(--accent-color, #ff9921);
     font-size: 16px;
     cursor: pointer;
     padding: 8px 12px;
@@ -38,12 +38,12 @@
     transition: all 0.3s ease;
 
     &:hover {
-      background-color: rgba(255, 153, 33, 0.1);
+      background-color: var(--background-secondary-color, rgba(255, 153, 33, 0.1));
     }
   }
 
   &__title {
-    color: #ffffff;
+    color: var(--text-color, #ffffff);
     font-size: 28px;
     margin: 0;
     font-weight: 700;
@@ -80,15 +80,15 @@
   display: flex;
   align-items: center;
   gap: 15px;
-  background-color: #2A2A2B;
+  background-color: var(--card-background-color, #2A2A2B);
   padding: 15px;
   border-radius: 8px;
-  border: 1px solid #444;
+  border: 1px solid var(--border-color, #444);
   transition: all 0.3s ease;
 
   &:hover {
-    border-color: #ff9921;
-    box-shadow: 0 4px 12px rgba(255, 153, 33, 0.1);
+    border-color: var(--accent-color, #ff9921);
+    box-shadow: 0 4px 12px var(--shadow-color, rgba(255, 153, 33, 0.1));
   }
 
   @media (max-width: 480px) {
@@ -101,7 +101,7 @@
   flex-shrink: 0;
   width: 100px;
   height: 100px;
-  background-color: #1A1A1B;
+  background-color: var(--background-secondary-color, #1A1A1B);
   border-radius: 6px;
   overflow: hidden;
   display: flex;
@@ -126,7 +126,7 @@
 }
 
 .payment-item__name {
-  color: #ffffff;
+  color: var(--text-color, #ffffff);
   font-size: 16px;
   margin: 0 0 8px 0;
   font-weight: 600;
@@ -140,13 +140,13 @@
 }
 
 .payment-item__color {
-  color: #bbb;
+  color: var(--text-secondary-color, #bbb);
   font-size: 13px;
   margin: 0 0 6px 0;
 }
 
 .payment-item__price {
-  color: #ff9921;
+  color: var(--accent-color, #ff9921);
   font-size: 16px;
   font-weight: 700;
   margin: 0;
@@ -156,7 +156,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background-color: #3E3E3F;
+  background-color: var(--background-secondary-color, #3E3E3F);
   border-radius: 4px;
   padding: 4px;
 
@@ -166,7 +166,7 @@
     text-align: center;
     background-color: transparent;
     border: none;
-    color: #ffffff;
+    color: var(--text-color, #ffffff);
     font-weight: 600;
     outline: none;
 
@@ -182,19 +182,19 @@
   height: 30px;
   border: none;
   background-color: transparent;
-  color: #ffffff;
+  color: var(--text-color, #ffffff);
   font-size: 18px;
   cursor: pointer;
   transition: all 0.3s ease;
   border-radius: 2px;
 
   &:hover:not(:disabled) {
-    background-color: #ff9921;
+    background-color: var(--accent-color, #ff9921);
     color: white;
   }
 
   &:disabled {
-    color: #666;
+    color: var(--text-light-color, #666);
     cursor: not-allowed;
   }
 
@@ -210,7 +210,7 @@
   width: 32px;
   height: 32px;
   border: none;
-  background-color: #ff3333;
+  background-color: var(--danger-color, #ff3333);
   color: white;
   border-radius: 4px;
   cursor: pointer;
@@ -218,7 +218,7 @@
   transition: all 0.3s ease;
 
   &:hover {
-    background-color: #cc2626;
+    background-color: var(--danger-color, #cc2626);
   }
 
   @media (max-width: 480px) {
@@ -232,12 +232,12 @@
   grid-column: 1 / -1;
   padding: 60px 20px;
   text-align: center;
-  background-color: #2A2A2B;
+  background-color: var(--card-background-color, #2A2A2B);
   border-radius: 8px;
-  border: 1px solid #444;
+  border: 1px solid var(--border-color, #444);
 
   p {
-    color: #bbb;
+    color: var(--text-secondary-color, #bbb);
     font-size: 18px;
     margin: 0;
   }
@@ -264,8 +264,8 @@
 .payment-method,
 .payment-promo,
 .payment-summary {
-  background-color: #2A2A2B;
-  border: 1px solid #444;
+  background-color: var(--card-background-color, #2A2A2B);
+  border: 1px solid var(--border-color, #444);
   border-radius: 8px;
   padding: 20px;
 
@@ -277,7 +277,7 @@
 .payment-user__title,
 .payment-method__title,
 .payment-promo__title {
-  color: #ffffff;
+  color: var(--text-color, #ffffff);
   font-size: 16px;
   margin: 0 0 16px 0;
   font-weight: 700;
@@ -295,7 +295,7 @@
   gap: 6px;
 
   label {
-    color: #bbb;
+    color: var(--text-secondary-color, #bbb);
     font-size: 12px;
     font-weight: 600;
     text-transform: uppercase;
@@ -303,17 +303,17 @@
   }
 
   input {
-    background-color: #3E3E3F;
-    border: 1px solid #555;
+    background-color: var(--input-background-color, #3E3E3F);
+    border: 1px solid var(--input-border-color, #555);
     border-radius: 4px;
     padding: 8px 12px;
-    color: #ffffff;
+    color: var(--input-text-color, #ffffff);
     font-size: 14px;
 
     &:focus {
       outline: none;
-      border-color: #ff9921;
-      box-shadow: 0 0 8px rgba(255, 153, 33, 0.2);
+      border-color: var(--accent-color, #ff9921);
+      box-shadow: 0 0 8px var(--shadow-color, rgba(255, 153, 33, 0.2));
     }
   }
 }
@@ -322,46 +322,46 @@
   width: 100%;
   margin-top: 12px;
   padding: 10px 16px;
-  background-color: #ff9921;
+  background-color: var(--button-primary-bg, #ff9921);
   border: none;
   border-radius: 4px;
-  color: white;
+  color: var(--button-primary-text, white);
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
   font-size: 14px;
 
   &:hover {
-    background-color: #e68a1a;
+    background-color: var(--hover-color, #e68a1a);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(255, 153, 33, 0.3);
+    box-shadow: 0 4px 12px var(--shadow-color, rgba(255, 153, 33, 0.3));
   }
 }
 
 .payment-method__select {
   width: 100%;
   padding: 10px 12px;
-  background-color: #3E3E3F;
-  border: 1px solid #555;
+  background-color: var(--input-background-color, #3E3E3F);
+  border: 1px solid var(--input-border-color, #555);
   border-radius: 4px;
-  color: #ffffff;
+  color: var(--input-text-color, #ffffff);
   font-size: 14px;
   cursor: pointer;
   transition: all 0.3s ease;
 
   option {
-    background-color: #2A2A2B;
-    color: #ffffff;
+    background-color: var(--card-background-color, #2A2A2B);
+    color: var(--text-color, #ffffff);
   }
 
   &:hover {
-    border-color: #ff9921;
+    border-color: var(--accent-color, #ff9921);
   }
 
   &:focus {
     outline: none;
-    border-color: #ff9921;
-    box-shadow: 0 0 8px rgba(255, 153, 33, 0.2);
+    border-color: var(--accent-color, #ff9921);
+    box-shadow: 0 0 8px var(--shadow-color, rgba(255, 153, 33, 0.2));
   }
 }
 
@@ -373,10 +373,10 @@
 .payment-promo__input {
   flex: 1;
   padding: 10px 12px;
-  background-color: #3E3E3F;
-  border: 1px solid #555;
+  background-color: var(--input-background-color, #3E3E3F);
+  border: 1px solid var(--input-border-color, #555);
   border-radius: 4px;
-  color: #ffffff;
+  color: var(--input-text-color, #ffffff);
   font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.5px;
@@ -384,24 +384,24 @@
   transition: all 0.3s ease;
 
   &::placeholder {
-    color: #888;
+    color: var(--text-light-color, #888);
     text-transform: none;
     letter-spacing: normal;
   }
 
   &:focus {
     outline: none;
-    border-color: #ff9921;
-    box-shadow: 0 0 8px rgba(255, 153, 33, 0.2);
+    border-color: var(--accent-color, #ff9921);
+    box-shadow: 0 0 8px var(--shadow-color, rgba(255, 153, 33, 0.2));
   }
 }
 
 .payment-promo__btn {
   padding: 10px 20px;
-  background-color: #ff9921;
+  background-color: var(--button-primary-bg, #ff9921);
   border: none;
   border-radius: 4px;
-  color: white;
+  color: var(--button-primary-text, white);
   font-weight: 600;
   font-size: 14px;
   cursor: pointer;
@@ -409,11 +409,11 @@
   white-space: nowrap;
 
   &:hover:not(:disabled) {
-    background-color: #e68a1a;
+    background-color: var(--hover-color, #e68a1a);
   }
 
   &:disabled {
-    background-color: #666;
+    background-color: var(--text-light-color, #666);
     cursor: not-allowed;
   }
 }
@@ -423,7 +423,7 @@
 }
 
 .payment-promo__list-label {
-  color: #bbb;
+  color: var(--text-secondary-color, #bbb);
   font-size: 12px;
   font-weight: 600;
   text-transform: uppercase;
@@ -448,11 +448,11 @@
   }
 
   &::-webkit-scrollbar-thumb {
-    background: #555;
+    background: var(--border-color, #555);
     border-radius: 2px;
 
     &:hover {
-      background: #ff9921;
+      background: var(--accent-color, #ff9921);
     }
   }
 }
@@ -462,21 +462,21 @@
   justify-content: space-between;
   align-items: center;
   padding: 8px 10px;
-  background-color: #3E3E3F;
-  border: 1px solid #555;
+  background-color: var(--background-secondary-color, #3E3E3F);
+  border: 1px solid var(--border-color, #555);
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.3s ease;
   text-align: left;
 
   &:hover {
-    border-color: #ff9921;
-    background-color: rgba(255, 153, 33, 0.05);
+    border-color: var(--accent-color, #ff9921);
+    background-color: var(--background-secondary-color, rgba(255, 153, 33, 0.05));
   }
 }
 
 .payment-promo__list-code {
-  color: #ff9921;
+  color: var(--accent-color, #ff9921);
   font-weight: 700;
   font-size: 13px;
   font-family: monospace;
@@ -485,7 +485,7 @@
 }
 
 .payment-promo__list-value {
-  color: #bbb;
+  color: var(--text-secondary-color, #bbb);
   font-size: 12px;
   margin-left: 8px;
   flex-shrink: 0;
@@ -496,8 +496,8 @@
   justify-content: space-between;
   align-items: center;
   padding: 12px;
-  background-color: #1a3d1a;
-  border: 1px solid #28a745;
+  background-color: rgba(40, 167, 69, 0.1);
+  border: 1px solid var(--success-color, #28a745);
   border-radius: 4px;
 }
 
@@ -508,7 +508,7 @@
 }
 
 .payment-promo__code {
-  color: #28a745;
+  color: var(--success-color, #28a745);
   font-weight: 700;
   font-size: 16px;
   font-family: monospace;
@@ -516,7 +516,7 @@
 }
 
 .payment-promo__discount {
-  color: #bbb;
+  color: var(--text-secondary-color, #bbb);
   font-size: 13px;
   font-weight: 600;
 }
@@ -525,7 +525,7 @@
   width: 28px;
   height: 28px;
   border: none;
-  background-color: #ff3333;
+  background-color: var(--danger-color, #ff3333);
   color: white;
   border-radius: 4px;
   cursor: pointer;
@@ -533,7 +533,7 @@
   transition: all 0.3s ease;
 
   &:hover {
-    background-color: #cc2626;
+    background-color: var(--danger-color, #cc2626);
   }
 }
 
@@ -541,7 +541,7 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  background: linear-gradient(135deg, #2A2A2B 0%, #323232 100%);
+  background: var(--card-background-color, #2A2A2B);
 }
 
 .payment-summary__item {
@@ -550,39 +550,39 @@
   align-items: center;
 
   span:first-child {
-    color: #bbb;
+    color: var(--text-secondary-color, #bbb);
     font-size: 14px;
   }
 
   span:last-child {
-    color: #ffffff;
+    color: var(--text-color, #ffffff);
     font-weight: 600;
   }
 }
 
 .payment-summary__discount {
-  color: #28a745;
+  color: var(--success-color, #28a745);
 
   span:last-child {
-    color: #28a745;
+    color: var(--success-color, #28a745);
     font-weight: 700;
   }
 }
 
 .payment-summary__total {
   padding-top: 12px;
-  border-top: 1px solid #444;
+  border-top: 1px solid var(--border-color, #444);
   margin-top: 4px;
 
   span:first-child {
-    color: #ffffff;
+    color: var(--text-color, #ffffff);
     font-size: 16px;
     font-weight: 600;
   }
 }
 
 .payment-summary__amount {
-  color: #ff9921;
+  color: var(--accent-color, #ff9921);
   font-size: 20px;
   font-weight: 700;
 
@@ -594,23 +594,23 @@
 .payment-summary__btn {
   width: 100%;
   padding: 14px 16px;
-  background-color: #ff9921;
+  background-color: var(--button-primary-bg, #ff9921);
   border: none;
   border-radius: 6px;
-  color: white;
+  color: var(--button-primary-text, white);
   font-weight: 700;
   font-size: 16px;
   cursor: pointer;
   transition: all 0.3s ease;
 
   &:hover:not(:disabled) {
-    background-color: #e68a1a;
+    background-color: var(--hover-color, #e68a1a);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(255, 153, 33, 0.3);
+    box-shadow: 0 6px 20px var(--shadow-color, rgba(255, 153, 33, 0.3));
   }
 
   &:disabled {
-    background-color: #666;
+    background-color: var(--text-light-color, #666);
     cursor: not-allowed;
     transform: none;
   }

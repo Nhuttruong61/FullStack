@@ -2,7 +2,7 @@
   width: 100%;
   margin: 0 !important;
   padding: 40px 20px !important;
-  background-color: #3E3E3F !important;
+  background-color: var(--background-color, #3E3E3F) !important;
   min-height: 100vh;
   box-sizing: border-box;
   display: flex !important;
@@ -18,13 +18,13 @@
     h1 {
       font-size: 32px;
       font-weight: 700;
-      color: #fff;
+      color: var(--text-color, #fff);
       margin-bottom: 10px;
     }
 
     .wishlist-count {
       font-size: 16px;
-      color: #ccc;
+      color: var(--text-secondary-color, #ccc);
     }
   }
 
@@ -43,13 +43,13 @@
 
     h2 {
       font-size: 24px;
-      color: #fff;
+      color: var(--text-color, #fff);
       margin-bottom: 10px;
     }
 
     p {
       font-size: 16px;
-      color: #ccc;
+      color: var(--text-secondary-color, #ccc);
     }
   }
 

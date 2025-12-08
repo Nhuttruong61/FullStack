@@ -115,6 +115,8 @@ const getPublicSettings = async (req, res) => {
       miniGames: settings.miniGames,
       maintenanceMode: settings.maintenanceMode,
       maintenanceMessage: settings.maintenanceMessage,
+      header: settings.header,
+      theme: settings.theme,
     };
 
     res.status(200).json({

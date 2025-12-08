@@ -1,37 +1,32 @@
 import React, { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import "./LoyaltyDashboard.scss";
 import { useSettings } from "../../contexts/SettingsContext";
+import {
+  getLoyaltyInfo,
+  getAvailableLoyaltyRewards,
+  getLoyaltyTransactions,
+  redeemLoyaltyReward,
+} from "../../api/loyalty";
 
-const LoyaltyDashboard = ({ userId }) => {
+const LoyaltyDashboard = () => {
   const { settings } = useSettings();
   const [activeTab, setActiveTab] = useState("overview");
+  const queryClient = useQueryClient();
 
-  // Fetch loyalty info
   const { data: loyaltyData, isLoading: loyaltyLoading } = useQuery({
-    queryKey: ["loyalty", userId],
-    queryFn: async () => {
-      const res = await fetch(`/api/loyalty/info/${userId}`);
-      return res.json();
-    },
+    queryKey: ["loyalty-info"],
+    queryFn: getLoyaltyInfo,
   });
 
-  // Fetch available rewards
   const { data: rewardsData, isLoading: rewardsLoading } = useQuery({
-    queryKey: ["loyalty-rewards", userId],
-    queryFn: async () => {
-      const res = await fetch(`/api/loyalty/rewards/${userId}`);
-      return res.json();
-    },
+    queryKey: ["loyalty-rewards"],
+    queryFn: getAvailableLoyaltyRewards,
   });
 
-  // Fetch transaction history
   const { data: historyData } = useQuery({
-    queryKey: ["loyalty-history", userId],
-    queryFn: async () => {
-      const res = await fetch(`/api/loyalty/history/${userId}`);
-      return res.json();
-    },
+    queryKey: ["loyalty-transactions"],
+    queryFn: () => getLoyaltyTransactions(1, 20),
   });
 
   const loyalty = loyaltyData?.data;
@@ -42,26 +37,28 @@ const LoyaltyDashboard = ({ userId }) => {
     platinum: "#E5E4E2",
   };
 
-  const handleRedeemReward = async (rewardId) => {
-    try {
-      const response = await fetch(`/api/loyalty/redeem`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ rewardId }),
-      });
-
-      const result = await response.json();
-
-      if (result.success) {
+  const redeemMutation = useMutation({
+    mutationFn: redeemLoyaltyReward,
+    onSuccess: (data) => {
+      if (data.success) {
         alert(
-          `✅ Đổi thành công! Mã voucher: ${result.voucherCode?.code || "N/A"}`
+          `✅ ${data.message}\nMã voucher: ${data.data?.voucherCode?.code || "N/A"}`
         );
-        // Refresh loyalty data
+        queryClient.invalidateQueries(["loyalty-info"]);
+        queryClient.invalidateQueries(["loyalty-rewards"]);
+        queryClient.invalidateQueries(["loyalty-transactions"]);
       } else {
-        alert(`❌ ${result.message}`);
+        alert(`❌ ${data.message}`);
       }
-    } catch (error) {
+    },
+    onError: (error) => {
       alert("Lỗi khi đổi phần thưởng");
+    },
+  });
+
+  const handleRedeemReward = (rewardId) => {
+    if (window.confirm("Bạn có chắc muốn đổi phần thưởng này?")) {
+      redeemMutation.mutate(rewardId);
     }
   };
 
@@ -247,9 +244,9 @@ const LoyaltyDashboard = ({ userId }) => {
         {/* History Tab */}
         {activeTab === "history" && (
           <div className="history-tab">
-            {historyData?.data?.length > 0 ? (
+            {historyData?.data?.transactions?.length > 0 ? (
               <div className="history-list">
-                {historyData.data.map((transaction, idx) => (
+                {historyData.data.transactions.map((transaction, idx) => (
                   <div key={idx} className="history-item">
                     <div className="history-left">
                       <span className={`history-type ${transaction.type}`}>

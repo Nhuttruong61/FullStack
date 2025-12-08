@@ -1,7 +1,7 @@
 .footer{
     max-width: 100%;
-    background-color: #101010;
-    color: white;
+    background-color: var(--footer-background-color, #101010);
+    color: var(--footer-text-color, white);
     display: flex;
     justify-content: center;
     &--top{
@@ -37,13 +37,19 @@
                 align-items: center;
                 
                 &--item{
-                    background-color: #555555;
+                    background-color: var(--surface-color, #555555);
                     border-radius: 100%;
                     display: flex; 
-                    color: white;
+                    color: var(--footer-text-color, white);
                     padding: 4px;
                     margin-right: 8px;
                     cursor: pointer;
+                    transition: all 0.3s ease;
+                    
+                    &:hover {
+                        background-color: var(--accent-color, #ff9921);
+                    }
+                    
                    &--icon{
                     width: 24px;
                      height: 24px;
@@ -55,14 +61,14 @@
     }
     .footer--bottom{
         margin-top: 5%;
-        border-top: #cccc solid 1px;
+        border-top: var(--border-color, #cccc) solid 1px;
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
        text-align: left;
        gap: 20px;
     
         &--left{
-            color: #ccc;
+            color: var(--text-secondary-color, #ccc);
             font-size: 10px;
     
         }

@@ -2,7 +2,7 @@
   width: 100%;
   display: flex;
   justify-content: center;
-  background-color: #3e3e3f;
+  background-color: var(--background-color, #3e3e3f);
   padding: 4% 0;
   
   .content {
@@ -15,7 +15,7 @@
   &--name {
     display: flex;
     justify-content: center;
-    color: white;
+    color: var(--text-color, white);
     align-items: center;
     img {
       width: 36px;
@@ -27,13 +27,13 @@
   }
   &--arrange {
     text-align: end;
-    color: white;
+    color: var(--text-color, white);
     margin-bottom: 20px;
     
     select {
-      color: white;
-      background-color: #2d2d2d;
-      border: 1px solid #444;
+      color: var(--text-color, white);
+      background-color: var(--card-background-color, #2d2d2d);
+      border: 1px solid var(--border-color, #444);
       outline: none;
       padding: 8px 12px;
       border-radius: 4px;
@@ -74,7 +74,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    color: white;
+    color: var(--text-color, white);
   }
 }
 @media screen and (max-width: 480px) {

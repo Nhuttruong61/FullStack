@@ -5,7 +5,7 @@ import "slick-carousel/slick/slick-theme.css";
 import "./Slick.scss";
 import CardEventCbn from "../card/cardEvent/CardEventCbn";
 export default function SlickEvent(props) {
-  const { data, slidesToShow, slidesToScroll } = props;
+  const { data, slidesToShow, slidesToScroll, showTimer = true } = props;
   var settings = {
     dots: false,
     infinite: true,
@@ -40,7 +40,7 @@ export default function SlickEvent(props) {
       {data?.map((el, index) => {
         return (
           <div className="slick--size" key={index}>
-            <CardEventCbn data={el} />
+            <CardEventCbn data={el} showTimer={showTimer} />
           </div>
         );
       })}

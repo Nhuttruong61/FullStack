@@ -12,6 +12,7 @@ const { seedSliders } = require("./seeders/sliders");
 const { usersSeed } = require("./seeders/users");
 const { seedSettings } = require("./seeders/settings");
 const { seedPromoCodes } = require("./seeders/promoCodes");
+const { seedLoyaltyRewards } = require("./seeders/loyaltyRewards");
 
 const connectDB = async () => {
   try {
@@ -49,6 +50,9 @@ const runSeeders = async () => {
 
     console.log("\n📌 Step 7: Seeding Promo Codes...");
     await seedPromoCodes();
+
+    console.log("\n📌 Step 8: Seeding Loyalty Rewards...");
+    await seedLoyaltyRewards();
 
     console.log("\n" + "═".repeat(50));
     console.log("\n✅ All seeders completed successfully!\n");

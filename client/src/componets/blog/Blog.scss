@@ -1,7 +1,7 @@
 .blogitem{
     margin-bottom: 2%;
     &--name{
-        color: white;
+        color: var(--text-color, white);
         font-weight: 600;
         text-align: center;
     }

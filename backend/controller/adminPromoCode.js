@@ -29,6 +29,9 @@ const createPromoCode = async (req, res) => {
       expiryDate,
       description,
       isActive,
+      isPublic,
+      pointsCost,
+      redemptionCooldown,
     } = req.body;
 
     const existingCode = await PromoCode.findOne({ code });
@@ -50,6 +53,9 @@ const createPromoCode = async (req, res) => {
       expiryDate: expiryDate || null,
       description: description || "",
       isActive: isActive !== undefined ? isActive : true,
+      isPublic: isPublic || false,
+      pointsCost: pointsCost || null,
+      redemptionCooldown: redemptionCooldown || 24,
       source: "admin",
       usedBy: [],
     });

@@ -1,6 +1,6 @@
 const { Server } = require("socket.io");
-
-
+require("dotenv").config();
+console.log(process.env.CLIENT_URL)
 const socketIo = (server) => {
     const io = new Server(server, {
         cors: {

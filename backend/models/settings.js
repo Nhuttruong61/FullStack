@@ -28,6 +28,24 @@ const settingsSchema = new mongoose.Schema(
       default: "",
     },
 
+    // Header Layout Configuration (colors moved to theme)
+    header: {
+      logoSize: { type: Number, default: 50 },
+      logoPosition: { type: String, enum: ["left", "center"], default: "left" },
+      headerHeight: { type: Number, default: 80 },
+      stickyHeader: { type: Boolean, default: true },
+      menuSpacing: { type: Number, default: 20 },
+      layoutStyle: { 
+        type: String, 
+        enum: ["modern", "classic", "minimal", "bold"], 
+        default: "modern" 
+      },
+      showSearchBar: { type: Boolean, default: true },
+      showWishlist: { type: Boolean, default: true },
+      transparentOnTop: { type: Boolean, default: false },
+      dropShadow: { type: Boolean, default: true },
+    },
+
     // Feature Toggle - Mã Giảm Giá
     features: {
       promoCode: {
@@ -114,6 +132,48 @@ const settingsSchema = new mongoose.Schema(
       smtpUser: { type: String, default: "" },
       smtpPassword: { type: String, default: "" },
       enableEmailNotification: { type: Boolean, default: false },
+    },
+
+    // Theme Configuration
+    theme: {
+      primaryColor: { type: String, default: "#007bff" },
+      secondaryColor: { type: String, default: "#6c757d" },
+      accentColor: { type: String, default: "#28a745" },
+      successColor: { type: String, default: "#28a745" },
+      dangerColor: { type: String, default: "#dc3545" },
+      warningColor: { type: String, default: "#ffc107" },
+      infoColor: { type: String, default: "#17a2b8" },
+      backgroundColor: { type: String, default: "#ffffff" },
+      backgroundSecondaryColor: { type: String, default: "#f8f9fa" },
+      surfaceColor: { type: String, default: "#ffffff" },
+      cardBackgroundColor: { type: String, default: "#ffffff" },
+      textColor: { type: String, default: "#212529" },
+      textSecondaryColor: { type: String, default: "#6c757d" },
+      textLightColor: { type: String, default: "#868e96" },
+      borderColor: { type: String, default: "#dee2e6" },
+      borderLightColor: { type: String, default: "#e9ecef" },
+      hoverColor: { type: String, default: "#0056b3" },
+      shadowColor: { type: String, default: "rgba(0, 0, 0, 0.1)" },
+      overlayColor: { type: String, default: "rgba(0, 0, 0, 0.5)" },
+      linkColor: { type: String, default: "#007bff" },
+      linkHoverColor: { type: String, default: "#0056b3" },
+      buttonPrimaryBg: { type: String, default: "#007bff" },
+      buttonPrimaryText: { type: String, default: "#ffffff" },
+      buttonSecondaryBg: { type: String, default: "#6c757d" },
+      buttonSecondaryText: { type: String, default: "#ffffff" },
+      inputBorderColor: { type: String, default: "#ced4da" },
+      inputBackgroundColor: { type: String, default: "#ffffff" },
+      inputTextColor: { type: String, default: "#212529" },
+      footerBackgroundColor: { type: String, default: "#1a1a1a" },
+      footerTextColor: { type: String, default: "#ffffff" },
+      headerBackgroundColor: { type: String, default: "#1a1a1a" },
+      headerTextColor: { type: String, default: "#ffffff" },
+      headerHoverColor: { type: String, default: "#ff6b6b" },
+      headerFontFamily: { type: String, default: "'Roboto', sans-serif" },
+      headerFontSize: { type: Number, default: 16 },
+      borderRadius: { type: Number, default: 8 },
+      fontFamily: { type: String, default: "'Roboto', sans-serif" },
+      fontSize: { type: Number, default: 16 },
     },
 
     // Other Settings

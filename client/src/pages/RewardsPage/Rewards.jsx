@@ -1,84 +1,30 @@
 import React, { useEffect, useState } from "react";
-import { getRewardOptions, redeemReward, getUserPromoCodes } from "../../api/reward";
-import { getUserGameStats } from "../../api/minigame";
+import { getUserPromoCodes } from "../../api/reward";
 import { toast } from "react-toastify";
+import LoyaltyDashboard from "../../componets/Loyalty/LoyaltyDashboard";
 import "./Rewards.scss";
 
 function Rewards() {
-  const [rewardOptions, setRewardOptions] = useState([]);
   const [promoCodes, setPromoCodes] = useState([]);
-  const [userPoints, setUserPoints] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [redeeming, setRedeeming] = useState(null);
 
   useEffect(() => {
-    fetchData();
+    fetchPromoCodes();
   }, []);
 
-  const fetchData = async () => {
+  const fetchPromoCodes = async () => {
     setLoading(true);
     try {
-      const [rewardsRes, promoRes, statsRes] = await Promise.all([
-        getRewardOptions(),
-        getUserPromoCodes(),
-        getUserGameStats(),
-      ]);
-
-      if (rewardsRes.success) {
-        setRewardOptions(rewardsRes.data);
-      }
+      const promoRes = await getUserPromoCodes();
 
       if (promoRes.success) {
         setPromoCodes(promoRes.data);
       }
-
-      if (statsRes.success) {
-        setUserPoints(statsRes.data.totalPoints || 0);
-      }
     } catch (err) {
-      console.error("Error fetching data:", err);
-      toast.error("Không thể tải dữ liệu");
+      console.error("Error fetching promo codes:", err);
+      toast.error("Không thể tải mã giảm giá");
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleRedeem = async (rewardId) => {
-    const reward = rewardOptions.find((r) => r._id === rewardId);
-    
-    const hasSameDiscountType = promoCodes.some(
-      (p) =>
-        p.discountType === reward.discountType &&
-        p.discountValue === reward.discountValue &&
-        p.source === reward.source
-    );
-
-    const hasUsedCode = promoCodes.some(
-      (p) =>
-        p.discountType === reward.discountType &&
-        p.discountValue === reward.discountValue &&
-        p.source === reward.source &&
-        p.usedCount > 0
-    );
-
-    if (hasSameDiscountType || hasUsedCode) {
-      toast.error("Bạn đã đổi loại voucher này rồi. Mỗi loại voucher chỉ được đổi 1 lần");
-      return;
-    }
-
-    setRedeeming(rewardId);
-    try {
-      const res = await redeemReward(rewardId);
-      if (res.success) {
-        toast.success("Đổi thưởng thành công!");
-        await fetchData();
-      } else {
-        toast.error(res.message || "Đổi thưởng thất bại");
-      }
-    } catch (err) {
-      toast.error("Có lỗi xảy ra");
-    } finally {
-      setRedeeming(null);
     }
   };
 
@@ -94,76 +40,11 @@ function Rewards() {
   return (
     <div className="rewards-container">
       <div className="rewards-header">
-        <h1>Đổi thưởng</h1>
-        <p>Sử dụng điểm để đổi lấy mã giảm giá</p>
-        <div className="points-badge">
-          Điểm của bạn: <strong>{userPoints}</strong>
-        </div>
+        <h1>Chương Trình Tích Điểm</h1>
+        <p>Mua sắm, tích điểm và nhận thưởng</p>
       </div>
 
-      <div className="rewards-section">
-        <h2>Phần thưởng có sẵn</h2>
-        <div className="rewards-grid">
-          {rewardOptions.length > 0 ? (
-            rewardOptions.map((reward) => {
-              const hasSameDiscountType = promoCodes.some(
-                (p) =>
-                  p.discountType === reward.discountType &&
-                  p.discountValue === reward.discountValue &&
-                  p.source === reward.source
-              );
-
-              const hasUsedCode = promoCodes.some(
-                (p) =>
-                  p.discountType === reward.discountType &&
-                  p.discountValue === reward.discountValue &&
-                  p.source === reward.source &&
-                  p.usedCount > 0
-              );
-
-              const isDisabled = hasSameDiscountType || hasUsedCode;
-
-              return (
-                <div key={reward._id} className="reward-card">
-                  <div className="reward-icon">🎁</div>
-                  <h3>{reward.name}</h3>
-                  <p className="reward-description">{reward.description}</p>
-                  <div className="reward-cost">
-                    <span className="points-required">{reward.pointsCost} điểm</span>
-                  </div>
-                  {isDisabled && (
-                    <p className="reward-redeemed-notice">
-                      ✓ Đã đổi loại voucher này rồi
-                    </p>
-                  )}
-                  <button
-                    className="btn-redeem"
-                    onClick={() => handleRedeem(reward._id)}
-                    disabled={
-                      userPoints < reward.pointsCost ||
-                      redeeming === reward._id ||
-                      isDisabled
-                    }
-                    title={
-                      isDisabled
-                        ? "Bạn đã đổi loại voucher này rồi"
-                        : userPoints < reward.pointsCost
-                        ? "Không đủ điểm"
-                        : ""
-                    }
-                  >
-                    {redeeming === reward._id ? "Đang xử lý..." : isDisabled ? "Đã đổi" : "Đổi ngay"}
-                  </button>
-                </div>
-              );
-            })
-          ) : (
-            <div className="no-rewards">
-              <p>Hiện không có phần thưởng nào</p>
-            </div>
-          )}
-        </div>
-      </div>
+      <LoyaltyDashboard />
 
       <div className="promo-section">
         <h2>Mã giảm giá của bạn</h2>
@@ -174,6 +55,9 @@ function Rewards() {
                 <div className="promo-info">
                   <div className="promo-code-wrapper">
                     <span className="promo-code">{promo.code}</span>
+                    {promo.isPublic && <span className="promo-badge public">Công khai</span>}
+                    {!promo.isPublic && promo.source === 'game' && <span className="promo-badge game">Từ trò chơi</span>}
+                    {!promo.isPublic && promo.source === 'loyalty' && <span className="promo-badge loyalty">Đổi điểm</span>}
                     <button
                       className="btn-copy"
                       onClick={() => copyToClipboard(promo.code)}
@@ -186,9 +70,6 @@ function Rewards() {
                   </p>
                   <p className="promo-expiry">
                     Hết hạn: {new Date(promo.expiryDate).toLocaleDateString('vi-VN')}
-                  </p>
-                  <p className="promo-source">
-                    Nguồn: {promo.source === 'game' ? 'Trò chơi' : promo.source === 'loyalty' ? 'Điểm thành viên' : 'Khác'}
                   </p>
                 </div>
                 <div className="promo-status">

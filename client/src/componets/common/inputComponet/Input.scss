@@ -2,10 +2,10 @@ input {
     outline: none;
     border-radius: 6px;
     padding: 10px 14px;
-    background-color: #2d2d2d;
+    background-color: var(--input-background-color, #2d2d2d);
     box-shadow: none;
-    color: white;
-    border: 1px solid #444;
+    color: var(--input-text-color, white);
+    border: 1px solid var(--input-border-color, #444);
     width: 100%;
     font-size: 14px;
     font-family: inherit;
@@ -13,17 +13,17 @@ input {
     will-change: border-color, background-color;
     
     &::placeholder {
-      color: #999;
+      color: var(--text-light-color, #999);
     }
     
     &:focus {
       outline: none;
-      border-color: #ff9921;
-      background-color: #333333;
-      box-shadow: 0 0 8px rgba(255, 153, 33, 0.2);
+      border-color: var(--accent-color, #ff9921);
+      background-color: var(--background-secondary-color, #333333);
+      box-shadow: 0 0 8px var(--shadow-color, rgba(255, 153, 33, 0.2));
     }
     
     &:hover {
-      border-color: #555;
+      border-color: var(--border-color, #555);
     }
 }

@@ -20,6 +20,22 @@ export const SettingsProvider = ({ children }) => {
     fetchSettings();
   }, []);
 
+  useEffect(() => {
+    console.log('SettingsContext - Settings changed:', settings);
+    if (settings?.header) {
+      console.log('SettingsContext - Applying header layout:', settings.header);
+      const root = document.documentElement;
+      // Only apply layout properties, colors are now in theme
+      root.style.setProperty('--header-height', `${settings.header.headerHeight || 80}px`);
+      root.style.setProperty('--header-menu-spacing', `${settings.header.menuSpacing || 20}px`);
+      root.style.setProperty('--header-logo-size', `${settings.header.logoSize || 50}px`);
+      
+      console.log('SettingsContext - Header layout CSS variables set');
+    } else {
+      console.log('SettingsContext - No header found in settings');
+    }
+  }, [settings]);
+
   const fetchSettings = async () => {
     try {
       setLoading(true);

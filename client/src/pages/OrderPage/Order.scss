@@ -3,14 +3,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #F0F0F0;
+    background-color: var(--background-secondary-color, #F0F0F0);
 
     &--list{
         margin: 2% 0;
         display: flex;
         justify-content: space-between;
         height: auto;
-        border-bottom: 1px solid #ccc;
+        border-bottom: 1px solid var(--border-color, #ccc);
       
         &--left{
             align-items: center;
@@ -57,7 +57,7 @@
 }
 .background{
     width: 100%;
-    background-color: white;
-    box-shadow: 1px 1px 1px #ccc;
-  
+    background-color: var(--card-background-color, white);
+    box-shadow: 1px 1px 1px var(--shadow-color, rgba(0, 0, 0, 0.1));
+    color: var(--text-color, #000);
 }

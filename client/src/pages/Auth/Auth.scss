@@ -12,7 +12,7 @@
   margin: 0;
   &--left {
     z-index: 10;
-    color: white;
+    color: var(--text-color, white);
 
     &--login {
       h1 {
@@ -22,9 +22,9 @@
   }
   &--right {
     z-index: 10;
-    color: white;
+    color: var(--text-color, white);
     height: 100%;
-    background-color: #0000006b;
+    background-color: var(--overlay-color, rgba(0, 0, 0, 0.42));
     display: flex;
     justify-content: center;
     align-items: center;
@@ -93,9 +93,9 @@
     }
     &--right {
       z-index: 10;
-      color: white;
+      color: var(--text-color, white);
       height: 80%;
-      background-color: #0000006b;
+      background-color: var(--overlay-color, rgba(0, 0, 0, 0.42));
       display: flex;
       justify-content: center;
       align-items: center;
@@ -126,7 +126,7 @@
               padding: 4px;
               background-color: transparent;
               box-shadow: none;
-              color: white;
+              color: var(--text-color, white);
               border: none;
               width: 100%;
             }
@@ -164,9 +164,9 @@
     }
     &--right {
       z-index: 10;
-      color: white;
+      color: var(--text-color, white);
       height: 80%;
-      background-color: #0000006b;
+      background-color: var(--overlay-color, rgba(0, 0, 0, 0.42));
       display: flex;
       justify-content: center;
       align-items: center;
@@ -197,7 +197,7 @@
               padding: 4px;
               background-color: transparent;
               box-shadow: none;
-              color: white;
+              color: var(--text-color, white);
               border: none;
               width: 100%;
             }

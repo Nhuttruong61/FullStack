@@ -22,6 +22,8 @@ import WishlistIcon from "../wishlist/WishlistIcon";
 import { useSettings } from "../../contexts/SettingsContext";
 function Header({ navigate, dispatch }) {
   const { settings } = useSettings();
+
+
   const { data } = useSelector((state) => state.category);
   const { user } = useSelector((state) => state.user);
   const [active, setActive] = useState(-1);
@@ -221,36 +223,44 @@ function Header({ navigate, dispatch }) {
               <p className="item">Tin Tức</p>
             </div>
             
-            <div 
-              className={`box ${active === 8 && "active"}`} 
-              onClick={() => {
-                setActive(8);
-                setListMenuRp(false);
-                navigate("/minigames");
-                document.title = "Mini Games";
-              }}
-            >
-              <p className="item">Mini Games</p>
-            </div>
+            {settings?.features?.miniGames?.enabled && (
+              <div 
+                className={`box ${active === 8 && "active"}`} 
+                onClick={() => {
+                  setActive(8);
+                  setListMenuRp(false);
+                  navigate("/minigames");
+                  document.title = "Mini Games";
+                }}
+              >
+                <p className="item">Mini Games</p>
+              </div>
+            )}
             
-            <div 
-              className={`box ${active === 9 && "active"}`} 
-              onClick={() => {
-                setActive(9);
-                setListMenuRp(false);
-                navigate("/rewards");
-                document.title = "Đổi Thưởng";
-              }}
-            >
-              <p className="item">Đổi Thưởng</p>
-            </div>
+            {settings?.features?.loyaltyProgram?.enabled && (
+              <div 
+                className={`box ${active === 9 && "active"}`} 
+                onClick={() => {
+                  setActive(9);
+                  setListMenuRp(false);
+                  navigate("/rewards");
+                  document.title = "Đổi Thưởng";
+                }}
+              >
+                <p className="item">Đổi Thưởng</p>
+              </div>
+            )}
           </div>
           <div className="header--content--right">
             <div className="header--content--right--search">
-              <label onClick={handleStatusSearch}>
-                <RiSearchLine />
-              </label>
-              <WishlistIcon navigate={navigate} />
+              {settings?.header?.showSearchBar !== false && (
+                <label onClick={handleStatusSearch}>
+                  <RiSearchLine />
+                </label>
+              )}
+              {settings?.header?.showWishlist !== false && (
+                <WishlistIcon navigate={navigate} />
+              )}
               <div className="header--content--right--card" onClick={() => navigate("/payment")}>
                 <label>
                   <IoBagOutline />
@@ -270,9 +280,11 @@ function Header({ navigate, dispatch }) {
                         <div onClick={() => navigate("/admin")}>
                           <p>Quản lý</p>
                         </div>
-                        <div onClick={() => navigate("/minigames")}>
-                          <p>Mini Games</p>
-                        </div>
+                        {settings?.features?.miniGames?.enabled && (
+                          <div onClick={() => navigate("/minigames")}>
+                            <p>Mini Games</p>
+                          </div>
+                        )}
                       </>
                     )}
                     <div onClick={() => navigate("/user")}>
@@ -281,9 +293,11 @@ function Header({ navigate, dispatch }) {
                     <div onClick={() => navigate("/order")}>
                       <p>Đơn hàng</p>
                     </div>
-                    <div onClick={() => navigate("/rewards")}>
-                      <p>Đổi Thưởng</p>
-                    </div>
+                    {settings?.features?.loyaltyProgram?.enabled && (
+                      <div onClick={() => navigate("/rewards")}>
+                        <p>Đổi Thưởng</p>
+                      </div>
+                    )}
                     <div
                       onClick={() => {
                         Cookies.remove("accesstoken");
@@ -310,7 +324,7 @@ function Header({ navigate, dispatch }) {
             )}
             <p
               onClick={() => setShowInFor(!showInFor)}
-              style={{ color: "white", paddingLeft: "8px", cursor: "pointer" }}
+              className="header--right--username"
             >
               {user?.name}
             </p>
@@ -366,30 +380,34 @@ function Header({ navigate, dispatch }) {
                   <div key="tin-tuc-sidebar" className={`sidebarItem--box  ${active === 7 && "active"}`} onClick={handleNavigateBlog}>
                     <p className="item">Tin Tức</p>
                   </div>
-                  <div 
-                    key="minigames-sidebar" 
-                    className={`sidebarItem--box  ${active === 8 && "active"}`} 
-                    onClick={() => {
-                      setActive(8);
-                      setListMenuRp(false);
-                      navigate("/minigames");
-                      document.title = "Mini Games";
-                    }}
-                  >
-                    <p className="item">Mini Games</p>
-                  </div>
-                  <div 
-                    key="rewards-sidebar" 
-                    className={`sidebarItem--box  ${active === 9 && "active"}`} 
-                    onClick={() => {
-                      setActive(9);
-                      setListMenuRp(false);
-                      navigate("/rewards");
-                      document.title = "Đổi Thưởng";
-                    }}
-                  >
-                    <p className="item">Đổi Thưởng</p>
-                  </div>
+                  {settings?.features?.miniGames?.enabled && (
+                    <div 
+                      key="minigames-sidebar" 
+                      className={`sidebarItem--box  ${active === 8 && "active"}`} 
+                      onClick={() => {
+                        setActive(8);
+                        setListMenuRp(false);
+                        navigate("/minigames");
+                        document.title = "Mini Games";
+                      }}
+                    >
+                      <p className="item">Mini Games</p>
+                    </div>
+                  )}
+                  {settings?.features?.loyaltyProgram?.enabled && (
+                    <div 
+                      key="rewards-sidebar" 
+                      className={`sidebarItem--box  ${active === 9 && "active"}`} 
+                      onClick={() => {
+                        setActive(9);
+                        setListMenuRp(false);
+                        navigate("/rewards");
+                        document.title = "Đổi Thưởng";
+                      }}
+                    >
+                      <p className="item">Đổi Thưởng</p>
+                    </div>
+                  )}
                 </>
               )}
             </div>

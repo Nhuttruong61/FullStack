@@ -10,7 +10,11 @@ const loyaltyPointSchema = new mongoose.Schema(
     },
     balance: {
       type: Number,
-      default: 0, // Tổng điểm hiện tại
+      default: 0, // Điểm từ mua hàng (shop points)
+    },
+    gamePoints: {
+      type: Number,
+      default: 0, // Điểm từ minigame
     },
     lifetime: {
       type: Number,

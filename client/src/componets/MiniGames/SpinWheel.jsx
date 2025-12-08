@@ -45,10 +45,7 @@ const SpinWheel = ({ settings }) => {
 
   const handlePlayGame = async (isPaidPlay = false) => {
     try {
-      const selectedRewardValue = rewards[Math.floor(Math.random() * rewards.length)].value;
-      const data = await playMiniGame("spinwheel", {
-        value: selectedRewardValue,
-      }, isPaidPlay);
+      const data = await playMiniGame("spinwheel", {}, isPaidPlay);
       if (data.success) {
         setMessage(data.message);
         setRemainingPlays(data.remainingPlays);
@@ -138,10 +135,13 @@ const SpinWheel = ({ settings }) => {
     if (reward !== null) {
       const canvas = canvasRef.current;
       if (canvas) {
+        const rewardIndex = rewards.findIndex(r => r.value === reward);
         const sliceAngle = (2 * Math.PI) / rewards.length;
         const spins = 5;
-        const randomExtraRotation = Math.random() * sliceAngle;
-        const targetRotation = spins * 2 * Math.PI + randomExtraRotation;
+        
+        const targetSliceCenter = rewardIndex * sliceAngle + sliceAngle / 2;
+        const randomOffset = (Math.random() - 0.5) * sliceAngle * 0.8;
+        const targetRotation = spins * 2 * Math.PI - targetSliceCenter - randomOffset;
 
         let currentRotation = 0;
         const startTime = Date.now();
@@ -171,6 +171,7 @@ const SpinWheel = ({ settings }) => {
 
   const freePlayStats = gameStats?.gamePlayStats?.spinwheel || {};
   const canPlayFree = freePlayStats.free < freePlayStats.freeLimit;
+  const hasRemainingPlays = remainingPlays > 0;
 
   return (
     <div className="spin-wheel-container">
@@ -182,13 +183,29 @@ const SpinWheel = ({ settings }) => {
           height={300}
           className="spin-wheel-canvas"
         />
-        <button
-          className="spin-button"
-          onClick={() => handleSpin(false)}
-          disabled={isSpinning || remainingPlays === 0 || !canPlayFree}
-        >
-          {isSpinning ? "Đang quay..." : remainingPlays > 0 && canPlayFree ? "QUAY NGAY" : "Hết lượt chơi"}
-        </button>
+        {canPlayFree && hasRemainingPlays ? (
+          <button
+            className="spin-button"
+            onClick={() => handleSpin(false)}
+            disabled={isSpinning}
+          >
+            {isSpinning ? "Đang quay..." : "QUAY NGAY"}
+          </button>
+        ) : !hasRemainingPlays ? (
+          <button
+            className="spin-button disabled"
+            disabled={true}
+          >
+            Hết lượt chơi hôm nay
+          </button>
+        ) : (
+          <button
+            className="spin-button disabled"
+            disabled={true}
+          >
+            Hết lượt miễn phí
+          </button>
+        )}
       </div>
 
       <div className="spin-info">
@@ -200,13 +217,14 @@ const SpinWheel = ({ settings }) => {
           </>
         )}
         {message && <p className="message">{message}</p>}
-        {!canPlayFree && remainingPlays > 0 && (
+        
+        {!canPlayFree && hasRemainingPlays && (
           <button 
-            className="btn-buy-play" 
+            className="btn-buy" 
             onClick={() => handleSpin(true)}
             disabled={isSpinning}
           >
-            Mua thêm lượt ({gameStats?.pointsPerFreePlay} điểm)
+            Mua thêm lượt ({gameStats?.pointsPerFreePlay || 10} điểm)
           </button>
         )}
       </div>

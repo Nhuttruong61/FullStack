@@ -1,5 +1,6 @@
 const Settings = require("../models/settings");
 const User = require("../models/user");
+const LoyaltyPoint = require("../models/loyaltyPoint");
 
 const playGame = async (req, res) => {
   try {
@@ -49,16 +50,28 @@ const playGame = async (req, res) => {
       });
     }
 
+    let loyaltyPoints = await LoyaltyPoint.findOne({ user: userId });
+    if (!loyaltyPoints) {
+      loyaltyPoints = new LoyaltyPoint({
+        user: userId,
+        balance: 0,
+        gamePoints: 0,
+        tier: "bronze",
+      });
+      await loyaltyPoints.save();
+    }
+
     if (isPaidPlay) {
       const costPerPlay = settings?.miniGames?.pointsPerFreePlay || 10;
-      if (user.loyaltyPoints < costPerPlay) {
+      if (loyaltyPoints.gamePoints < costPerPlay) {
         return res.status(400).json({
           success: false,
-          message: `Bạn không đủ điểm để mua thêm lượt chơi. Cần ${costPerPlay} điểm`,
+          message: `Bạn không đủ điểm game để mua thêm lượt chơi. Cần ${costPerPlay} điểm`,
           pointsNeeded: costPerPlay,
         });
       }
-      user.loyaltyPoints -= costPerPlay;
+      loyaltyPoints.gamePoints -= costPerPlay;
+      await loyaltyPoints.save();
     }
 
     const rewards = {
@@ -77,7 +90,14 @@ const playGame = async (req, res) => {
     let finalReward = Math.min(randomReward, pointsCanWin);
 
     if (finalReward > 0) {
-      user.loyaltyPoints = (user.loyaltyPoints || 0) + finalReward;
+      loyaltyPoints.gamePoints += finalReward;
+      loyaltyPoints.transactions.push({
+        type: "bonus",
+        amount: finalReward,
+        reason: `Chơi ${gameType}`,
+        referenceModel: "Game",
+      });
+      await loyaltyPoints.save();
     }
 
     todayStats.count += 1;
@@ -115,7 +135,7 @@ const playGame = async (req, res) => {
       remainingPlays: dailyLimit - todayStats.count,
       pointsWonToday: todayStats.pointsWon,
       pointsCanStillWin: Math.max(0, dailyMaxPoints - todayStats.pointsWon),
-      totalPoints: user.loyaltyPoints,
+      totalPoints: loyaltyPoints.gamePoints,
       isPaidPlay,
     });
   } catch (error) {
@@ -131,6 +151,7 @@ const getUserGameStats = async (req, res) => {
     const userId = req.user.id;
     const user = await User.findById(userId);
     const settings = await Settings.findOne();
+    const loyaltyPoints = await LoyaltyPoint.findOne({ user: userId });
 
     if (!user) {
       return res.status(404).json({
@@ -171,7 +192,7 @@ const getUserGameStats = async (req, res) => {
         pointsWonToday: todayStats.pointsWon || 0,
         pointsCanStillWin: Math.max(0, dailyMaxPoints - (todayStats.pointsWon || 0)),
         dailyMaxPoints,
-        totalPoints: user.loyaltyPoints || 0,
+        totalPoints: loyaltyPoints?.gamePoints || 0,
         pointsPerFreePlay: settings?.miniGames?.pointsPerFreePlay || 10,
         gamePlayStats,
       },

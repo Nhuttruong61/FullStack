@@ -1,13 +1,13 @@
 .loyalty-dashboard {
   padding: 30px;
-  background: #f8f9fa;
-  border-radius: 12px;
+  background: var(--background-secondary-color, #f8f9fa);
+  border-radius: var(--border-radius, 12px);
 
   .loyalty-loading {
     text-align: center;
     padding: 40px;
     font-size: 18px;
-    color: #666;
+    color: var(--text-secondary-color, #666);
   }
 
   // Header Section
@@ -20,27 +20,27 @@
     .points-card,
     .tier-card,
     .lifetime-card {
-      background: white;
+      background: var(--card-background-color, white);
       padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      border-left: 4px solid #667eea;
+      border-radius: var(--border-radius, 12px);
+      box-shadow: 0 2px 8px var(--shadow-color, rgba(0, 0, 0, 0.1));
+      border-left: 4px solid var(--primary-color, #667eea);
 
       h3 {
         margin: 0 0 15px 0;
         font-size: 14px;
-        color: #999;
+        color: var(--text-secondary-color, #999);
         text-transform: uppercase;
         letter-spacing: 0.5px;
       }
     }
 
     .tier-card {
-      border-left-color: #f5576c;
+      border-left-color: var(--danger-color, #f5576c);
     }
 
     .lifetime-card {
-      border-left-color: #4facfe;
+      border-left-color: var(--info-color, #4facfe);
     }
 
     .points-display,
@@ -53,13 +53,13 @@
       .lifetime-value {
         font-size: 36px;
         font-weight: bold;
-        color: #667eea;
+        color: var(--primary-color, #667eea);
       }
 
       .points-label,
       .lifetime-label {
         font-size: 14px;
-        color: #999;
+        color: var(--text-secondary-color, #999);
         text-transform: uppercase;
       }
     }
@@ -72,17 +72,18 @@
       .tier-badge {
         padding: 12px 20px;
         border-radius: 8px;
-        color: white;
+        color: var(--button-primary-text, white);
+        background: var(--primary-color, #667eea);
         font-weight: bold;
         text-align: center;
         font-size: 16px;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        text-shadow: 0 2px 4px var(--shadow-color, rgba(0, 0, 0, 0.2));
       }
 
       .next-tier {
         margin: 0;
         font-size: 13px;
-        color: #666;
+        color: var(--text-secondary-color, #666);
       }
     }
   }
@@ -92,26 +93,26 @@
     display: flex;
     gap: 10px;
     margin-bottom: 25px;
-    border-bottom: 2px solid #e9ecef;
+    border-bottom: 2px solid var(--border-color, #e9ecef);
 
     .tab-btn {
       padding: 12px 20px;
       background: none;
       border: none;
       border-bottom: 3px solid transparent;
-      color: #666;
+      color: var(--text-secondary-color, #666);
       font-weight: 500;
       cursor: pointer;
       transition: all 0.3s ease;
       font-size: 15px;
 
       &:hover {
-        color: #667eea;
+        color: var(--primary-color, #667eea);
       }
 
       &.active {
-        color: #667eea;
-        border-bottom-color: #667eea;
+        color: var(--primary-color, #667eea);
+        border-bottom-color: var(--primary-color, #667eea);
       }
     }
   }
@@ -126,15 +127,15 @@
       gap: 30px;
 
       .tier-progress {
-        background: white;
+        background: var(--card-background-color, white);
         padding: 25px;
-        border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border-radius: var(--border-radius, 12px);
+        box-shadow: 0 2px 8px var(--shadow-color, rgba(0, 0, 0, 0.1));
 
         h4 {
           margin: 0 0 20px 0;
           font-size: 16px;
-          color: #333;
+          color: var(--text-color, #333);
         }
 
         .tier-progress-bar {
@@ -146,7 +147,8 @@
             padding: 20px;
             border-radius: 10px;
             text-align: center;
-            color: white;
+            color: var(--button-primary-text, white);
+            background: var(--primary-color, #667eea);
             font-weight: 600;
             transition: all 0.3s ease;
             position: relative;
@@ -156,7 +158,7 @@
             }
 
             &.active {
-              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+              box-shadow: 0 4px 12px var(--shadow-color, rgba(0, 0, 0, 0.15));
               transform: scale(1.05);
             }
 
@@ -169,15 +171,15 @@
       }
 
       .referral-section {
-        background: white;
+        background: var(--card-background-color, white);
         padding: 25px;
-        border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border-radius: var(--border-radius, 12px);
+        box-shadow: 0 2px 8px var(--shadow-color, rgba(0, 0, 0, 0.1));
 
         h4 {
           margin: 0 0 20px 0;
           font-size: 16px;
-          color: #333;
+          color: var(--text-color, #333);
         }
 
         .referral-code-box {
@@ -188,17 +190,18 @@
           .referral-code {
             flex: 1;
             padding: 12px 15px;
-            border: 1px solid #ddd;
+            border: 1px solid var(--border-color, #ddd);
             border-radius: 8px;
             font-family: "Courier New", monospace;
             font-size: 14px;
-            background: #f8f9fa;
+            background: var(--background-secondary-color, #f8f9fa);
+            color: var(--text-color, #000);
           }
 
           .copy-btn {
             padding: 12px 25px;
-            background: #667eea;
-            color: white;
+            background: var(--button-primary-bg, #667eea);
+            color: var(--button-primary-text, white);
             border: none;
             border-radius: 8px;
             font-weight: 600;
@@ -206,9 +209,9 @@
             transition: all 0.3s ease;
 
             &:hover {
-              background: #764ba2;
+              background: var(--hover-color, #764ba2);
               transform: translateY(-2px);
-              box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+              box-shadow: 0 4px 12px var(--shadow-color, rgba(102, 126, 234, 0.4));
             }
           }
         }
@@ -216,14 +219,14 @@
         .referral-info {
           margin: 0 0 10px 0;
           font-size: 14px;
-          color: #666;
+          color: var(--text-secondary-color, #666);
         }
 
         .referral-stat {
           margin: 0;
           font-size: 14px;
           font-weight: 600;
-          color: #667eea;
+          color: var(--primary-color, #667eea);
         }
       }
     }
@@ -236,17 +239,17 @@
         gap: 20px;
 
         .reward-card {
-          background: white;
-          border-radius: 12px;
+          background: var(--card-background-color, white);
+          border-radius: var(--border-radius, 12px);
           overflow: hidden;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 2px 8px var(--shadow-color, rgba(0, 0, 0, 0.1));
           transition: all 0.3s ease;
           display: flex;
           flex-direction: column;
 
           &:hover:not(.unavailable) {
             transform: translateY(-8px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 8px 20px var(--shadow-color, rgba(0, 0, 0, 0.15));
           }
 
           &.unavailable {
@@ -257,32 +260,32 @@
             width: 100%;
             height: 180px;
             object-fit: cover;
-            background: #f0f0f0;
+            background: var(--background-secondary-color, #f0f0f0);
           }
 
           h5 {
             margin: 15px 15px 8px 15px;
             font-size: 16px;
-            color: #333;
+            color: var(--text-color, #333);
           }
 
           .reward-description {
             margin: 0 15px 10px 15px;
             font-size: 13px;
-            color: #666;
+            color: var(--text-secondary-color, #666);
             line-height: 1.4;
           }
 
           .reward-points {
             margin: 10px 15px;
             padding: 10px;
-            background: #f8f9fa;
+            background: var(--background-secondary-color, #f8f9fa);
             border-radius: 8px;
             text-align: center;
 
             span {
               font-weight: bold;
-              color: #667eea;
+              color: var(--primary-color, #667eea);
               font-size: 14px;
             }
           }
@@ -292,19 +295,19 @@
             padding: 12px;
             border: none;
             border-radius: 8px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: var(--button-primary-bg, #667eea);
+            color: var(--button-primary-text, white);
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
 
             &:hover:not(.disabled) {
               transform: translateY(-2px);
-              box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+              box-shadow: 0 4px 12px var(--shadow-color, rgba(102, 126, 234, 0.4));
             }
 
             &.disabled {
-              background: #ccc;
+              background: var(--text-light-color, #ccc);
               cursor: not-allowed;
               opacity: 0.7;
             }
@@ -315,16 +318,16 @@
       .no-rewards {
         text-align: center;
         padding: 40px 20px;
-        color: #999;
+        color: var(--text-secondary-color, #999);
         font-size: 15px;
       }
     }
 
     // History Tab
     .history-tab {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      background: var(--card-background-color, white);
+      border-radius: var(--border-radius, 12px);
+      box-shadow: 0 2px 8px var(--shadow-color, rgba(0, 0, 0, 0.1));
       overflow: hidden;
 
       .history-list {
@@ -333,11 +336,11 @@
           justify-content: space-between;
           align-items: center;
           padding: 15px 20px;
-          border-bottom: 1px solid #eee;
+          border-bottom: 1px solid var(--border-color, #eee);
           transition: background 0.2s ease;
 
           &:hover {
-            background: #f8f9fa;
+            background: var(--background-secondary-color, #f8f9fa);
           }
 
           &:last-child {
@@ -358,13 +361,13 @@
                 margin: 0;
                 font-size: 14px;
                 font-weight: 600;
-                color: #333;
+                color: var(--text-color, #333);
               }
 
               .history-date {
                 margin: 5px 0 0 0;
                 font-size: 12px;
-                color: #999;
+                color: var(--text-secondary-color, #999);
               }
             }
           }
@@ -374,15 +377,15 @@
             font-size: 15px;
 
             &.earn {
-              color: #43e97b;
+              color: var(--success-color, #43e97b);
             }
 
             &.redeem {
-              color: #f5576c;
+              color: var(--danger-color, #f5576c);
             }
 
             &.bonus {
-              color: #667eea;
+              color: var(--primary-color, #667eea);
             }
           }
         }
@@ -391,7 +394,7 @@
       .no-history {
         text-align: center;
         padding: 40px 20px;
-        color: #999;
+        color: var(--text-secondary-color, #999);
       }
     }
   }

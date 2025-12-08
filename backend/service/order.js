@@ -1,6 +1,8 @@
 const Order = require("../models/order");
 const Product = require("../models/product");
 const User = require("../models/user");
+const LoyaltyPointService = require("./loyaltyPoint");
+const Settings = require("../models/settings");
 
 const createOrder = (props) => {
   return new Promise(async (resolve, reject) => {
@@ -262,8 +264,26 @@ const updateStatusOrder = (id, data) => {
         }
       }
 
+      const previousStatus = order.status;
       order.status = data.status;
       await order.save();
+
+      if (previousStatus !== "Đã giao" && data.status === "Đã giao") {
+        try {
+          const settings = await Settings.findOne();
+          if (settings?.features?.loyaltyProgram?.enabled) {
+            const orderValue = order.finalPrice || order.totalPrice;
+            await LoyaltyPointService.addPointsFromOrder(
+              order.user,
+              orderValue,
+              order._id
+            );
+          }
+        } catch (loyaltyError) {
+          console.log("Error adding loyalty points:", loyaltyError);
+        }
+      }
+
       resolve(order);
     } catch (e) {
       reject(e);

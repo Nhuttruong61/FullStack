@@ -182,7 +182,7 @@ function ManageBlog({ setActive }) {
       <div className="blog-container">
         <div className="blog-header">
           <h2 className="blog-title">Quản lý bài viết</h2>
-          <button className="btn-create" onClick={() => setActive(8)}>
+          <button className="btn-create" onClick={() => setActive(11)}>
             <CiCirclePlus size={20} />
             <span>Tạo mới</span>
           </button>

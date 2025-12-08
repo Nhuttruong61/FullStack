@@ -24,6 +24,8 @@ import Rewards from "./pages/RewardsPage/Rewards.jsx";
 import MaintenancePage from "./pages/MaintenancePage/MaintenancePage.jsx";
 import AdminLogin from "./pages/AdminLogin/AdminLogin.jsx";
 import { SettingsProvider, useSettings } from "./contexts/SettingsContext.jsx";
+import { ThemeProvider } from "./contexts/ThemeContext.jsx";
+import TestTheme from "./pages/TestTheme.jsx";
 
 function AppContent() {
   const { user } = useSelector((state) => state.user);
@@ -159,6 +161,10 @@ function AppContent() {
             }
           />
           <Route
+            path="/test-theme"
+            element={<TestTheme />}
+          />
+          <Route
             path="/admin"
             element={
               <LayoutAdmin>
@@ -189,7 +195,9 @@ function AppContent() {
 function App() {
   return (
     <SettingsProvider>
-      <AppContent />
+      <ThemeProvider>
+        <AppContent />
+      </ThemeProvider>
     </SettingsProvider>
   );
 }

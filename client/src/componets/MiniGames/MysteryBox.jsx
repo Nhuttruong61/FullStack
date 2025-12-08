@@ -11,11 +11,19 @@ function MysteryBox() {
   const [gameStats, setGameStats] = useState(null);
 
   const boxes = [
-    { id: 1, prize: { label: "20 điểm", value: 20 } },
-    { id: 2, prize: { label: "100 điểm", value: 100 } },
-    { id: 3, prize: { label: "40 điểm", value: 40 } },
-    { id: 4, prize: { label: "300 điểm", value: 300 } },
-    { id: 5, prize: { label: "Chúc may mắn", value: 0 } },
+    { id: 1 },
+    { id: 2 },
+    { id: 3 },
+    { id: 4 },
+    { id: 5 },
+  ];
+
+  const prizes = [
+    { label: "20 điểm", value: 20 },
+    { label: "100 điểm", value: 100 },
+    { label: "40 điểm", value: 40 },
+    { label: "300 điểm", value: 300 },
+    { label: "Chúc may mắn", value: 0 },
   ];
 
   useEffect(() => {
@@ -40,21 +48,31 @@ function MysteryBox() {
       alert("Bạn đã hết lượt chơi hôm nay");
       return;
     }
+
+    const freePlayStats = gameStats?.gamePlayStats?.mysterybox || {};
+    const canPlayFree = freePlayStats.free < freePlayStats.freeLimit;
+    
+    if (!canPlayFree) {
+      alert("Bạn đã hết lượt miễn phí. Vui lòng mua thêm lượt chơi.");
+      return;
+    }
+
     setSelectedBox(box.id);
     
     setTimeout(async () => {
-      setOpened(true);
-      setResult(box.prize);
-      await handlePlayGame(box.prize);
+      await handlePlayGame(box.id);
     }, 800);
   };
 
-  const handlePlayGame = async (prize, isPaidPlay = false) => {
+  const handlePlayGame = async (boxId, isPaidPlay = false) => {
     try {
-      const data = await playMiniGame("mysterybox", { value: prize.value }, isPaidPlay);
+      const data = await playMiniGame("mysterybox", { boxId }, isPaidPlay);
       if (data.success) {
         setMessage(data.message);
         setRemainingPlays(data.remainingPlays);
+        const serverPrize = prizes.find(p => p.value === data.reward) || prizes[prizes.length - 1];
+        setResult(serverPrize);
+        setOpened(true);
         await fetchRemainingPlays();
       } else {
         console.error("Play game failed:", data.message);
@@ -122,8 +140,8 @@ function MysteryBox() {
               : result.label}
           </p>
           {!canPlayFree && remainingPlays > 0 && (
-            <button onClick={() => handlePlayGame(result, true)} className="btn-buy">
-              Mua thêm lượt ({gameStats?.pointsPerFreePlay} điểm)
+            <button onClick={() => handlePlayGame(selectedBox, true)} className="btn-buy">
+              Mua thêm lượt ({gameStats?.pointsPerFreePlay || 10} điểm)
             </button>
           )}
           <button onClick={handleReset}>Chơi lại</button>

@@ -1,12 +1,12 @@
 .spin-wheel-container {
   text-align: center;
   padding: 40px 30px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  background: var(--card-background-color, white);
+  border-radius: var(--border-radius, 12px);
+  box-shadow: 0 2px 12px var(--shadow-color, rgba(0, 0, 0, 0.08));
   max-width: 600px;
   margin: 0 auto;
-  border: 1px solid #e9ecef;
+  border: 1px solid var(--border-color, #e9ecef);
 
   .wheel-wrapper {
     position: relative;
@@ -22,7 +22,7 @@
       height: 0;
       border-left: 15px solid transparent;
       border-right: 15px solid transparent;
-      border-top: 25px solid #dc3545;
+      border-top: 25px solid var(--danger-color, #dc3545);
       z-index: 10;
     }
   }
@@ -36,8 +36,8 @@
     padding: 12px 48px;
     font-size: 16px;
     font-weight: 500;
-    background: #007bff;
-    color: white;
+    background: var(--button-primary-bg, #007bff);
+    color: var(--button-primary-text, white);
     border: none;
     border-radius: 6px;
     cursor: pointer;
@@ -45,38 +45,38 @@
     margin-top: 20px;
 
     &:hover:not(:disabled) {
-      background: #0056b3;
+      background: var(--hover-color, #0056b3);
     }
 
     &:disabled {
       opacity: 0.6;
       cursor: not-allowed;
-      background: #6c757d;
+      background: var(--text-light-color, #6c757d);
     }
   }
 
   .spin-info {
     margin-top: 70px;
     font-size: 15px;
-    color: #495057;
-    background: #f8f9fa;
+    color: var(--text-color, #495057);
+    background: var(--background-secondary-color, #f8f9fa);
     padding: 16px 24px;
     border-radius: 8px;
-    border: 1px solid #e9ecef;
+    border: 1px solid var(--border-color, #e9ecef);
 
     p {
       margin: 8px 0;
       font-weight: 400;
 
       strong {
-        color: #007bff;
+        color: var(--primary-color, #007bff);
         font-size: 18px;
         font-weight: 600;
       }
     }
 
     .message {
-      color: #28a745;
+      color: var(--success-color, #28a745);
       font-weight: 500;
       font-size: 14px;
       margin-top: 8px;
@@ -86,8 +86,8 @@
       display: block;
       margin: 16px auto 0;
       padding: 10px 20px;
-      background: #20c997;
-      color: white;
+      background: var(--success-color, #20c997);
+      color: var(--button-primary-text, white);
       border: none;
       border-radius: 6px;
       cursor: pointer;
@@ -96,7 +96,7 @@
       transition: all 0.2s;
 
       &:hover:not(:disabled) {
-        background: #1aa179;
+        background: var(--hover-color, #1aa179);
       }
 
       &:disabled {
@@ -112,7 +112,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
+    background: var(--overlay-color, rgba(0, 0, 0, 0.5));
     display: flex;
     align-items: center;
     justify-content: center;
@@ -120,32 +120,32 @@
     animation: fadeIn 0.2s;
 
     .reward-content {
-      background: white;
+      background: var(--card-background-color, white);
       padding: 40px;
-      border-radius: 12px;
+      border-radius: var(--border-radius, 12px);
       text-align: center;
       max-width: 400px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-      border: 1px solid #e9ecef;
+      box-shadow: 0 8px 32px var(--shadow-color, rgba(0, 0, 0, 0.12));
+      border: 1px solid var(--border-color, #e9ecef);
 
       h2 {
         font-size: 28px;
         margin-bottom: 16px;
-        color: #2c3e50;
+        color: var(--text-color, #2c3e50);
         font-weight: 600;
       }
 
       .reward-value {
         font-size: 48px;
         font-weight: 700;
-        color: #007bff;
+        color: var(--primary-color, #007bff);
         margin: 20px 0;
       }
 
       .btn-close {
         padding: 10px 32px;
-        background: #007bff;
-        color: white;
+        background: var(--button-primary-bg, #007bff);
+        color: var(--button-primary-text, white);
         border: none;
         border-radius: 6px;
         font-size: 15px;
@@ -155,7 +155,7 @@
         transition: all 0.2s;
 
         &:hover {
-          background: #0056b3;
+          background: var(--hover-color, #0056b3);
         }
       }
     }

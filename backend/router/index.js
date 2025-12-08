@@ -10,6 +10,8 @@ const settings = require("./settings");
 const miniGame = require("./minigame");
 const reward = require("./reward");
 const adminPromoCode = require("./adminPromoCode");
+const event = require("./event");
+const loyalty = require("./loyalty");
 
 const initialRouter = (app) => {
   app.use("/api/v1/user", user);
@@ -24,7 +26,9 @@ const initialRouter = (app) => {
   app.use("/api/v1/settings", settings);
   app.use("/api/v1/minigames", miniGame);
   app.use("/api/v1/rewards", reward);
+  app.use("/api/v1/loyalty", loyalty);
   app.use("/api/v1/admin", adminPromoCode);
+  app.use("/api/v1/event", event);
   app.use("/", (req, res) => {
     return res.send("Server on");
   });

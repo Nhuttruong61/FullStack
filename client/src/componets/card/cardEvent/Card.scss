@@ -1,47 +1,85 @@
-.box-card-event{
-    background-color: #323232;
-    border-radius: 10px;
-    margin: 0 20px;
-    cursor: pointer;
-    &--image{
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        padding: 12px 0;
-    img{
-        width: 120px;
+.box-card-event {
+  background-color: var(--card-background-color, #323232);
+  border-radius: var(--border-radius, 10px);
+  margin: 0 20px;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(255, 153, 33, 0.2);
+  }
+
+  &--image {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 12px 0;
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px 10px 0 0;
+
+    img {
+      width: 120px;
+      transition: transform 0.3s ease;
     }
+
+    &:hover img {
+      transform: scale(1.05);
     }
-    &--content{
-        display: flex;
-        flex-direction: column;
-        margin: 12px 0;
-        &--name{
-            text-shadow: 1px ;
-            margin: 0;
-        }
-        &--price{
-            color: #ccc;
-            text-decoration: line-through;
-            font-weight: 400;
-            margin: 4px 0;
-        }
-        &--sale{
-            color: #ff9921;
-            font-weight: 600;
-            margin: 4px 0;
-        }
-        &--loader{
-            text-align: center;
-            color: black;
-            background-color: white;
-            margin: 12px 8px;
-            border-radius: 8px;
-            &--color{
-                height: 100%;
-                background-color: #ff9921;
-                border-radius: 8px;
-            }
-        }
+
+    .event-badge {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: linear-gradient(135deg, #ff6b6b 0%, #ff9921 100%);
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 12px;
+      box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
     }
+  }
+
+  &--content {
+    display: flex;
+    flex-direction: column;
+    margin: 12px 0;
+    padding: 0 8px;
+
+    &--name {
+      text-shadow: 1px;
+      margin: 0 0 4px 0;
+      font-size: 14px;
+      line-height: 1.3;
+      color: var(--text-color, #fff);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      min-height: 36px;
+    }
+
+    &--price {
+      color: var(--text-secondary-color, #ccc);
+      text-decoration: line-through;
+      font-weight: 400;
+      margin: 4px 0;
+      font-size: 12px;
+    }
+
+    &--sale {
+      color: var(--accent-color, #ff9921);
+      font-weight: 600;
+      margin: 4px 0;
+      font-size: 14px;
+    }
+  }
+
+  &--timer {
+    margin: 8px 0;
+    padding: 0 4px;
+  }
 }

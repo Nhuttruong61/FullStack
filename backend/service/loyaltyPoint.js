@@ -1,23 +1,61 @@
 const LoyaltyPoint = require("../models/loyaltyPoint");
 const LoyaltyReward = require("../models/loyaltyReward");
 const PromoCode = require("../models/promoCode");
+const Settings = require("../models/settings");
 
 class LoyaltyPointService {
-  // Tier thresholds (cumulative purchase amount)
-  TIER_THRESHOLDS = {
-    bronze: 0,
-    silver: 5000000, // 5M
-    gold: 20000000, // 20M
-    platinum: 50000000, // 50M
-  };
+  constructor() {
+    this.settings = null;
+    this.TIER_THRESHOLDS = {
+      bronze: 0,
+      silver: 5000000,
+      gold: 20000000,
+      platinum: 50000000,
+    };
+    this.POINTS_MULTIPLIER = {
+      bronze: 1,
+      silver: 1.2,
+      gold: 1.5,
+      platinum: 2,
+    };
+    this.POINTS_PER_DONG = 1;
+    this.POINT_EXPIRY_DAYS = 365;
+  }
 
-  // Points per VND by tier
-  POINTS_MULTIPLIER = {
-    bronze: 1,
-    silver: 1.2,
-    gold: 1.5,
-    platinum: 2,
-  };
+  async loadSettings() {
+    try {
+      const settings = await Settings.findOne();
+      if (settings && settings.loyalty) {
+        this.settings = settings.loyalty;
+        
+        if (settings.loyalty.pointsPerDong) {
+          this.POINTS_PER_DONG = settings.loyalty.pointsPerDong;
+        }
+        
+        if (settings.loyalty.pointExpiryDays) {
+          this.POINT_EXPIRY_DAYS = settings.loyalty.pointExpiryDays;
+        }
+        
+        if (settings.loyalty.tiers) {
+          const tiers = settings.loyalty.tiers;
+          this.TIER_THRESHOLDS = {
+            bronze: tiers.bronze?.minSpent || 0,
+            silver: tiers.silver?.minSpent || 5000000,
+            gold: tiers.gold?.minSpent || 20000000,
+            platinum: tiers.platinum?.minSpent || 50000000,
+          };
+          this.POINTS_MULTIPLIER = {
+            bronze: tiers.bronze?.pointMultiplier || 1,
+            silver: tiers.silver?.pointMultiplier || 1.2,
+            gold: tiers.gold?.pointMultiplier || 1.5,
+            platinum: tiers.platinum?.pointMultiplier || 2,
+          };
+        }
+      }
+    } catch (error) {
+      console.log("LoyaltyPointService.loadSettings error:", error);
+    }
+  }
 
   /**
    * Get or create loyalty points for user
@@ -48,6 +86,8 @@ class LoyaltyPointService {
    */
   async addPointsFromOrder(userId, orderValue, orderId) {
     try {
+      await this.loadSettings();
+      
       const loyaltyPoints = await LoyaltyPoint.findOne({ user: userId });
 
       if (!loyaltyPoints) {
@@ -55,12 +95,12 @@ class LoyaltyPointService {
         return this.addPointsFromOrder(userId, orderValue, orderId);
       }
 
-      // Calculate points
+      const basePoints = orderValue * this.POINTS_PER_DONG;
       const pointsToAdd = Math.floor(
-        orderValue * this.POINTS_MULTIPLIER[loyaltyPoints.tier]
+        basePoints * this.POINTS_MULTIPLIER[loyaltyPoints.tier]
       );
       const expiryDate = new Date();
-      expiryDate.setFullYear(expiryDate.getFullYear() + 1);
+      expiryDate.setDate(expiryDate.getDate() + this.POINT_EXPIRY_DAYS);
 
       // Update balance
       loyaltyPoints.balance += pointsToAdd;
@@ -189,6 +229,8 @@ class LoyaltyPointService {
    * Update user tier based on lifetime points
    */
   async updateTier(loyaltyPoints) {
+    await this.loadSettings();
+    
     const currentLifetime = loyaltyPoints.lifetime;
     let newTier = "bronze";
 
@@ -204,18 +246,23 @@ class LoyaltyPointService {
       loyaltyPoints.tier = newTier;
       loyaltyPoints.tierUpgradedAt = new Date();
 
-      // Bonus points on tier up
-      const bonusPoints = {
-        silver: 500,
-        gold: 1000,
-        platinum: 2000,
-      };
+      let bonusPoints = 0;
+      if (this.settings && this.settings.tiers && this.settings.tiers[newTier]) {
+        bonusPoints = this.settings.tiers[newTier].bonusPointsOnTierUp || 0;
+      } else {
+        const defaultBonus = {
+          silver: 500,
+          gold: 1000,
+          platinum: 2000,
+        };
+        bonusPoints = defaultBonus[newTier] || 0;
+      }
 
-      if (bonusPoints[newTier]) {
-        loyaltyPoints.balance += bonusPoints[newTier];
+      if (bonusPoints > 0) {
+        loyaltyPoints.balance += bonusPoints;
         loyaltyPoints.transactions.push({
           type: "bonus",
-          amount: bonusPoints[newTier],
+          amount: bonusPoints,
           reason: `Thăng cấp lên tier ${newTier}`,
         });
       }
@@ -293,6 +340,7 @@ class LoyaltyPointService {
         success: true,
         data: {
           balance: loyaltyPoints.balance,
+          gamePoints: loyaltyPoints.gamePoints || 0,
           lifetime: loyaltyPoints.lifetime,
           tier: loyaltyPoints.tier,
           tierUpgradedAt: loyaltyPoints.tierUpgradedAt,

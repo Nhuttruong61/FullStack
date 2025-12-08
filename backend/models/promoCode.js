@@ -46,6 +46,10 @@ const promoCodeSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    isPublic: {
+      type: Boolean,
+      default: false,
+    },
     usedBy: [
       {
         user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
@@ -61,6 +65,11 @@ const promoCodeSchema = new mongoose.Schema(
     pointsCost: {
       type: Number,
       default: null,
+    },
+    pointType: {
+      type: String,
+      enum: ["shop", "game"],
+      default: "shop",
     },
     redemptionCooldown: {
       type: Number, // Cooldown in hours between redemptions of same source

@@ -8,15 +8,8 @@ function Product({ data, category }) {
       <div className="box-product">
         {data && data?.length > 0 ? (
           <div className="box-product--main">
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                marginBottom: "20px",
-              }}
-            >
-              <img src={Logo} className="right--image" alt="" style={{ width: "50px", height: "50px" }} />
+            <div className="box-product--main--header">
+              <img src={Logo} className="right--image" alt="" />
               <h1>{category?.name}</h1>
             </div>
 

@@ -41,16 +41,8 @@ const SlickProduct = (props) => {
   return (
     <div>
       <div className="box-product--main">
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            marginBottom: "20px",
-            color: "white",
-          }}
-        >
-          <img src={Logo} className="right--image" alt="" style={{ width: "50px", height: "50px" }} />
+        <div className="box-product--main--header">
+          <img src={Logo} className="right--image" alt="" />
           <h1>{category?.name}</h1>
         </div>
       </div>

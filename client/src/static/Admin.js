@@ -6,6 +6,7 @@ import { CiViewList, CiImageOn } from "react-icons/ci";
 import { IoNewspaperOutline } from "react-icons/io5";
 import { IoSettingsOutline } from "react-icons/io5";
 import { RiCoupon3Line } from "react-icons/ri";
+import { MdEventNote } from "react-icons/md";
 export const sidebar = [
   {
     id: 1,
@@ -49,6 +50,11 @@ export const sidebar = [
   },
   {
     id: 9,
+    name: "Sự Kiện",
+    icon: MdEventNote,
+  },
+  {
+    id: 10,
     name: "Cài Đặt",
     icon: IoSettingsOutline,
   },

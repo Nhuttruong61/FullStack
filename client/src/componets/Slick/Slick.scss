@@ -10,6 +10,26 @@
     }
 }
 
+.box-product--main {
+  &--header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    color: var(--text-color, white);
+    
+    h1 {
+      color: var(--text-color, white);
+      margin: 0;
+    }
+    
+    .right--image {
+      width: 50px;
+      height: 50px;
+    }
+  }
+}
+
  button.slick-prev {
     top: 50%;
     left: 5%;
@@ -21,24 +41,24 @@
     z-index: 10;
   }
    button.slick-prev::before {
-    color: white;
+    color: var(--button-primary-text, white);
     content: "\276E";
     height: 40px;
     width: 40px;
     font-size: 30px;
-    background: #757575;
+    background: var(--surface-color, #757575);
     border-radius: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
   }
    button.slick-next::before {
-    color: white;
+    color: var(--button-primary-text, white);
     content: "\276F";
     height: 40px;
     width: 40px;
     font-size: 30px;
-    background: #757575;
+    background: var(--surface-color, #757575);
     border-radius: 100%;
     display: flex;
     align-items: center;
